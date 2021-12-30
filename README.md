@@ -1,7 +1,6 @@
-# Corey在线教育前端(corey_edu_front)
+# Corey在线教育前端
 
-
-> 供用户使用的网站门户
+> 分为用户前端网站和管理员前端网站
 
 ## Build Setup
 
