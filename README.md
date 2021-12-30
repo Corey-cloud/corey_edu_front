@@ -1,7 +1,7 @@
-# corey_edu_front
-# {{ Corey在线教育前端 }}
+# Corey在线教育前端(corey_edu_front)
 
-> {{ 供用户使用的网站门户 }}
+
+> 供用户使用的网站门户
 
 ## Build Setup
 
