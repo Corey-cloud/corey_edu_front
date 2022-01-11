@@ -4,11 +4,11 @@
     <!-- 幻灯片 开始 -->
     <div v-swiper:mySwiper="swiperOption">
         <div class="swiper-wrapper">
-            <div class="swiper-slide" style="background: #040B1B;">
+            <!-- <div class="swiper-slide" style="background: #040B1B;">
                 <a target="_blank" href="/">
                     <img src="~/assets/photo/banner/1525939573202.jpg" alt="首页banner">
                 </a>
-            </div>
+            </div> -->
             <div class="swiper-slide" style="background: #F3260B;">
                 <a target="_blank" href="/">
                     <img src="~/assets/photo/banner/153525d0ef15459596.jpg" alt="首页banner">
