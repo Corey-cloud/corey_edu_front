@@ -1,66 +1,52 @@
 <template>
-    <div>
-        <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.0/skins/default/aliplayer-min.css" />
-        <script type="text/javascript" charset="utf-8" src="https://g.alicdn.com/de/prismplayer/2.8.0/aliplayer-min.js"></script>
-    
-        <div class="prism-player" id="player-con"></div>
-    </div>
-</template>
+  <div>
 
+    <!-- 阿里云视频播放器样式 -->
+    <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.1/skins/default/aliplayer-min.css" >
+    <!-- 阿里云视频播放器脚本 -->
+    <script charset="utf-8" type="text/javascript" src="https://g.alicdn.com/de/prismplayer/2.8.1/aliplayer-min.js" />
+
+    <!-- 定义播放器dom -->
+    <div id="J_prismPlayer" class="prism-player" />
+  </div>
+</template>
 <script>
-import course from "@/api/course"
+import vod from '@/api/vod'
+
 export default {
-    layout: 'video',
-    mounted () {
-         console.log(999999999999)
-         console.log(this.playAuth)
-         console.log(this.vid)
-         
-         var player = new Aliplayer({
-            "id": "player-con",
-            "vid": this.vid,
-            "playauth": this.playAuth,
-            "qualitySort": "asc",
-            "format": "mp4",
-            "mediaType": "video",
-            "width": "100%",
-            "height": "500px",
-            "autoplay": false,
-            "isLive": false,
-            "rePlay": false,
-            "playsinline": true,
-            "preload": false,
-            "language": "zh-cn",
-            "controlBarVisibility": "hover",
-            "useH5Prism": true
-            }, function (player) {
-                console.log("播放器创建了。");
-            }
-        );
-    },
+    layout: 'video',//应用video布局
     asyncData({ params, error }) {
-    return course.getPlayAuth(params.vid).then(response => {
-      console.log(11111111111)
-      console.log(response.data.data);
-      //   require('~/assets/js/aliplayer-min.js')
-      //已经拿到playAuth
-      return { 
-        playAuth: response.data.data.playAuth,
-        vid: params.vid
-        // chapterList: response.data.data.chapterList
-      }
-    })
-  }
+       return vod.getPlayAuth(params.vid)
+        .then(response => {
+            return { 
+                playAuth: response.data.data.playAuth,
+                vid: params.vid
+            }
+        })
+    },
+    mounted() { //页面渲染之后  created
+        new Aliplayer({
+            id: 'J_prismPlayer',
+            vid: this.vid, // 视频id
+            playauth: this.playAuth, // 播放凭证
+            encryptType: '1', // 如果播放加密视频，则需设置encryptType=1，非加密视频无需设置此项
+            width: '100%',
+            height: '500px',
+            // 以下可选设置
+            cover: 'http://guli.shop/photo/banner/1525939573202.jpg', // 封面
+            qualitySort: 'asc', // 清晰度排序
+
+            mediaType: 'video', // 返回音频还是视频
+            autoplay: false, // 自动播放
+            isLive: false, // 直播
+            rePlay: false, // 循环播放
+            preload: true,
+            controlBarVisibility: 'hover', // 控制条的显示方式：鼠标悬停
+            useH5Prism: true, // 播放器类型：html5
+        }, function(player) {
+            console.log('播放器创建成功')
+        })
+    }
+
 }
 </script>
-
-<style scoped>
-  .prism-player .prism-cover{
-    background-color:none;
-    display:block;
-  }
-  
-  .prism-player .prism-marker-text{
-    display:none;
-  }
-</style>
