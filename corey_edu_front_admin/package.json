@@ -2,7 +2,7 @@
   "name": "guli-admin",
   "version": "3.8.0",
   "license": "MIT",
-  "description": "谷粒学院后台管理系统",
+  "description": "Corey在线教育后台管理系统",
   "author": "Corey <corey15770@gmail.com>",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
