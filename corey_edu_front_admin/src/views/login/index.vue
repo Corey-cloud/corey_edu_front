@@ -38,6 +38,7 @@
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
+import {login} from '@/api/login'
 
 export default {
   name: 'Login',
@@ -94,6 +95,10 @@ export default {
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
             this.$router.push({ path: this.redirect || '/' })
+          // login(this.loginForm.username, this.loginForm.password).then( response => {
+          //   this.loading = false
+          //   console.log(response.data)
+          //   this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {
             this.loading = false
           })
