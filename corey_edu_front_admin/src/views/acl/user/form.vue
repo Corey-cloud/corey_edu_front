@@ -70,7 +70,6 @@ export default {
 
     // 表单初始化
     init() {
-      debugger
       if (this.$route.params && this.$route.params.id) {
         const id = this.$route.params.id
         this.fetchDataById(id)
@@ -78,6 +77,14 @@ export default {
         // 对象拓展运算符：拷贝对象，而不是赋值对象的引用
         this.user = { ...defaultForm }
       }
+    },
+
+    // 根据id查询记录
+    fetchDataById(id) {
+      userApi.getById(id).then(response => {
+        console.log("data:",response.data)
+        this.user = response.data.item
+      })
     },
 
     saveOrUpdate() {
@@ -109,7 +116,7 @@ export default {
 
     // 根据id更新记录
     updateData() {
-      // teacher数据的获取
+      // user数据的获取
       userApi.updateById(this.user).then(response => {
         if (response.success) {
           this.$message({
@@ -119,16 +126,7 @@ export default {
           this.$router.push({ path: '/acl/user/list' })
         }
       })
-    },
-
-    // 根据id查询记录
-    fetchDataById(id) {
-      userApi.getById(id).then(response => {
-        debugger
-        this.user = response.data.item
-      })
     }
-
   }
 }
 </script>

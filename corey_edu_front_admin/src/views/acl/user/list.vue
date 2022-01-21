@@ -15,10 +15,10 @@
     <div>
       <el-button type="danger" size="mini" @click="addUser()" v-if="hasPerm('user.add')">添加</el-button>
       <el-button type="danger" size="mini" @click="removeRows()" v-if="hasPerm('user.remove')">批量删除</el-button>
-
+      
     </div>
 
-    <!-- 讲师列表 -->
+    <!-- 用户列表 -->
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       listLoading: true, // 数据是否正在加载
-      list: null, // 讲师列表
+      list: null, // 用户列表
       total: 0, // 数据库中的总记录数
       page: 1, // 默认页码
       limit: 10, // 每页记录数
