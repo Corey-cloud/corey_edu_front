@@ -1,20 +1,25 @@
 <template>
   <div class="app-container">
-    <el-form ref="user" :model="user" :rules="validateRules" label-width="120px">
+    <el-form ref="user"  :model="user" :rules="validateRules" label-width="100px">
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="user.username"/>
+        <el-input style="width:350px" v-model="user.username"/>
       </el-form-item>
-      <el-form-item label="用户昵称">
-        <el-input v-model="user.nickName"/>
+      <el-form-item label="昵称" prop="nickName">
+        <el-input style="width:350px" v-model="user.nickName"/>
       </el-form-item>
-     
-      <el-form-item v-if="!user.id" label="用户密码" prop="password">
-        <el-input v-model="user.password"/>
+      <el-form-item label="密码" prop="pass">
+        <el-input type="password" style="width:350px" v-model="user.pass">
+          <!-- <i slot="suffix" class="el-icon-view" @click="showPwd"></i> -->
+        </el-input>
       </el-form-item>
-
-
+      <el-form-item label="确认密码" prop="checkPass">
+        <el-input type="password" style="width:350px" v-model="user.checkPass">
+          <!-- <i slot="suffix" class="el-icon-view" @click="showPwd"></i> -->
+        </el-input>
+      </el-form-item>
       <el-form-item>
         <el-button :disabled="saveBtnDisabled" type="primary" @click="saveOrUpdate">保存</el-button>
+        <!-- <el-button :disabled="saveBtnDisabled" @click="resetForm">清空</el-button> -->
       </el-form-item>
     </el-form>
   </div>
@@ -23,29 +28,56 @@
 <script>
 
 import userApi from '@/api/acl/user'
-
-const defaultForm = {
-  username: '',
-  nickName: '',
-  password: ''
-}
-
-const validatePass = (rule, value, callback) => {
-  if (value.length < 6) {
-    callback(new Error('密码不能小于6位'))
-  } else {
-    callback()
-  }
-}
+// let Base64 = require('js-base64').Base64
 
 export default {
   data() {
+    var validateUsername = (rule, value, callback) => {
+      if (value.length < 5 || value.length > 10) {
+        return callback(new Error('用户名不得小于5个或大于10个字符!'))
+      }
+    }
+
+    var validateNickname = (rule, value, callback) => {
+      if (value.length < 2 || value.length > 10) {
+        return callback(new Error('昵称不得小于2个或大于10个字符!'))
+      }
+    }
+
+    var validatePass = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('密码不能小于6位!'))
+      } else {
+        if (this.user.checkPass !== '') {
+          this.$refs.user.validateField('checkPass');
+        }
+        callback()
+      }
+    }
+    var validatePass2 = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('密码不能小于6位!'))
+      }
+      if (value !== this.user.pass) {
+        callback(new Error('两次输入密码不一致!'))
+      }
+      else {
+        callback()
+      }
+    }
     return {
-      user: defaultForm,
+      user: {
+        username: '',
+        nickName: '',
+        pass: '',
+        checkPass: ''
+      },
       saveBtnDisabled: false, // 保存按钮是否禁用,
       validateRules: {
-        username: [{ required: true, trigger: 'blur', message: '用户名必须输入' }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        nickName: [{ required: true, trigger: 'blur', validator: validateNickname }],
+        pass: [{ required: true, trigger: 'blur', validator: validatePass }],
+        checkPass: [{ required: true, trigger: 'blur', validator: validatePass2 }],
       }
     }
   },
@@ -68,14 +100,28 @@ export default {
 
   methods: {
 
+    // 重置表单
+    resetForm() {
+      this.user = {
+        username: '',
+        nickName: '',
+        pass: '',
+        checkPass: ''
+      }
+    },
+
     // 表单初始化
     init() {
       if (this.$route.params && this.$route.params.id) {
         const id = this.$route.params.id
         this.fetchDataById(id)
       } else {
-        // 对象拓展运算符：拷贝对象，而不是赋值对象的引用
-        this.user = { ...defaultForm }
+        this.user = {
+          username: '',
+          nickName: '',
+          pass: '',
+          checkPass: ''
+        }
       }
     },
 
@@ -95,6 +141,8 @@ export default {
           } else {
             this.updateData()
           }
+        } else {
+          console.log("校验不通过")
         }
       })
     },
@@ -110,6 +158,8 @@ export default {
           })
           this.$router.push({ path: '/acl/user/list' })
         }
+      }).catch(() => {
+        this.saveBtnDisabled = false
       })
     },
 
@@ -124,6 +174,8 @@ export default {
           })
           this.$router.push({ path: '/acl/user/list' })
         }
+      }).catch(() => {
+        this.saveBtnDisabled = false
       })
     }
   }

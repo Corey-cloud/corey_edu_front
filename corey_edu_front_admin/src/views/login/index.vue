@@ -38,7 +38,7 @@
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
-import {login} from '@/api/login'
+import { login } from '@/api/login'
 
 export default {
   name: 'Login',
@@ -90,7 +90,6 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-         // debugger
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
