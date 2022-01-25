@@ -1,20 +1,18 @@
 <template>
   <div class="app-container">
-    <el-form ref="user"  :model="user" :rules="validateRules" label-width="100px">
+    <el-form ref="user" :model="user" :rules="validateRules" label-width="100px">
       <el-form-item label="用户名" prop="username">
-        <el-input style="width:350px" v-model="user.username"/>
+        <el-input v-model="user.username" style="width:350px"/>
       </el-form-item>
       <el-form-item label="昵称" prop="nickName">
-        <el-input style="width:350px" v-model="user.nickName"/>
+        <el-input v-model="user.nickName" style="width:350px"/>
       </el-form-item>
       <el-form-item label="密码" prop="pass">
-        <el-input type="password" style="width:350px" v-model="user.pass">
-          <!-- <i slot="suffix" class="el-icon-view" @click="showPwd"></i> -->
+        <el-input type="password" v-model="user.pass" style="width:350px">
         </el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="checkPass">
-        <el-input type="password" style="width:350px" v-model="user.checkPass">
-          <!-- <i slot="suffix" class="el-icon-view" @click="showPwd"></i> -->
+        <el-input type="password" v-model="user.checkPass" style="width:350px">
         </el-input>
       </el-form-item>
       <el-form-item>
@@ -28,7 +26,6 @@
 <script>
 
 import userApi from '@/api/acl/user'
-// let Base64 = require('js-base64').Base64
 
 export default {
   data() {
