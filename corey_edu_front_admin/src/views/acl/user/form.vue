@@ -7,11 +7,11 @@
       <el-form-item label="昵称" prop="nickName">
         <el-input v-model="user.nickName" style="width:350px"/>
       </el-form-item>
-      <el-form-item label="密码" prop="pass">
+      <el-form-item v-if="!user.id" label="密码" prop="pass">
         <el-input type="password" v-model="user.pass" style="width:350px">
         </el-input>
       </el-form-item>
-      <el-form-item label="确认密码" prop="checkPass">
+      <el-form-item v-if="!user.id" label="确认密码" prop="checkPass">
         <el-input type="password" v-model="user.checkPass" style="width:350px">
         </el-input>
       </el-form-item>
@@ -147,31 +147,54 @@ export default {
       //   }
       // })
 
-      if (this.user.username.length >= 5 && this.user.username.length <= 10 && this.user.nickName.length >= 2 && this.user.nickName.length <= 10 && this.user.pass.length >= 6 && this.user.checkPass === this.user.pass) {
-        this.saveBtnDisabled = true // 防止表单重复提交
-        userApi.getPublicKey().then(response => {
-          if (response.success) {
-            this.publicKey = response.data.publicKey
-            console.log('公钥', this.publicKey)
-            // 拿到公钥后对用户名和密码进行加密
-            Encrypt.setPublicKey(this.publicKey)
-            if (!this.user.id) {
+      // 添加
+      if (!this.user.id) {
+        if (this.user.username.length >= 5 && this.user.username.length <= 10 && this.user.nickName.length >= 2 && this.user.nickName.length <= 10 && this.user.pass.length >= 6 && this.user.checkPass === this.user.pass) {
+          this.saveBtnDisabled = true // 防止表单重复提交
+          userApi.getPublicKey().then(response => {
+            if (response.success) {
+              this.publicKey = response.data.publicKey
+              console.log('公钥', this.publicKey)
+              // 拿到公钥后对用户名和密码进行加密
+              Encrypt.setPublicKey(this.publicKey)
               this.saveData()
             } else {
-              this.updateData()
+              this.$message({
+                type: 'error',
+                message: '从服务器获取加密公钥失败！'
+              })
             }
-          } else {
-            this.$message({
-              type: 'error',
-              message: '从服务器获取加密公钥失败！'
-            })
-          }
-        })
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: '表单校验不通过，请检查！'
+          })
+        }
       } else {
-        this.$message({
-          type: 'error',
-          message: '表单校验不通过，请检查！'
-        })
+        // 修改
+        if (this.user.username.length >= 5 && this.user.username.length <= 10 && this.user.nickName.length >= 2 && this.user.nickName.length <= 10) {
+          this.saveBtnDisabled = true // 防止表单重复提交
+          userApi.getPublicKey().then(response => {
+            if (response.success) {
+              this.publicKey = response.data.publicKey
+              console.log('公钥', this.publicKey)
+              // 拿到公钥后对用户名和密码进行加密
+              Encrypt.setPublicKey(this.publicKey)
+              this.updateData()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '从服务器获取加密公钥失败！'
+              })
+            }
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: '表单校验不通过，请检查！'
+          })
+        }
       }
     },
 
@@ -181,9 +204,7 @@ export default {
       user.username = Encrypt.encrypt(this.user.username.trim())
       user.pass = Encrypt.encrypt(this.user.pass.trim())
       user.checkPass = Encrypt.encrypt(this.user.checkPass.trim())
-      console.log(user.username)
-      console.log(user.pass)
-      console.log(user.checkPass)
+
       userApi.save(user).then(response => {
         if (response.success) {
           this.$message({
@@ -199,8 +220,10 @@ export default {
 
     // 根据id更新记录
     updateData() {
-      // user数据的获取
-      userApi.updateById(this.user).then(response => {
+      let user = { ...this.user }
+      user.username = Encrypt.encrypt(this.user.username.trim())
+      console.log('username:', user.username)
+      userApi.updateById(user).then(response => {
         if (response.success) {
           this.$message({
             type: 'success',
