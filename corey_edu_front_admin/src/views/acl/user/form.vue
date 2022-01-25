@@ -9,17 +9,28 @@
       </el-form-item>
       <el-form-item label="密码" prop="pass">
         <el-input type="password" v-model="user.pass" style="width:350px">
+<<<<<<< HEAD
           <!-- <i slot="suffix" class="el-icon-view" @click="showPwd"></i> -->
+=======
+>>>>>>> 268ce8986c587a4e042657081146ed1ae9ecc4d2
         </el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="checkPass">
         <el-input type="password" v-model="user.checkPass" style="width:350px">
+<<<<<<< HEAD
           <!-- <i slot="suffix" class="el-icon-view" @click="showPwd"></i> -->
         </el-input>
       </el-form-item>
       <el-form-item>
         <el-button :disabled="saveBtnDisabled" type="primary" @click="saveOrUpdate">保存</el-button>
         <el-button :disabled="saveBtnDisabled" @click="resetForm">清空</el-button>
+=======
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button :disabled="saveBtnDisabled"  type="primary" @click="saveOrUpdate">保存</el-button>
+        <!-- <el-button :disabled="saveBtnDisabled" @click="resetForm">清空</el-button> -->
+>>>>>>> 268ce8986c587a4e042657081146ed1ae9ecc4d2
       </el-form-item>
     </el-form>
   </div>
@@ -28,7 +39,14 @@
 <script>
 
 import userApi from '@/api/acl/user'
+<<<<<<< HEAD
 import Base64 from 'js-base64/Base64'
+=======
+import { JSEncrypt } from 'jsencrypt'
+
+const Encrypt = new JSEncrypt();
+
+>>>>>>> 268ce8986c587a4e042657081146ed1ae9ecc4d2
 export default {
   data() {
     var validateUsername = (rule, value, callback) => {
@@ -76,8 +94,14 @@ export default {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         nickName: [{ required: true, trigger: 'blur', validator: validateNickname }],
         pass: [{ required: true, trigger: 'blur', validator: validatePass }],
+<<<<<<< HEAD
         checkPass: [{ required: true, trigger: 'blur', validator: validatePass2 }]
       }
+=======
+        checkPass: [{ required: true, trigger: 'blur', validator: validatePass2 }],
+      },
+      publicKey: '' // 加密公钥
+>>>>>>> 268ce8986c587a4e042657081146ed1ae9ecc4d2
     }
   },
 
@@ -133,6 +157,7 @@ export default {
 
     saveOrUpdate() {
       // this.$refs.user.validate(valid => {
+<<<<<<< HEAD
         // if (valid) {
         //   this.saveBtnDisabled = true // 防止表单重复提交
         //   if (!this.user.id) {
@@ -149,15 +174,65 @@ export default {
         this.saveData()
       } else {
         this.updateData()
+=======
+      //   if (valid) {
+      //     this.saveBtnDisabled = true // 防止表单重复提交
+      //     if (!this.user.id) {
+      //       this.saveData()
+      //     } else {
+      //       this.updateData()
+      //     }
+      //   } else {
+      //     console.log("校验不通过")
+      //   }
+      // })
+      
+      if (this.user.username.length >= 5 && this.user.username.length <= 10 && this.user.nickName.length >= 2 && this.user.nickName.length <= 10 && this.user.pass.length >= 6 && this.user.checkPass === this.user.pass) {
+        this.saveBtnDisabled = true // 防止表单重复提交
+        userApi.getPublicKey().then(response => {
+          if (response.success) {
+            this.publicKey = response.data.publicKey
+            console.log('公钥', this.publicKey)
+            // 拿到公钥后对用户名和密码进行加密
+            Encrypt.setPublicKey(this.publicKey)
+            if (!this.user.id) {
+              this.saveData()
+            } else {
+              this.updateData()
+            }
+          } else {
+            this.$message({
+              type: 'error',
+              message: '从服务器获取加密公钥失败！'
+            })
+          }
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '表单校验不通过，请检查！'
+        })
+>>>>>>> 268ce8986c587a4e042657081146ed1ae9ecc4d2
       }
     },
 
     // 新增讲师
     saveData() {
+<<<<<<< HEAD
       var user = this.user
       console.log(user)
       userApi.save(this.user).then(response => {
         // debugger
+=======
+      let user = { ...this.user }
+      user.username = Encrypt.encrypt(this.user.username.trim())
+      user.pass = Encrypt.encrypt(this.user.pass.trim())
+      user.checkPass = Encrypt.encrypt(this.user.checkPass.trim())
+      console.log(user.username)
+      console.log(user.pass)
+      console.log(user.checkPass)
+      userApi.save(user).then(response => {
+>>>>>>> 268ce8986c587a4e042657081146ed1ae9ecc4d2
         if (response.success) {
           this.$message({
             type: 'success',

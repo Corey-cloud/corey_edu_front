@@ -4,6 +4,13 @@ const api_name = '/admin/acl/user'
 
 export default {
 
+  getPublicKey() {
+    return request({
+      url: `${api_name}/getPublicKey`,
+      method: 'get'
+    })
+  },
+
   getPageList(page, limit, searchObj) {
     return request({
       url: `${api_name}/${page}/${limit}`,

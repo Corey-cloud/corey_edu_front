@@ -3,12 +3,12 @@
     <!-- 查询表单 -->
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
-      <el-form-item>
+      <el-form-item label="用户名">
          <el-input v-model="searchObj.username" placeholder="用户名"/>
       </el-form-item>
 
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
-      <el-button type="default" @click="resetData()">清空</el-button>
+      <!-- <el-button type="default" @click="resetData()">清空</el-button> -->
     </el-form>
 
     <!-- 工具条 -->
@@ -63,7 +63,7 @@
       :current-page="page"
       :total="total"
       :page-size="limit"
-      :page-sizes="[5, 10, 20, 30, 40, 50, 100]"
+      :page-sizes="[1, 5, 10, 20, 30, 40, 50, 100]"
       style="padding: 30px 0; text-align: center;"
       layout="sizes, prev, pager, next, jumper, ->, total, slot"
       @current-change="fetchData"
