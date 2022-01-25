@@ -1,25 +1,25 @@
 <template>
   <div class="app-container">
-    <el-form ref="user"  :model="user" :rules="validateRules" label-width="100px">
+    <el-form ref="user" :model="user" :rules="validateRules" label-width="100px">
       <el-form-item label="用户名" prop="username">
-        <el-input style="width:350px" v-model="user.username"/>
+        <el-input v-model="user.username" style="width:350px"/>
       </el-form-item>
       <el-form-item label="昵称" prop="nickName">
-        <el-input style="width:350px" v-model="user.nickName"/>
+        <el-input v-model="user.nickName" style="width:350px"/>
       </el-form-item>
       <el-form-item label="密码" prop="pass">
-        <el-input type="password" style="width:350px" v-model="user.pass">
+        <el-input type="password" v-model="user.pass" style="width:350px">
           <!-- <i slot="suffix" class="el-icon-view" @click="showPwd"></i> -->
         </el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="checkPass">
-        <el-input type="password" style="width:350px" v-model="user.checkPass">
+        <el-input type="password" v-model="user.checkPass" style="width:350px">
           <!-- <i slot="suffix" class="el-icon-view" @click="showPwd"></i> -->
         </el-input>
       </el-form-item>
       <el-form-item>
         <el-button :disabled="saveBtnDisabled" type="primary" @click="saveOrUpdate">保存</el-button>
-        <!-- <el-button :disabled="saveBtnDisabled" @click="resetForm">清空</el-button> -->
+        <el-button :disabled="saveBtnDisabled" @click="resetForm">清空</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -28,8 +28,7 @@
 <script>
 
 import userApi from '@/api/acl/user'
-// let Base64 = require('js-base64').Base64
-
+import Base64 from 'js-base64/Base64'
 export default {
   data() {
     var validateUsername = (rule, value, callback) => {
@@ -77,7 +76,7 @@ export default {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         nickName: [{ required: true, trigger: 'blur', validator: validateNickname }],
         pass: [{ required: true, trigger: 'blur', validator: validatePass }],
-        checkPass: [{ required: true, trigger: 'blur', validator: validatePass2 }],
+        checkPass: [{ required: true, trigger: 'blur', validator: validatePass2 }]
       }
     }
   },
@@ -133,22 +132,30 @@ export default {
     },
 
     saveOrUpdate() {
-      this.$refs.user.validate(valid => {
-        if (valid) {
-          this.saveBtnDisabled = true // 防止表单重复提交
-          if (!this.user.id) {
-            this.saveData()
-          } else {
-            this.updateData()
-          }
-        } else {
-          console.log("校验不通过")
-        }
-      })
+      // this.$refs.user.validate(valid => {
+        // if (valid) {
+        //   this.saveBtnDisabled = true // 防止表单重复提交
+        //   if (!this.user.id) {
+        //     this.saveData()
+        //   } else {
+        //     this.updateData()
+        //   }
+        // } else {
+        //   console.log('校验不通过')
+        // }
+      // })
+      this.saveBtnDisabled = true
+      if (!this.user.id) {
+        this.saveData()
+      } else {
+        this.updateData()
+      }
     },
 
     // 新增讲师
     saveData() {
+      var user = this.user
+      console.log(user)
       userApi.save(this.user).then(response => {
         // debugger
         if (response.success) {
