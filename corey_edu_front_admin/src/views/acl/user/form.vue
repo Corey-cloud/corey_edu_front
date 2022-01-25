@@ -16,7 +16,7 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button :disabled="saveBtnDisabled" type="primary" @click="saveOrUpdate">保存</el-button>
+        <el-button :disabled="saveBtnDisabled"  type="primary" @click="saveOrUpdate">保存</el-button>
         <!-- <el-button :disabled="saveBtnDisabled" @click="resetForm">清空</el-button> -->
       </el-form-item>
     </el-form>
@@ -26,6 +26,9 @@
 <script>
 
 import userApi from '@/api/acl/user'
+import { JSEncrypt } from 'jsencrypt'
+
+const Encrypt = new JSEncrypt();
 
 export default {
   data() {
@@ -75,7 +78,8 @@ export default {
         nickName: [{ required: true, trigger: 'blur', validator: validateNickname }],
         pass: [{ required: true, trigger: 'blur', validator: validatePass }],
         checkPass: [{ required: true, trigger: 'blur', validator: validatePass2 }],
-      }
+      },
+      publicKey: '' // 加密公钥
     }
   },
 
@@ -130,24 +134,57 @@ export default {
     },
 
     saveOrUpdate() {
-      this.$refs.user.validate(valid => {
-        if (valid) {
-          this.saveBtnDisabled = true // 防止表单重复提交
-          if (!this.user.id) {
-            this.saveData()
+      // this.$refs.user.validate(valid => {
+      //   if (valid) {
+      //     this.saveBtnDisabled = true // 防止表单重复提交
+      //     if (!this.user.id) {
+      //       this.saveData()
+      //     } else {
+      //       this.updateData()
+      //     }
+      //   } else {
+      //     console.log("校验不通过")
+      //   }
+      // })
+      
+      if (this.user.username.length >= 5 && this.user.username.length <= 10 && this.user.nickName.length >= 2 && this.user.nickName.length <= 10 && this.user.pass.length >= 6 && this.user.checkPass === this.user.pass) {
+        this.saveBtnDisabled = true // 防止表单重复提交
+        userApi.getPublicKey().then(response => {
+          if (response.success) {
+            this.publicKey = response.data.publicKey
+            console.log('公钥', this.publicKey)
+            // 拿到公钥后对用户名和密码进行加密
+            Encrypt.setPublicKey(this.publicKey)
+            if (!this.user.id) {
+              this.saveData()
+            } else {
+              this.updateData()
+            }
           } else {
-            this.updateData()
+            this.$message({
+              type: 'error',
+              message: '从服务器获取加密公钥失败！'
+            })
           }
-        } else {
-          console.log("校验不通过")
-        }
-      })
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '表单校验不通过，请检查！'
+        })
+      }
     },
 
     // 新增讲师
     saveData() {
-      userApi.save(this.user).then(response => {
-        // debugger
+      let user = { ...this.user }
+      user.username = Encrypt.encrypt(this.user.username.trim())
+      user.pass = Encrypt.encrypt(this.user.pass.trim())
+      user.checkPass = Encrypt.encrypt(this.user.checkPass.trim())
+      console.log(user.username)
+      console.log(user.pass)
+      console.log(user.checkPass)
+      userApi.save(user).then(response => {
         if (response.success) {
           this.$message({
             type: 'success',
