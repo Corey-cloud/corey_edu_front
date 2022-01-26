@@ -34,7 +34,7 @@ export default {
   data() {
     var validateUsername = (rule, value, callback) => {
       if (value.length < 5 || value.length > 10) {
-        return callback(new Error('用户名不得小于5个或大于10个字符!'))
+        callback(new Error('用户名不得小于5个或大于10个字符!'))
       } else {
         callback()
       }
@@ -42,7 +42,7 @@ export default {
 
     var validateNickname = (rule, value, callback) => {
       if (value.length < 2 || value.length > 10) {
-        return callback(new Error('昵称不得小于2个或大于10个字符!'))
+        callback(new Error('昵称不得小于2个或大于10个字符!'))
       } else {
         callback()
       }
@@ -65,9 +65,7 @@ export default {
       if (value !== this.user.pass) {
         callback(new Error('两次输入密码不一致!'))
       }
-      else {
-        callback()
-      }
+      callback()
     }
     return {
       user: {
@@ -137,31 +135,22 @@ export default {
       })
     },
 
+    // 添加或修改
     saveOrUpdate() {
-      // this.$refs.user.validate(valid => {
-      //   if (valid) {
-      //     this.saveBtnDisabled = true // 防止表单重复提交
-      //     if (!this.user.id) {
-      //       this.saveData()
-      //     } else {
-      //       this.updateData()
-      //     }
-      //   } else {
-      //     console.log("校验不通过")
-      //   }
-      // })
-
-      // 添加
-      if (!this.user.id) {
-        if (this.user.username.length >= 5 && this.user.username.length <= 10 && this.user.nickName.length >= 2 && this.user.nickName.length <= 10 && this.user.pass.length >= 6 && this.user.checkPass === this.user.pass) {
+      this.$refs.user.validate(valid => {
+        if (valid) {
           this.saveBtnDisabled = true // 防止表单重复提交
+          // 获取公钥
           userApi.getPublicKey().then(response => {
             if (response.success) {
               this.publicKey = response.data.publicKey
-              console.log('公钥', this.publicKey)
               // 拿到公钥后对用户名和密码进行加密
               Encrypt.setPublicKey(this.publicKey)
-              this.saveData()
+              if (!this.user.id) {
+                this.saveData()
+              } else {
+                this.updateData()
+              }
             } else {
               this.$message({
                 type: 'error',
@@ -175,31 +164,7 @@ export default {
             message: '表单校验不通过，请检查！'
           })
         }
-      } else {
-        // 修改
-        if (this.user.username.length >= 5 && this.user.username.length <= 10 && this.user.nickName.length >= 2 && this.user.nickName.length <= 10) {
-          this.saveBtnDisabled = true // 防止表单重复提交
-          userApi.getPublicKey().then(response => {
-            if (response.success) {
-              this.publicKey = response.data.publicKey
-              console.log('公钥', this.publicKey)
-              // 拿到公钥后对用户名和密码进行加密
-              Encrypt.setPublicKey(this.publicKey)
-              this.updateData()
-            } else {
-              this.$message({
-                type: 'error',
-                message: '从服务器获取加密公钥失败！'
-              })
-            }
-          })
-        } else {
-          this.$message({
-            type: 'error',
-            message: '表单校验不通过，请检查！'
-          })
-        }
-      }
+      })
     },
 
     // 新增讲师

@@ -82,6 +82,7 @@ export default {
     }
   },
   methods: {
+    // 显示、隐藏密码
     showPwd() {
       if (this.pwdType === 'password') {
         this.pwdType = ''
@@ -89,18 +90,21 @@ export default {
         this.pwdType = 'password'
       }
     },
+
+    // 登录
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           // 获取公钥
           userApi.getPublicKey().then(response => {
-            console.log('进来了')
             if (response.success) {
+              console.log('公钥：', response.data.publicKey)
               Encrypt.setPublicKey(response.data.publicKey)
-              
               const loginForm = { ...this.loginForm }
               loginForm.username = Encrypt.encrypt(this.loginForm.username)
               loginForm.password = Encrypt.encrypt(this.loginForm.password)
+              console.log('username:', loginForm.username)
+              console.log('password:', loginForm.password)
               this.loading = true
               this.$store.dispatch('Login', loginForm).then(() => {
                 this.loading = false
