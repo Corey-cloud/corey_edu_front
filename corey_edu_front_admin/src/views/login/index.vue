@@ -37,15 +37,17 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
-import { login } from '@/api/login'
+import { JSEncrypt } from 'jsencrypt'
+import userApi from '@/api/acl/user'
+
+const Encrypt = new JSEncrypt();
 
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+      if (value.length < 5 || value.length > 10) {
+        return callback(new Error('用户名不得小于5个或大于10个字符'))
       } else {
         callback()
       }
@@ -90,19 +92,34 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
-            this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
-          // login(this.loginForm.username, this.loginForm.password).then( response => {
-          //   this.loading = false
-          //   console.log(response.data)
-          //   this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
-            this.loading = false
+          // 获取公钥
+          userApi.getPublicKey().then(response => {
+            console.log('进来了')
+            if (response.success) {
+              Encrypt.setPublicKey(response.data.publicKey)
+              
+              const loginForm = { ...this.loginForm }
+              loginForm.username = Encrypt.encrypt(this.loginForm.username)
+              loginForm.password = Encrypt.encrypt(this.loginForm.password)
+              this.loading = true
+              this.$store.dispatch('Login', loginForm).then(() => {
+                this.loading = false
+                this.$router.push({ path: this.redirect || '/' })
+              }).catch(() => {
+                this.loading = false
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '从服务器获取公钥失败'
+              })
+            }
           })
         } else {
-          console.log('error submit!!')
+          this.$message({
+            type: 'error',
+            message: '表单校验不通过，请输入正确的用户名和密码'
+          })
           return false
         }
       })

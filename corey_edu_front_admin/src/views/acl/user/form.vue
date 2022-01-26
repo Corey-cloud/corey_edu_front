@@ -35,12 +35,16 @@ export default {
     var validateUsername = (rule, value, callback) => {
       if (value.length < 5 || value.length > 10) {
         return callback(new Error('用户名不得小于5个或大于10个字符!'))
+      } else {
+        callback()
       }
     }
 
     var validateNickname = (rule, value, callback) => {
       if (value.length < 2 || value.length > 10) {
         return callback(new Error('昵称不得小于2个或大于10个字符!'))
+      } else {
+        callback()
       }
     }
 
@@ -200,7 +204,7 @@ export default {
 
     // 新增讲师
     saveData() {
-      let user = { ...this.user }
+      const user = { ...this.user }
       user.username = Encrypt.encrypt(this.user.username.trim())
       user.pass = Encrypt.encrypt(this.user.pass.trim())
       user.checkPass = Encrypt.encrypt(this.user.checkPass.trim())
@@ -220,7 +224,7 @@ export default {
 
     // 根据id更新记录
     updateData() {
-      let user = { ...this.user }
+      const user = { ...this.user }
       user.username = Encrypt.encrypt(this.user.username.trim())
       console.log('username:', user.username)
       userApi.updateById(user).then(response => {
