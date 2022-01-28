@@ -117,10 +117,13 @@ export default {
       console.log('翻页。。。' + page)
       // 异步获取远程数据（ajax）
       this.page = page
-
-      user.getPageList(this.page, this.limit, this.searchObj).then(
+      const pageParam = {
+        page: this.page,
+        limit: this.limit
+      }
+      user.getPageList(pageParam, this.searchObj).then(
         response => {
-          this.list = response.data.items
+          this.list = response.data.userInfoList
           this.total = response.data.total
 
           // 数据加载并绑定成功
