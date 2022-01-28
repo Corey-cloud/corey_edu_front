@@ -3,8 +3,11 @@
     <!-- 查询表单 -->
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
-      <el-form-item>
+      <el-form-item label="角色名称:">
         <el-input v-model="searchObj.roleName" placeholder="角色名称"/>
+      </el-form-item>
+      <el-form-item label="角色编码:">
+        <el-input v-model="searchObj.roleCode" placeholder="角色编码"/>
       </el-form-item>
 
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
@@ -39,8 +42,10 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="roleName" label="角色名称" />
-
+      <el-table-column prop="roleName" label="角色名称" width="150" />
+      <el-table-column prop="roleCode" label="角色编码" />
+      <el-table-column prop="gmtCreate" label="创建时间" width="180" />
+      <el-table-column prop="gmtModified" label="更新时间" width="180" />
 
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
@@ -100,7 +105,6 @@ export default {
 
     // 当页码发生改变的时候
     changeSize(size) {
-      console.log(size)
       this.limit = size
       this.fetchData(1)
     },
@@ -111,13 +115,15 @@ export default {
 
     // 加载讲师列表数据
     fetchData(page = 1) {
-      console.log('翻页。。。' + page)
-      // 异步获取远程数据（ajax）
       this.page = page
-
-      roleApi.getPageList(this.page, this.limit, this.searchObj).then(
-        response => {
-          this.list = response.data.items
+      const queryParam = {
+        page: this.page,
+        limit: this.limit,
+        roleName: this.searchObj.roleName,
+        roleCode: this.searchObj.roleCode
+      }
+      roleApi.getPageList(queryParam).then(response => {
+          this.list = response.data.rolesInfoList
           this.total = response.data.total
 
           // 数据加载并绑定成功
@@ -206,20 +212,8 @@ export default {
           message: '已取消删除'
         })
       })
-    },
-
-    // 执行搜索
-    // queryString：文本框中输入的值
-    // cb：一个函数
-    querySearch(queryString, cb) {
-      console.log(queryString)
-      console.log(cb)
-
-      // teacher.selectNameByKey(queryString).then(response => {
-      //   // 调用 callback 返回建议列表的数据
-      //   cb(response.data.items)
-      // })
     }
+
   }
 }
 </script>

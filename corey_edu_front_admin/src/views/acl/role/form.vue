@@ -2,7 +2,10 @@
   <div class="app-container">
     <el-form ref="role" :model="role" :rules="validateRules" label-width="120px">
       <el-form-item label="角色名称" prop="roleName">
-        <el-input v-model="role.roleName"/>
+        <el-input v-model="role.roleName" style="width:350px"/>
+      </el-form-item>
+      <el-form-item label="角色编码" prop="roleCode">
+        <el-input v-model="role.roleCode" style="width:350px"/>
       </el-form-item>
     <el-form-item>
         <el-button :disabled="saveBtnDisabled" type="primary" @click="saveOrUpdate">保存</el-button>
@@ -16,16 +19,32 @@
 import roleApi from '@/api/acl/role'
 
 const defaultForm = {
-  roleName: ''
+  roleName: '',
+  roleCode: ''
 }
 
 export default {
   data() {
+    var validateRoleName = (rule, value, callback) => {
+      if (value.length < 2 || value.length > 8) {
+        callback(new Error('角色名称不得小于2个或大于8个字符!'))
+      } else {
+        callback()
+      }
+    }
+    var validateRoleCode = (rule, value, callback) => {
+      if (value.length != 6) {
+        callback(new Error('角色编码必须为6个字符!'))
+      } else {
+        callback()
+      }
+    }
     return {
       role: defaultForm,
       saveBtnDisabled: false, // 保存按钮是否禁用,
       validateRules: {
-        roleName: [{ required: true, trigger: 'blur', message: '角色名必须输入' }]
+        roleName: [{ required: true, trigger: 'blur', validator: validateRoleName }],
+        roleCode: [{ required: true, trigger: 'blur', validator: validateRoleCode }]
       }
     }
   },
@@ -42,7 +61,6 @@ export default {
 
   // 生命周期方法（在路由切换，组件不变的情况下不会被调用）
   created() {
-    console.log('form created ......')
     this.init()
   },
 
@@ -50,7 +68,6 @@ export default {
 
     // 表单初始化
     init() {
-      debugger
       if (this.$route.params && this.$route.params.id) {
         const id = this.$route.params.id
         this.fetchDataById(id)
@@ -60,6 +77,7 @@ export default {
       }
     },
 
+    // 保存或修改
     saveOrUpdate() {
       this.$refs.role.validate(valid => {
         if (valid) {
@@ -76,7 +94,6 @@ export default {
     // 新增讲师
     saveData() {
       roleApi.save(this.role).then(response => {
-        // debugger
         if (response.success) {
           this.$message({
             type: 'success',
@@ -84,6 +101,8 @@ export default {
           })
           this.$router.push({ path: '/acl/role/list' })
         }
+      }).catch(() => {
+        this.saveBtnDisabled = false
       })
     },
 
@@ -98,14 +117,15 @@ export default {
           })
           this.$router.push({ path: '/acl/role/list' })
         }
+      }).catch(() => {
+        this.saveBtnDisabled = false
       })
     },
 
     // 根据id查询记录
     fetchDataById(id) {
       roleApi.getById(id).then(response => {
-        debugger
-        this.role = response.data.item
+        this.role = response.data.roleInfo
       })
     }
 

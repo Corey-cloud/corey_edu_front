@@ -13,11 +13,11 @@ export default {
   },
 
   // 分页获取
-  getPageList(pageParam, searchObj) {
+  getPageList(queryParam) {
     return request({
       url: `${api_name}/users`,
       method: 'get',
-      params: pageParam, searchObj // url查询字符串或表单键值对
+      params: queryParam // url查询字符串或表单键值对
     })
   },
 
@@ -73,7 +73,7 @@ export default {
   // 根据id列表批量删除用户信息
   removeRows(idList) {
     return request({
-      url: `${api_name}/batchRemove`,
+      url: `${api_name}/users/batchRemove`,
       method: 'delete',
       data: idList
     })

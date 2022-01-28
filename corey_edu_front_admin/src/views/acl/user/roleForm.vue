@@ -2,10 +2,10 @@
   <div class="app-container">
     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
     <div style="margin: 15px 0;"></div>
-    <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-        <el-checkbox v-for="city in cities" :label="city.id" :key="city.id">{{city.roleName}}</el-checkbox>
+    <el-checkbox-group v-model="checkedRoles" @change="handleCheckedRolesChange">
+        <el-checkbox v-for="role in roles" :label="role.id" :key="role.id" border>{{role.roleName}}</el-checkbox>
     </el-checkbox-group>
-    </br>
+   <br/>
     <el-button :disabled="saveBtnDisabled" type="primary" @click="update">保存</el-button>
     
   </div>
@@ -15,14 +15,13 @@
 
 import userApi from '@/api/acl/user'
 
-//const cityOptions = ['上海', '北京', '广州', '深圳'];
-
 export default {
   data() {
       return {
         checkAll: false,
-        checkedCities: [], //已选中
-        cities: [], //所有的
+        checkedRoles: [], //已选中的角色
+        allRolesId: [], //全部角色id列表
+        roles: [], //所有的角色
         isIndeterminate: true,
         userId:'',
         saveBtnDisabled: false // 保存按钮是否禁用,
@@ -32,19 +31,33 @@ export default {
       this.init()  
     },
     methods: {
-      init(){
-          if (this.$route.params && this.$route.params.id) {
-                this.userId = this.$route.params.id
-                this.getById(this.userId)
-            } 
+
+      handleCheckAllChange(val) {
+        this.checkedRoles = val ? this.allRolesId : [];
+        this.isIndeterminate = false;
       },
-      getById(userId){
+      handleCheckedRolesChange(value) {
+      
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.roles.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.roles.length;
+      },
+
+      init(){
+        if (this.$route.params && this.$route.params.id) {
+          this.userId = this.$route.params.id
+          this.getAssignById(this.userId)
+        }
+      },
+      getAssignById(userId){
           userApi.getAssign(userId).then(response => {
               var jsonObj = response.data.assignRoles
-              this.checkedCities = this.getJsonToList(jsonObj,"id")
-              this.cities = response.data.allRolesList
+              this.checkedRoles = this.getJsonToList(jsonObj,"id")
+              this.roles = response.data.allRolesList
+              this.allRolesId = this.getJsonToList(this.roles,"id")
           })
       },
+
       //把json数据转成string再转成对象，根据Key获取value数据
       getJsonToList(json,key){
         
@@ -59,19 +72,10 @@ export default {
           return strText;
         
       },
-      handleCheckAllChange(val) {
-        this.checkedCities = val ? this.cities : [];
-        this.isIndeterminate = false;
-      },
-      handleCheckedCitiesChange(value) {
       
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.cities.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
-      },
       update(){
         this.saveBtnDisabled = true // 防止表单重复提交
-        var ids = this.checkedCities.join(",")
+        var ids = this.checkedRoles.join(",")
         console.log(ids)
         //修改权限
         userApi.saveAssign(this.userId, ids).then(response => {

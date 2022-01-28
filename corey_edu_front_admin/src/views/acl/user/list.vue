@@ -6,6 +6,9 @@
       <el-form-item label="用户名">
          <el-input v-model="searchObj.username" placeholder="用户名"/>
       </el-form-item>
+      <el-form-item label="用户昵称">
+        <el-input v-model="searchObj.nickName" placeholder="用户昵称"/>
+      </el-form-item>
 
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
       <!-- <el-button type="default" @click="resetData()">清空</el-button> -->
@@ -44,6 +47,7 @@
       <el-table-column prop="nickName" label="用户昵称" />
 
       <el-table-column prop="gmtCreate" label="创建时间" width="180"/>
+      <el-table-column prop="gmtModified" label="更新时间" width="180"/>
 
       <el-table-column label="操作" width="230" align="center">
         <template slot-scope="scope">
@@ -114,14 +118,15 @@ export default {
 
     // 加载讲师列表数据
     fetchData(page = 1) {
-      console.log('翻页。。。' + page)
       // 异步获取远程数据（ajax）
       this.page = page
-      const pageParam = {
+      const queryParam = {
         page: this.page,
-        limit: this.limit
+        limit: this.limit,
+        username: this.searchObj.username,
+        nickName: this.searchObj.nickName
       }
-      user.getPageList(pageParam, this.searchObj).then(
+      user.getPageList(queryParam).then(
         response => {
           this.list = response.data.userInfoList
           this.total = response.data.total

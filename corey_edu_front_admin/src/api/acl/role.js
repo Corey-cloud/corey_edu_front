@@ -1,26 +1,27 @@
 import request from '@/utils/request'
 
-const api_name = '/admin/acl/role'
+const api_name = '/admin/acl/roles'
 
 export default {
 
-  getPageList(page, limit, searchObj) {
+  getPageList(queryParam) {
     return request({
-      url: `${api_name}/${page}/${limit}`,
+      url: `${api_name}`,
       method: 'get',
-      params: searchObj // url查询字符串或表单键值对
+      params: queryParam
     })
   },
+
   getById(id) {
     return request({
-      url: `${api_name}/get/${id}`,
+      url: `${api_name}/${id}`,
       method: 'get'
     })
   },
 
   save(role) {
     return request({
-      url: `${api_name}/save`,
+      url: `${api_name}`,
       method: 'post',
       data: role
     })
@@ -28,7 +29,7 @@ export default {
 
   updateById(role) {
     return request({
-      url: `${api_name}/update`,
+      url: `${api_name}`,
       method: 'put',
       data: role
     })
@@ -41,7 +42,7 @@ export default {
   },
   removeById(id) {
     return request({
-      url: `${api_name}/remove/${id}`,
+      url: `${api_name}/${id}`,
       method: 'delete'
     })
   },
