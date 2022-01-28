@@ -18,7 +18,7 @@
     <div>
       <el-button type="danger" size="mini" @click="addUser()" v-if="hasPerm('user.add')">添加</el-button>
       <el-button type="danger" size="mini" @click="removeRows()" v-if="hasPerm('user.remove')">批量删除</el-button>
-      
+
     </div>
 
     <!-- 用户列表 -->
@@ -52,7 +52,9 @@
       <el-table-column label="操作" width="230" align="center">
         <template slot-scope="scope">
           <router-link :to="'/acl/user/role/'+scope.row.id">
-            <el-button type="info" size="mini" icon="el-icon-info" v-if="hasPerm('user.assgin')"></el-button>
+            <el-tooltip class="item" effect="dark" content="用户角色管理" placement="top">
+              <el-button type="info" size="mini" icon="el-icon-info" v-if="hasPerm('user.assgin')"></el-button>
+            </el-tooltip>
           </router-link>
           <router-link :to="'/acl/user/update/'+scope.row.id">
             <el-button type="primary" size="mini" icon="el-icon-edit" v-if="hasPerm('user.update')"></el-button>

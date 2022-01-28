@@ -3,10 +3,10 @@
     <!-- 查询表单 -->
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
-      <el-form-item label="角色名称:">
+      <el-form-item label="角色名称">
         <el-input v-model="searchObj.roleName" placeholder="角色名称"/>
       </el-form-item>
-      <el-form-item label="角色编码:">
+      <el-form-item label="角色编码">
         <el-input v-model="searchObj.roleCode" placeholder="角色编码"/>
       </el-form-item>
 
@@ -16,8 +16,8 @@
 
     <!-- 工具条 -->
     <div>
-      <el-button type="danger" size="mini" @click="addUser()" v-if="hasPerm('role.add')">添加</el-button>
-      <el-button type="danger" size="mini" @click="removeRows()" v-if="hasPerm('role.remove')">批量删除</el-button>
+      <el-button type="danger" @click="addUser()" v-if="hasPerm('role.add')">添加</el-button>
+      <el-button type="danger" @click="removeRows()" v-if="hasPerm('role.remove')">批量删除</el-button>
 
     </div>
 
@@ -50,10 +50,12 @@
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <router-link :to="'/acl/role/distribution/'+scope.row.id">
-            <el-button type="info" size="mini" icon="el-icon-info" v-if="hasPerm('role.acl')"></el-button>
+            <el-tooltip class="item" effect="dark" content="角色权限管理" placement="top">
+              <el-button type="info" size="mini" icon="el-icon-info" v-if="hasPerm('role.acl')"></el-button>
+            </el-tooltip>
           </router-link>
           <router-link :to="'/acl/role/update/'+scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-edit"  v-if="hasPerm('role.update')"></el-button>
+            <el-button type="primary" size="mini" icon="el-icon-edit" v-if="hasPerm('role.update')"></el-button>
           </router-link>
           <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)" v-if="hasPerm('role.remove')"></el-button>
         </template>

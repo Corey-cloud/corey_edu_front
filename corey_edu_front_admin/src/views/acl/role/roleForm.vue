@@ -42,18 +42,18 @@ export default {
     this.init()
   },
   methods: {
-
+    // 初始化
     init(){
       if (this.$route.params && this.$route.params.id) {
           this.roleId = this.$route.params.id
           this.fetchDataById(this.roleId)
-      } 
+      }
     },
+    // 获取数据
     fetchDataById(roleId){
         menu.toAssign(roleId).then(response => {
             this.data = response.data.children
             var jsonList = JSON.parse(JSON.stringify(this.data))
-            debugger;
             var list = []
             this.getJsonToList(list, jsonList[0]['children'])
             console.log("最终集合")
@@ -68,11 +68,11 @@ export default {
             if(jsonList[i]['select'] == true && jsonList[i]['level'] == 4){
                 list.push(jsonList[i]['id'])
             }
-            if(jsonList[i]['children'] != null){ 
+            if(jsonList[i]['children'] != null){
               this.getJsonToList(list, jsonList[i]['children'])
-            } 
+            }
         }
-        
+
     },
 
     getCheckedNodes() {
@@ -82,7 +82,7 @@ export default {
       console.log(this.$refs.tree.getCheckedKeys());
     },
 
-    setCheckedKeys(list) {
+    setCheckedKeys(list) {2
       this.$refs.tree.setCheckedKeys(list);
     },
 
