@@ -7,7 +7,7 @@
     </el-checkbox-group>
    <br/>
     <el-button :disabled="saveBtnDisabled" type="primary" @click="update">保存</el-button>
-    
+
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
       };
     },
     created () {
-      this.init()  
+      this.init()
     },
     methods: {
 
@@ -37,12 +37,10 @@ export default {
         this.isIndeterminate = false;
       },
       handleCheckedRolesChange(value) {
-      
         let checkedCount = value.length;
         this.checkAll = checkedCount === this.roles.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.roles.length;
       },
-
       init(){
         if (this.$route.params && this.$route.params.id) {
           this.userId = this.$route.params.id
@@ -60,7 +58,7 @@ export default {
 
       //把json数据转成string再转成对象，根据Key获取value数据
       getJsonToList(json,key){
-        
+
           //把JSON字符串转成对象
           var list = JSON.parse(JSON.stringify(json));
           //var list = JSON.parse(json)
@@ -70,9 +68,9 @@ export default {
              strText.push(list[i][key])
           }
           return strText;
-        
+
       },
-      
+
       update(){
         this.saveBtnDisabled = true // 防止表单重复提交
         var ids = this.checkedRoles.join(",")

@@ -34,6 +34,7 @@ export default {
       data: role
     })
   },
+
   getAssign(roleId) {
     return request({
       url: `${api_name}/toAssign/${roleId}`,
@@ -51,6 +52,21 @@ export default {
       url: `${api_name}/batchRemove`,
       method: 'delete',
       data: idList
+    })
+  },
+
+  getAssign(roleId) {
+    return request({
+      url: `${api_name}/getAssign/${roleId}`,
+      method: 'get'
+    })
+  },
+
+  doAssign(roleId, permissionId) {
+    return request({
+      url: `${api_name}/doAssign`,
+      method: 'post',
+      params: { roleId, permissionId }
     })
   }
 

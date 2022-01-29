@@ -11,7 +11,7 @@
       </el-form-item>
 
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
-      <!-- <el-button type="default" @click="resetData()">清空</el-button> -->
+      <el-button type="default" @click="resetData()">清空</el-button>
     </el-form>
 
     <!-- 工具条 -->

@@ -55,21 +55,23 @@ export default {
     })
   },
 
+  // 根据用户id获取所属角色列表
   getAssign(userId) {
     return request({
-      url: `${api_name}/toAssign/${userId}`,
+      url: `${api_name}/users/toAssign/${userId}`,
       method: 'get'
     })
   },
 
+  // 保存用户对应的角色关系
   saveAssign(userId, roleId) {
     return request({
-      url: `${api_name}/doAssign`,
+      url: `${api_name}/users/doAssign`,
       method: 'post',
       params: { userId, roleId }
     })
   },
-  
+
   // 根据id列表批量删除用户信息
   removeRows(idList) {
     return request({

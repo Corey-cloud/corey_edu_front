@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import menu from '@/api/acl/menu'
+import role from '@/api/acl/role'
 
 export default {
   data() {
@@ -51,12 +51,12 @@ export default {
     },
     // 获取数据
     fetchDataById(roleId){
-        menu.toAssign(roleId).then(response => {
-            this.data = response.data.children
+        role.getAssign(roleId).then(response => {
+            this.data = response.data.permissionList
             var jsonList = JSON.parse(JSON.stringify(this.data))
             var list = []
             this.getJsonToList(list, jsonList[0]['children'])
-            console.log("最终集合")
+            console.log("最终集合:")
             console.log(list)
             this.setCheckedKeys(list)
         })
@@ -82,24 +82,23 @@ export default {
       console.log(this.$refs.tree.getCheckedKeys());
     },
 
-    setCheckedKeys(list) {2
+    setCheckedKeys(list) {
       this.$refs.tree.setCheckedKeys(list);
     },
 
+    // 保存
     save(){
       this.saveBtnDisabled = true
       var ids = this.$refs.tree.getCheckedKeys().join(",");
-      //vue elementUI tree树形控件获取父节点ID的实例
-      //node_modules\element-ui\lib\element-ui.common.js
-      //25348行修改源码
-      menu.doAssign(this.roleId, ids).then(response => {
-          if(response.success){
-              this.$message({
-                type:'success',
-                message:'保存成功'
-              })
-              this.$router.push({ path: '/acl/role/list' })
-            }
+
+      role.doAssign(this.roleId, ids).then(response => {
+        if(response.success){
+          this.$message({
+            type:'success',
+            message:'保存成功'
+          })
+          this.$router.push({ path: '/acl/role/list' })
+        }
       })
     }
   }

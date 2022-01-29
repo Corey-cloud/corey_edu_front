@@ -3,43 +3,38 @@ import request from '@/utils/request'
 const api_name = '/admin/acl'
 
 export default {
+
+  // 获取全部菜单列表（递归）
   getNestedTreeList() {
     return request({
       url: `${api_name}/permissions`,
       method: 'get'
     })
   },
-  removeById(id) {
-    return request({
-      url: `${api_name}/remove/${id}`,
-      method: 'delete'
-    })
-  },
+
+  // 添加菜单
   saveLevelOne(menu) {
     return request({
-      url: `${api_name}/save`,
+      url: `${api_name}/permissions`,
       method: 'post',
       data: menu
     })
   },
+
+  // 修改
   update(menu) {
     return request({
-      url: `${api_name}/update`,
+      url: `${api_name}/permissions`,
       method: 'put',
       data: menu
     })
   },
-  toAssign(roleId) {
+
+  // 删除
+  removeById(id) {
     return request({
-      url: `${api_name}/toAssign/${roleId}`,
-      method: 'get'
-    })
-  },
-  doAssign(roleId, permissionId) {
-    return request({
-      url: `${api_name}/doAssign`,
-      method: 'post',
-      params: { roleId, permissionId }
+      url: `${api_name}/permissions/${id}`,
+      method: 'delete'
     })
   }
 }

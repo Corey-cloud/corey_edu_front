@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "0.18.0",
     "echarts": "^4.1.0",
-    "element-ui": "2.4.6",
+    "element-ui": "^2.15.6",
     "encrypt": "0.0.1",
     "js-base64": "^3.7.2",
     "js-cookie": "2.2.0",

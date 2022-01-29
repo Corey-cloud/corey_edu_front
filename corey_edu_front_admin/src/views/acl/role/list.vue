@@ -16,8 +16,8 @@
 
     <!-- 工具条 -->
     <div>
-      <el-button type="danger" @click="addUser()" v-if="hasPerm('role.add')">添加</el-button>
-      <el-button type="danger" @click="removeRows()" v-if="hasPerm('role.remove')">批量删除</el-button>
+      <el-button type="danger" size="mini" @click="addUser()" v-if="hasPerm('role.add')">添加</el-button>
+      <el-button type="danger" size="mini" @click="removeRows()" v-if="hasPerm('role.remove')">批量删除</el-button>
 
     </div>
 
