@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
-const api_name = '/admin/acl/permission'
+const api_name = '/admin/acl'
 
 export default {
   getNestedTreeList() {
     return request({
-      url: `${api_name}`,
+      url: `${api_name}/permissions`,
       method: 'get'
     })
   },

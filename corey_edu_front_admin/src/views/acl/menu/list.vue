@@ -2,7 +2,6 @@
   <div class="app-container">
     <el-input v-model="filterText" placeholder="Filter keyword" style="margin-bottom:30px;"/>
 
-
     <el-table
       :data="menuList"
       style="width: 100%;margin-bottom: 20px;"
@@ -10,30 +9,11 @@
       border
       default-expand-all
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column
-        prop="name"
-        label="名称"
-        sortable
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="path"
-        label="访问路径"
-        sortable
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="component"
-        label="组件路径"
-        sortable
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="permissionValue"
-        label="权限值">
-      </el-table-column>
-      <el-table-column
-        label="操作">
+      <el-table-column prop="name" label="名称" sortable width="180" />
+      <el-table-column prop="path" label="访问路径" sortable width="180" />
+      <el-table-column prop="component" label="组件路径" sortable width="180" />
+      <el-table-column prop="permissionValue" label="权限值" />
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <!-- v-if="node.level == 1 || node.level == 2" v-if="node.level == 3" v-if="node.level == 4"-->
           <el-button
@@ -138,10 +118,10 @@ export default {
     return {
       filterText: '',
       menuList: [],
-      defaultProps: {
-        children: 'children',
-        label: 'name'
-      },
+      // defaultProps: {
+      //   children: 'children',
+      //   label: 'name'
+      // },
       dialogFormValue: '添加菜单',
       dialogFormVisible: false,
       dialogPermissionVisible: false,
@@ -173,7 +153,7 @@ export default {
     fetchNodeList() {
       menu.getNestedTreeList().then(response => {
         if (response.success === true) {
-          this.menuList = response.data.children
+          this.menuList = response.data.permissionsList
           console.log(this.menuList)
         }
       })
