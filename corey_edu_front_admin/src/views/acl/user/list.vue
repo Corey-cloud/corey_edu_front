@@ -4,10 +4,10 @@
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="用户名">
-         <el-input v-model="searchObj.username" placeholder="用户名"/>
+         <el-input clearable prefix-icon="el-icon-search" v-model="searchObj.username" placeholder="用户名"/>
       </el-form-item>
       <el-form-item label="用户昵称">
-        <el-input v-model="searchObj.nickName" placeholder="用户昵称"/>
+        <el-input clearable prefix-icon="el-icon-search" v-model="searchObj.nickName" placeholder="用户昵称"/>
       </el-form-item>
 
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
@@ -16,8 +16,8 @@
 
     <!-- 工具条 -->
     <div>
-      <el-button type="danger" size="mini" @click="addUser()" v-if="hasPerm('user.add')">添加</el-button>
-      <el-button type="danger" size="mini" @click="removeRows()" v-if="hasPerm('user.remove')">批量删除</el-button>
+      <el-button type="primary" size="small" @click="addUser()" v-if="hasPerm('user.add')">添加用户</el-button>
+      <el-button type="danger" size="small" @click="removeRows()" v-if="hasPerm('user.remove')">批量删除</el-button>
 
     </div>
 
@@ -49,17 +49,15 @@
       <el-table-column prop="gmtCreate" label="创建时间" width="180"/>
       <el-table-column prop="gmtModified" label="更新时间" width="180"/>
 
-      <el-table-column label="操作" width="230" align="center">
+      <el-table-column label="操作" width="350" align="center">
         <template slot-scope="scope">
           <router-link :to="'/acl/user/role/'+scope.row.id">
-            <el-tooltip class="item" effect="dark" content="用户角色管理" placement="top">
-              <el-button type="info" size="mini" icon="el-icon-info" v-if="hasPerm('user.assgin')"></el-button>
-            </el-tooltip>
+            <el-button type="info" size="small" icon="el-icon-info" v-if="hasPerm('user.assgin')">用户角色管理</el-button>
           </router-link>
           <router-link :to="'/acl/user/update/'+scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-edit" v-if="hasPerm('user.update')"></el-button>
+            <el-button type="primary" size="small" icon="el-icon-edit" v-if="hasPerm('user.update')">修改</el-button>
           </router-link>
-          <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)" v-if="hasPerm('user.remove')"></el-button>
+          <el-button type="danger" size="small" icon="el-icon-delete" @click="removeDataById(scope.row.id)" v-if="hasPerm('user.remove')">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -128,11 +126,9 @@ export default {
         username: this.searchObj.username,
         nickName: this.searchObj.nickName
       }
-      user.getPageList(queryParam).then(
-        response => {
+      user.getPageList(queryParam).then(response => {
           this.list = response.data.userInfoList
           this.total = response.data.total
-
           // 数据加载并绑定成功
           this.listLoading = false
         }

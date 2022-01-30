@@ -14,8 +14,8 @@
         <el-select v-model="teacher.level" clearable placeholder="请选择">
           <!--数据类型一定要和取出的json中的一致，否则没法回填
           因此，这里value使用动态绑定的值，保证其数据类型是number-->
-          <el-option :value="1" label="高级讲师" />
-          <el-option :value="2" label="首席讲师" />
+          <el-option :value=1 label="高级讲师" />
+          <el-option :value=2 label="首席讲师" />
         </el-select>
       </el-form-item>
       <el-form-item label="讲师资历">
@@ -24,10 +24,7 @@
       <el-form-item label="讲师简介">
         <el-input v-model="teacher.intro" :rows="10" type="textarea" />
       </el-form-item>
-      <!-- 讲师头像：TODO -->
-      <!-- 讲师头像 -->
       <el-form-item label="讲师头像">
-        <!-- 头衔缩略图 -->
         <pan-thumb :image="teacher.avatar"/>
         <!-- 文件上传按钮 -->
         <el-button type="primary" icon="el-icon-upload" @click="imagecropperShow=true">更换头像
@@ -63,18 +60,21 @@
 import teacher from '@/api/edu/teacher'
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
-export default {
-  components: { ImageCropper, PanThumb },
-  data() {
-    return {
-      teacher: {
+
+const defaultTeacher = {
         name: '',
         sort: 0,
         level: 1,
         career: '',
         intro: '',
         avatar: process.env.OSS_API + '/avatar/default.jpg'
-      },
+      }
+
+export default {
+  components: { ImageCropper, PanThumb },
+  data() {
+    return {
+      teacher: {...defaultTeacher},
       saveBtnDisabled: false, // 保存按钮是否禁用,
       BASE_API: process.env.BASE_API, // 接口API地址
       imagecropperShow: false, // 是否显示上传组件
@@ -94,17 +94,16 @@ export default {
   methods: {
     init() {
       if (this.$route.params && this.$route.params.id) {
-        const id = this.$route.params.id
-        this.fetchDataById(id)
+        this.fetchDataById(this.$route.params.id)
       } else {
-        this.teacher = {}
+        this.teacher = {...defaultTeacher}
       }
     },
-    // 根据id查询讲师的方法
+    // 根据id查询讲师
     fetchDataById(id) {
       teacher.getById(id).then(response => {
         this.teacher = response.data.item
-      }).catch(response => {
+      }).catch(_ => {
         this.$message({
           type: 'error',
           message: '获取数据失败'
@@ -119,54 +118,55 @@ export default {
         this.updateData()
       }
     },
+
+    // 保存
+    saveData() {
+      teacher.save(this.teacher).then(response => {
+        this.$message({
+          type: 'success',
+          message: '添加成功'
+        })
+        this.$router.push({ path: '/edu/teacher/list' })
+      }).catch(_ => {
+        this.$message({
+          type: 'error',
+          message: '添加失败'
+        })
+        this.saveBtnDisabled = false
+      })
+    },
+
     // 修改
     updateData() {
       this.saveBtnDisabled = true
       teacher.updateById(this.teacher).then(response => {
-        return this.$message({
+        this.$message({
           type: 'success',
-          message: '修改成功!'
+          message: '修改成功'
         })
-      }).then(resposne => {
         // 修改成功，回到列表页面 路由跳转
-        this.$router.push({ path: '/edu/teacher' })
-      }).catch((response) => {
-        // console.log(response)
+        this.$router.push({ path: '/edu/teacher/list' })
+      }).catch(_ => {
         this.$message({
           type: 'error',
-          message: '保存失败'
+          message: '修改失败'
         })
+        this.saveBtnDisabled = false
       })
     },
-    // 保存
-    saveData() {
-      teacher.save(this.teacher).then(response => {
-        return this.$message({
-          type: 'success',
-          message: '保存成功!'
-        })
-      }).then(resposne => {
-        this.$router.push({ path: '/edu/teacher' })
-      }).catch((response) => {
-        // console.log(response)
-        this.$message({
-          type: 'error',
-          message: '保存失败'
-        })
-      })
-    },
+
     // 上传成功后的回调函数
     cropSuccess(data) {
-      console.log(data)
       this.imagecropperShow = false
       this.teacher.avatar = data.url
       this.$message({
         type: 'success',
-        message: '头像上传成功！'
+        message: '头像上传成功'
       })
       // 上传成功后，重新打开上传组件时初始化组件，否则显示上一次的上传结果
       this.imagecropperKey = this.imagecropperKey + 1
     },
+
     // 关闭上传组件
     close() {
       this.imagecropperShow = false

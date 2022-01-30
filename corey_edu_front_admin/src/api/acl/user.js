@@ -7,7 +7,7 @@ export default {
   // 获取公钥
   getPublicKey() {
     return request({
-      url: `${api_name}/publicKey`,
+      url: `${api_name}/index/publicKey`,
       method: 'get'
     })
   },
@@ -17,7 +17,7 @@ export default {
     return request({
       url: `${api_name}/users`,
       method: 'get',
-      params: queryParam // url查询字符串或表单键值对
+      params: queryParam
     })
   },
 

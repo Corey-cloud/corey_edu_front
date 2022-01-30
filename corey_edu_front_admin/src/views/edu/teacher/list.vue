@@ -2,16 +2,19 @@
   <div class="app-container">
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
-      <el-form-item>
-        <el-input v-model="teacherQuery.name" placeholder="讲师名"/>
+      <el-form-item label="讲师名">
+        <el-input
+        v-model="teacherQuery.name"
+        placeholder="讲师名"
+        prefix-icon="el-icon-search"/>
       </el-form-item>
-      <el-form-item>
+      <el-form-item label="讲师头衔">
         <el-select v-model="teacherQuery.level" clearable placeholder="讲师头衔">
-          <el-option :value="1" label="高级讲师"/>
-          <el-option :value="2" label="首席讲师"/>
+          <el-option :value=1 label="高级讲师"/>
+          <el-option :value=2 label="首席讲师"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="添加时间">
+      <el-form-item label="创建时间">
         <el-date-picker
           v-model="teacherQuery.begin"
           type="datetime"
@@ -20,6 +23,7 @@
           default-time="00:00:00"
         />
       </el-form-item>
+      <span><b>: &nbsp;</b></span>
       <el-form-item>
         <el-date-picker
           v-model="teacherQuery.end"
@@ -49,16 +53,16 @@
           {{ (page - 1) * limit + scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="名称" width="80" />
+      <el-table-column sortable prop="name" label="讲师名称" width="110" />
       <el-table-column label="头衔" width="80">
         <template slot-scope="scope">
           {{ scope.row.level===1?'高级讲师':'首席讲师' }}
         </template>
       </el-table-column>
       <el-table-column prop="intro" label="资历" />
-      <el-table-column prop="gmtCreate" label="添加时间" width="160"/>
-      <el-table-column prop="gmtModified" label="更新时间" width="160"/>
-      <el-table-column prop="sort" label="排序" width="60" />
+      <el-table-column sortable prop="gmtCreate" label="创建时间" width="160"/>
+      <el-table-column sortable prop="gmtModified" label="更新时间" width="160"/>
+      <el-table-column sortable prop="sort" label="排序" width="80" />
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <router-link :to="'/edu/teacher/edit/'+scope.row.id">
@@ -82,10 +86,9 @@
 </template>
 
 <script>
-// 引入调用teacher.js文件
 import teacher from '@/api/edu/teacher'
+
 export default {
-  // 写核心代码位置
   data() {
     return {
       listLoading: true, // 是否显示loading信息
@@ -104,14 +107,18 @@ export default {
     // 讲师列表的方法
     getList(page = 1) {
       this.page = page
-      teacher.getTeacherListPage(this.page, this.limit, this.teacherQuery)
-        .then(response => { // 请求成功
-          // response接口返回的数据
-          // console.log(response)
-          this.list = response.data.rows
+      // 请求参数封装
+      const queryParam = {
+        page: this.page,
+        limit: this.limit,
+        name: this.teacherQuery.name,
+        level: this.teacherQuery.level,
+        begin: this.teacherQuery.begin,
+        end: this.teacherQuery.end
+      }
+      teacher.getPageList(queryParam).then(response => {
+          this.list = response.data.teacherList
           this.total = response.data.total
-          console.log(this.list)
-          console.log(this.total)
         })
       this.listLoading = false
     },
@@ -122,8 +129,6 @@ export default {
     },
     // 根据ID删除讲师的方法
     removeDataById(id) {
-      // debugger
-      // console.log(memberId)
       this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -134,7 +139,7 @@ export default {
         this.getList()
         this.$message({
           type: 'success',
-          message: '删除成功!'
+          message: '删除成功'
         })
       }).catch((response) => { // 失败
         if (response === 'cancel') {

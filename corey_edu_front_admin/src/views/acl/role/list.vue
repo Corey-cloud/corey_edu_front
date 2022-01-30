@@ -4,10 +4,10 @@
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="角色名称">
-        <el-input v-model="searchObj.roleName" placeholder="角色名称"/>
+        <el-input clearable prefix-icon="el-icon-search" v-model="searchObj.roleName" placeholder="角色名称"/>
       </el-form-item>
       <el-form-item label="角色编码">
-        <el-input v-model="searchObj.roleCode" placeholder="角色编码"/>
+        <el-input clearable prefix-icon="el-icon-search" v-model="searchObj.roleCode" placeholder="角色编码"/>
       </el-form-item>
 
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
@@ -16,8 +16,8 @@
 
     <!-- 工具条 -->
     <div>
-      <el-button type="danger" size="mini" @click="addUser()" v-if="hasPerm('role.add')">添加</el-button>
-      <el-button type="danger" size="mini" @click="removeRows()" v-if="hasPerm('role.remove')">批量删除</el-button>
+      <el-button type="primary" size="small" @click="addUser()" v-if="hasPerm('role.add')">添加角色</el-button>
+      <el-button type="danger" size="small" @click="removeRows()" v-if="hasPerm('role.remove')">批量删除</el-button>
 
     </div>
 
@@ -47,17 +47,15 @@
       <el-table-column prop="gmtCreate" label="创建时间" width="180" />
       <el-table-column prop="gmtModified" label="更新时间" width="180" />
 
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="350" align="center">
         <template slot-scope="scope">
           <router-link :to="'/acl/role/distribution/'+scope.row.id">
-            <el-tooltip class="item" effect="dark" content="角色权限管理" placement="top">
-              <el-button type="info" size="mini" icon="el-icon-info" v-if="hasPerm('role.acl')"></el-button>
-            </el-tooltip>
+            <el-button type="info" size="small" icon="el-icon-info" v-if="hasPerm('role.acl')">角色权限管理</el-button>
           </router-link>
           <router-link :to="'/acl/role/update/'+scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-edit" v-if="hasPerm('role.update')"></el-button>
+            <el-button type="primary" size="small" icon="el-icon-edit" v-if="hasPerm('role.update')">修改</el-button>
           </router-link>
-          <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)" v-if="hasPerm('role.remove')"></el-button>
+          <el-button type="danger" size="small" icon="el-icon-delete" @click="removeDataById(scope.row.id)" v-if="hasPerm('role.remove')">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
