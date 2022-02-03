@@ -3,7 +3,7 @@ const api_name = 'edu/admin/teachers'
 
 export default {
 
-  // 获取列表
+  // 分页获取列表
   getPageList(queryParam) {
     return request({
       url: `${api_name}`,
@@ -44,6 +44,13 @@ export default {
       method: 'put',
       data: teacher
     })
-  }
+  },
 
+  // 获取讲师列表，用于课程列表模糊查询讲师数据下拉框回显
+  getList() {
+    return request({
+      url: `${api_name}/all`,
+      method: 'get',
+    })
+  }
 }

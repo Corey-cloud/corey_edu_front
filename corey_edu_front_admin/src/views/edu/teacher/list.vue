@@ -2,10 +2,11 @@
   <div class="app-container">
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
-      <el-form-item label="讲师名">
+      <el-form-item label="讲师名称">
         <el-input
         v-model="teacherQuery.name"
-        placeholder="讲师名"
+        placeholder="讲师名称"
+        clearable
         prefix-icon="el-icon-search"/>
       </el-form-item>
       <el-form-item label="讲师头衔">
@@ -79,8 +80,9 @@
       :page-size="limit"
       :total="total"
       style="padding: 30px 0; text-align: center;"
-      layout="total, prev, pager, next, jumper"
+      layout="total, sizes, prev, pager, next, jumper"
       @current-change="getList"
+      @size-change="changeSize"
     />
   </div>
 </template>
@@ -103,7 +105,13 @@ export default {
     // 调用
     this.getList()
   },
-  methods: { // 创建具体的方法，调用teacher.js定义的方法
+  methods: {
+    // 当页码发生改变的时候
+    changeSize(size) {
+      this.limit = size
+      this.getList(1)
+    },
+
     // 讲师列表的方法
     getList(page = 1) {
       this.page = page

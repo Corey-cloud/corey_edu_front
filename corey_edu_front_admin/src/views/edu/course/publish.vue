@@ -7,8 +7,8 @@
       align-center
       style="margin-bottom: 40px"
     >
-      <el-step title="填写课程基本信息" />
-      <el-step title="创建课程大纲" />
+      <el-step title="编辑课程基本信息" />
+      <el-step title="编辑课程大纲" />
       <el-step title="发布课程" />
     </el-steps>
     <div class="ccInfo">
@@ -24,6 +24,9 @@
     </div>
     <el-form label-width="120px">
       <el-form-item>
+        <router-link style="margin-right: 80px" :to="'/edu/course/list'">
+          <el-button type="info">返回课程列表</el-button>
+        </router-link>
         <el-button @click="previous">返回修改</el-button>
         <el-button :disabled="saveBtnDisabled" type="primary" @click="publish">发布课程</el-button>
       </el-form-item>
@@ -38,7 +41,7 @@ export default {
     return {
       saveBtnDisabled: false, // 保存按钮是否禁用
       courseId: '', // 所属课程
-      coursePublish: {}
+      coursePublishInfo: {}
     }
   },
   created() {
@@ -49,14 +52,13 @@ export default {
     init() {
       if (this.$route.params && this.$route.params.id) {
         this.courseId = this.$route.params.id
-        // 根据id获取课程基本信息
+        // 根据id获取课程发布信息
         this.fetchCoursePublishInfoById()
       }
     },
     fetchCoursePublishInfoById() {
       course.getCoursePublishInfoById(this.courseId).then(response => {
-        this.coursePublish = response.data.item
-        console.log('这里表示进来了获取课程发布信息', this.coursePublish)
+        this.coursePublishInfo = response.data.item
       })
     },
 
@@ -64,8 +66,8 @@ export default {
       console.log('previous')
       this.$router.push({ path: '/edu/course/chapter/' + this.courseId })
     },
+
     publish() {
-      console.log('publish')
       course.publishCourse(this.courseId).then(response => {
         this.$message({
           type: 'success',

@@ -65,9 +65,9 @@
       :current-page="page"
       :total="total"
       :page-size="limit"
-      :page-sizes="[5, 10, 20, 30, 40, 50, 100]"
+      :page-sizes="[10, 20, 30, 40, 50, 100]"
       style="padding: 30px 0; text-align: center;"
-      layout="sizes, prev, pager, next, jumper, ->, total, slot"
+      layout="total, sizes, prev, pager, next, jumper"
       @current-change="fetchData"
       @size-change="changeSize"
     />

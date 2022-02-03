@@ -270,8 +270,6 @@ export default {
           type: 'error',
           message: '添加一级菜单失败'
         })
-        this.menu = {...menuForm}
-        this.permission = {...perForm}
       })
     },
 
@@ -296,8 +294,6 @@ export default {
           type: 'error',
           message: "添加二级菜单失败"
         })
-        this.menu = {...menuForm}
-        this.permission = {...perForm}
       })
     },
 

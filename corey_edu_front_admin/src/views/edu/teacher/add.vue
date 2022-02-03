@@ -22,7 +22,8 @@
         <el-input v-model="teacher.career" />
       </el-form-item>
       <el-form-item label="讲师简介">
-        <el-input v-model="teacher.intro" :rows="10" type="textarea" />
+        <tinymce :height="300" v-model="teacher.intro"/>
+        <!-- <el-input v-model="teacher.intro" :rows="10" type="textarea" /> -->
       </el-form-item>
       <el-form-item label="讲师头像">
         <pan-thumb :image="teacher.avatar"/>
@@ -40,7 +41,7 @@
           :width="300"
           :height="300"
           :key="imagecropperKey"
-          :url="BASE_API+'/eduoss/fileoss'"
+          :url="BASE_API+'/aliyun/oss/fileoss'"
           field="file"
           @close="close"
           @crop-upload-success="cropSuccess"/>
@@ -60,6 +61,7 @@
 import teacher from '@/api/edu/teacher'
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
+import Tinymce from '@/components/Tinymce'
 
 const defaultTeacher = {
         name: '',
@@ -71,7 +73,7 @@ const defaultTeacher = {
       }
 
 export default {
-  components: { ImageCropper, PanThumb },
+  components: { ImageCropper, PanThumb, Tinymce },
   data() {
     return {
       teacher: {...defaultTeacher},

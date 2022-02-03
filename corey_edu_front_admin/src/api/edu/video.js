@@ -1,28 +1,32 @@
 import request from '@/utils/request'
 
-const api_name = '/eduservice/edu-video'
+const api_name = '/edu/admin/videos'
 
 export default {
+
   saveVideoInfo(videoInfo) {
     return request({
-      url: `${api_name}/save-video-info`,
+      url: `${api_name}`,
       method: 'post',
       data: videoInfo
     })
   },
+
   getVideoInfoById(id) {
     return request({
-      url: `${api_name}/video-info/${id}`,
+      url: `${api_name}/${id}`,
       method: 'get'
     })
   },
+
   updateVideoInfoById(videoInfo) {
     return request({
-      url: `${api_name}/update-video-info/${videoInfo.id}`,
+      url: `${api_name}`,
       method: 'put',
       data: videoInfo
     })
   },
+
   removeById(id) {
     return request({
       url: `${api_name}/${id}`,

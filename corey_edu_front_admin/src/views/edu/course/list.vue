@@ -28,8 +28,8 @@
         </el-select>
       </el-form-item>
       <!-- 标题 -->
-      <el-form-item>
-        <el-input v-model="searchObj.title" placeholder="课程标题" />
+      <el-form-item label="课程标题">
+        <el-input prefix-icon="el-icon-search" clearable v-model="searchObj.title" placeholder="课程标题" />
       </el-form-item>
       <!-- 讲师 -->
       <el-form-item>
@@ -45,6 +45,7 @@
       <el-button type="primary" icon="el-icon-search" @click="fetchData()">查询</el-button>
       <el-button type="default" @click="resetData()">清空</el-button>
     </el-form>
+
     <!-- 表格 -->
     <el-table
       v-loading="listLoading"
@@ -52,57 +53,51 @@
       element-loading-text="数据加载中"
       border
       fit
-      highlight-current-row
-      row-class-name="myClassList"
-    >
+      highlight-current-row>
       <el-table-column label="序号" width="70" align="center">
         <template slot-scope="scope">
           {{ (page - 1) * limit + scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="课程信息" width="470" align="center">
+      <el-table-column label="课程封面" align="center">
         <template slot-scope="scope">
-          <div class="info">
-            <div class="pic">
-              <img :src="scope.row.cover" alt="scope.row.title" width="150px" >
-            </div>
-            <div class="title">
-              <a href="">{{ scope.row.title }}</a>
-              课时<span> {{ scope.row.lessonNum }} </span>
-              <p>{{ scope.row.lessonNum }}</p>
-            </div>
-          </div>
+            <img :src="scope.row.cover" alt="scope.row.title" width="150" height="80" >
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.gmtCreate.substr(0, 10) }}
-        </template>
-      </el-table-column>
-      <el-table-column label="发布时间" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.gmtModified.substr(0, 10) }}
-        </template>
-      </el-table-column>
+      <el-table-column label="课程标题" prop="title" align="center" />
+      <el-table-column label="总课时" prop="lessonNum" align="center" width="100" />
+      <el-table-column label="创建时间" prop="gmtCreate" align="center" width="160" />
+      <el-table-column label="更新时间" prop="gmtModified" align="center" width="160" />
+
       <el-table-column label="价格" width="100" align="center">
         <template slot-scope="scope">
-          {{
-            Number(scope.row.price) === 0 ? "免费" : "¥" + scope.row.price.toFixed(2)
-          }}
+          <b>
+            {{Number(scope.row.price) === 0 ? "免费" : "¥" + scope.row.price.toFixed(2)}}
+          </b>
         </template>
       </el-table-column>
       <el-table-column prop="buyCount" label="付费学员" width="100" align="center">
-        <template slot-scope="scope">{{ scope.row.buyCount }}人</template>
+        <template slot-scope="scope"><b>{{ scope.row.buyCount }}</b>人</template>
       </el-table-column>
-      <el-table-column label="操作" width="150" align="center">
+      <el-table-column label="课程状态" prop="status" align="center" width="120">
+        <template slot-scope="scope">
+          <span style="color:red;" v-if="scope.row.status === 'Draft' ">
+            <b>未发布</b>
+          </span>
+          <span style="color:green;" v-else>
+            <b>已发布</b>
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="350" align="center">
         <template slot-scope="scope">
           <router-link :to="'/edu/course/info/' + scope.row.id">
-            <el-button type="text" size="mini" icon="el-icon-edit">编辑课程信息</el-button>
+            <el-button type="primary" size="medium" icon="el-icon-edit">编辑课程信息</el-button>
           </router-link>
           <router-link :to="'/edu/course/chapter/' + scope.row.id">
-            <el-button type="text" size="mini" icon="el-icon-edit">编辑课程大纲</el-button>
+            <el-button type="info" size="medium" icon="el-icon-edit">编辑课程大纲</el-button>
           </router-link>
-          <el-button type="text" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
+          <el-button type="danger" size="medium" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -112,8 +107,9 @@
       :page-size="limit"
       :total="total"
       style="padding: 30px 0 text-align: center"
-      layout="total, prev, pager, next, jumper"
+      layout="total, sizes, prev, pager, next, jumper"
       @current-change="fetchData"
+      @size-change="changeSize"
     />
   </div>
 </template>
@@ -151,33 +147,46 @@ export default {
     this.initTeacherList()
   },
   methods: {
+    // 当页码发生改变的时候
+    changeSize(size) {
+      this.limit = size
+      this.fetchData(1)
+    },
+
     fetchData(page = 1) {
-      // 调用api层获取数据库中的数据
-      console.log('加载列表')
-      // 当点击分页组件的切换按钮的时候，会传输一个当前页码的参数page
-      // 解决分页无效问题
       this.page = page
+      const queryParam = {
+        page: this.page,
+        limit: this.limit,
+        projectParentId: this.searchObj.projectParentId,
+        projectId: this.searchObj.projectId,
+        title: this.searchObj.title,
+        teacherId: this.searchObj.teacherId
+      }
       this.listLoading = true
-      course.getPageList(this.page, this.limit, this.searchObj)
-        .then((response) => {
-          // debugger 设置断点调试
-          if (response.success === true) {
-            this.list = response.data.rows
+      course.getPageList(queryParam).then(response => {
+          if (response.success) {
+            this.list = response.data.courseInfoList
             this.total = response.data.total
           }
           this.listLoading = false
         })
     },
+
+    // 获取讲师列表
     initTeacherList() {
-      teacher.getList().then((response) => {
-        this.teacherList = response.data.items
+      teacher.getList().then(response => {
+        this.teacherList = response.data.teacherList
       })
     },
+
+    // 获取课程分类列表
     initSubjectList() {
-      subject.getNestedTreeList().then((response) => {
+      subject.getNestedTreeList().then(response => {
         this.subjectNestedList = response.data.items
       })
     },
+
     subjectLevelOneChanged(value) {
       for (let i = 0; i < this.subjectNestedList.length; i++) {
         if (this.subjectNestedList[i].id === value) {
@@ -192,7 +201,6 @@ export default {
       this.fetchData()
     },
     removeDataById(id) {
-      // debugger
       this.$confirm('此操作将永久删除该课程，以及该课程下的章节和视频，是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

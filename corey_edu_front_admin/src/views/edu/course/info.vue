@@ -7,8 +7,8 @@
       align-center
       style="margin-bottom: 40px"
     >
-      <el-step title="填写课程基本信息" />
-      <el-step title="创建课程大纲" />
+      <el-step title="编辑课程基本信息" />
+      <el-step title="编辑课程大纲" />
       <el-step title="提交审核" />
     </el-steps>
 
@@ -65,9 +65,9 @@
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
-          :action="BASE_API+'/eduoss/fileoss'"
+          :action="BASE_API+'/aliyun/oss/fileoss'"
           class="avatar-uploader">
-          <img :src="courseInfo.cover">
+          <img width="320" height="180" :src="courseInfo.cover">
         </el-upload>
       </el-form-item>
 
@@ -75,6 +75,9 @@
         <el-input-number :min="0" v-model="courseInfo.price" controls-position="right" placeholder="请填写课程价格"/> 元
       </el-form-item>
       <el-form-item>
+        <router-link style="margin-right: 80px" :to="'/edu/course/list'">
+          <el-button type="info">返回课程列表</el-button>
+        </router-link>
         <el-button :disabled="saveBtnDisabled" type="primary" @click="next">保存并下一步</el-button>
       </el-form-item>
     </el-form>
@@ -111,7 +114,6 @@ export default {
   },
 
   created() {
-    console.log('info created')
     this.init()
   },
 
@@ -161,7 +163,7 @@ export default {
 
     initTeacherList() {
       teacher.getList().then(response => {
-        this.teacherList = response.data.items
+        this.teacherList = response.data.teacherList
       })
     },
 
@@ -176,7 +178,6 @@ export default {
     },
 
     next() {
-      console.log('next')
       this.saveBtnDisabled = true
       if (!this.courseInfo.id) {
         this.saveData()
@@ -190,7 +191,7 @@ export default {
       course.saveCourseInfo(this.courseInfo).then(response => {
         this.$message({
           type: 'success',
-          message: '保存成功!'
+          message: '保存成功'
         })
         return response// 将响应结果传递给then
       }).then(response => {
@@ -200,26 +201,23 @@ export default {
           type: 'error',
           message: response.message
         })
+        this.saveBtnDisabled = false
       })
     },
 
+    // 修改
     updateData() {
-      this.saveBtnDisabled = true
       course.updateCourseInfoById(this.courseInfo).then(response => {
         this.$message({
           type: 'success',
-          message: '修改成功!'
+          message: '修改成功'
         })
         return response// 将响应结果传递给then
       }).then(response => {
         this.$router.push({ path: '/edu/course/chapter/' +
         response.data.courseId })
-      }).catch((response) => {
-        // console.log(response)
-        this.$message({
-          type: 'error',
-          message: '保存失败'
-        })
+      }).catch(_ => {
+        this.saveBtnDisabled = false
       })
     },
 
