@@ -16,7 +16,7 @@
           :on-error="fileUploadError"
           :disabled="importBtnDisabled"
           :limit="1"
-          :action="BASE_API+'/eduservice/edu-subject/addSubject'"
+          :action="BASE_API+'/edu/admin/subjects/addSubject'"
           name="file"
           accept="application/.xlsx">
           <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
@@ -39,7 +39,7 @@ export default {
       BASE_API: process.env.BASE_API, // 接口API地址
       OSS_API: process.env.OSS_API, // 阿里云OSS地址
       fileUploadBtnText: '上传到服务器', // 按钮文字
-      importBtnDisabled: false, // 按钮是否禁用,
+      importBtnDisabled: true, // 按钮是否禁用,
       loading: false
     }
   },

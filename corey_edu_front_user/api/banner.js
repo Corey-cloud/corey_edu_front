@@ -2,7 +2,7 @@ import request from '@/utils/request'
 export default {
   getList() {
     return request({
-      url: `/educms/banner/getAllBanner`,
+      url: `/edu/banners`,
       method: 'get'
     })
   }

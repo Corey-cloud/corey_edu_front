@@ -41,7 +41,7 @@
                   </div>
                 </section>
               </li>
-              
+
             </ul>
             <div class="clear"></div>
           </article>
@@ -100,7 +100,7 @@ export default {
   //异步调用，调用一次
   //params: 相当于之前 this.$route.params.id  等价  params.id
   asyncData({ params, error }) {
-    return teacherApi.getTeacherList(1,8).then(response => {
+    return teacherApi.getPageList(1,8).then(response => {
           //this.data = response.data.data
           return { data: response.data.data }
        })

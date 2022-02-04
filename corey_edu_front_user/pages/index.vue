@@ -1,5 +1,5 @@
 <template>
-  
+
   <div>
     <!-- 幻灯片 开始 -->
   <div v-swiper:mySwiper="swiperOption">
@@ -16,7 +16,7 @@
       <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
   </div>
   <!-- 幻灯片 结束 -->
-    
+
      <div id="aCoursesList">
       <!-- 网校课程 开始 -->
       <div>
@@ -29,39 +29,40 @@
           <div>
             <article class="comm-course-list">
               <ul class="of" id="bna">
-                <li v-for="course in eduList" :key="course.id">
+                <li v-for="course in courseList" :key="course.id">
                   <div class="cc-l-wrap">
                     <section class="course-img">
                       <img
+                        width="320"
+                        height="180"
                         :src="course.cover"
                         class="img-responsive"
-                        :alt="course.title"
-                      >
+                        :alt="course.title">
                       <div class="cc-mask">
-                        <a href="#" title="开始学习" class="comm-btn c-btn-1">开始学习</a>
+                        <a :href="'/course/'+course.id" title="开始学习" class="comm-btn c-btn-1">开始学习</a>
                       </div>
                     </section>
                     <h3 class="hLh30 txtOf mt10">
-                      <a href="#" :title="course.title" class="course-title fsize18 c-333">{{course.title}}</a>
+                      <a :href="'/course/'+course.id" :title="course.title" class="course-title fsize18 c-333">{{course.title}}</a>
                     </h3>
                     <section class="mt10 hLh20 of">
                       <span class="fr jgTag bg-green" v-if="Number(course.price) === 0">
                         <i class="c-fff fsize12 f-fA">免费</i>
                       </span>
                       <span class="fl jgAttr c-ccc f-fA">
-                        <i class="c-999 f-fA">9634人学习</i>
+                        <i class="c-999 f-fA">{{course.viewCount}}万播放</i>
                         |
                         <i class="c-999 f-fA">9634评论</i>
                       </span>
                     </section>
                   </div>
                 </li>
-               
+
               </ul>
               <div class="clear"></div>
             </article>
             <section class="tac pt20">
-              <a href="#" title="全部课程" class="comm-btn c-btn-2">全部课程</a>
+              <a href="/course" title="全部课程" class="comm-btn c-btn-2">全部课程</a>
             </section>
           </div>
         </section>
@@ -81,12 +82,12 @@
                 <li v-for="teacher in teacherList" :key="teacher.id">
                   <section class="i-teach-wrap">
                     <div class="i-teach-pic">
-                      <a href="/teacher/1" :title="teacher.name">
+                      <a :href="'/teacher/' + teacher.id" :title="teacher.name">
                         <img :alt="teacher.name" :src="teacher.avatar">
                       </a>
                     </div>
                     <div class="mt10 hLh30 txtOf tac">
-                      <a href="/teacher/1" :title="teacher.name" class="fsize18 c-666">{{teacher.name}}</a>
+                      <a :href="'/teacher/' + teacher.id" :title="teacher.name" class="fsize18 c-666">{{teacher.name}}</a>
                     </div>
                     <div class="hLh30 txtOf tac">
                       <span class="fsize14 c-999">{{teacher.career}}</span>
@@ -98,12 +99,12 @@
                     </div>
                   </section>
                 </li>
-                
+
               </ul>
               <div class="clear"></div>
             </article>
             <section class="tac pt20">
-              <a href="#" title="全部讲师" class="comm-btn c-btn-2">全部讲师</a>
+              <a href="/teacher" title="全部讲师" class="comm-btn c-btn-2">全部讲师</a>
             </section>
           </div>
         </section>
@@ -134,7 +135,7 @@ export default {
       },
       //banner数组
       bannerList:[],
-      eduList:[],
+      courseList:[],
       teacherList:[]
     }
   },
@@ -147,17 +148,17 @@ export default {
   methods:{
     //查询热门课程和名师
     getHotCourseTeacher() {
-      index.getIndexData()
+      index.getList()
         .then(response => {
-          this.eduList = response.data.data.eduList
+          this.courseList = response.data.data.courseList
           this.teacherList = response.data.data.teacherList
         })
     },
     //查询banner数据
     getBannerList() {
-      banner.getListBanner()
+      banner.getList()
         .then(response => {
-          this.bannerList = response.data.data.list
+          this.bannerList = response.data.data.bannerList
         })
     }
   }

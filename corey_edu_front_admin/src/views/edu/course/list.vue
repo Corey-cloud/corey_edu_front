@@ -97,7 +97,8 @@
           <router-link :to="'/edu/course/chapter/' + scope.row.id">
             <el-button type="info" size="medium" icon="el-icon-edit">编辑课程大纲</el-button>
           </router-link>
-          <el-button type="danger" size="medium" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
+          <el-button style="margin-top: 10px" v-if="scope.row.status === 'Draft' " type="primary" size="medium" icon="el-icon-finished" @click="toPublish(scope.row.id)">去发布</el-button>
+          <el-button style="margin-top: 10px" type="danger" size="medium" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -123,6 +124,7 @@ export default {
   data() {
     return {
       listLoading: true, // 是否显示loading信息
+      publishBtnDisabled: false,  // 发布按钮是否禁用
       list: null, // 数据列表
       total: 0, // 总记录数
       page: 1, // 页码
@@ -200,6 +202,11 @@ export default {
       this.subSubjectList = [] // 二级分类列表
       this.fetchData()
     },
+
+    toPublish(courseId) {
+      this.$router.push({ path: '/edu/course/publish/' + courseId })
+    },
+
     removeDataById(id) {
       this.$confirm('此操作将永久删除该课程，以及该课程下的章节和视频，是否继续?', '提示', {
         confirmButtonText: '确定',

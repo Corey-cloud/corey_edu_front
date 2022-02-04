@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const api_name = '/eduservice/front-course'
+const api_name = '/edu/courses'
 
 export default {
   getPageList(page, limit, searchObj) {
@@ -11,16 +11,16 @@ export default {
     })
   },
   // 获取课程二级分类
-  getNestedTreeList2() {
+  getAllSubject() {
     return request({
-      url: `/eduservice/edu-subject`,
+      url: `/edu/admin/subjects`,
       method: 'get'
     })
   },
 
-  getById(courseId,token) {
+  getById(courseId) {
     return request({
-      url: `${api_name}/${courseId}/${token}`,
+      url: `${api_name}/${courseId}`,
       method: 'get'
     })
   }

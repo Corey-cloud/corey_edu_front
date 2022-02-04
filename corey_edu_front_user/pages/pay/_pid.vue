@@ -26,13 +26,13 @@
         </div>
         <div class="clearfix"></div>
         <!-- <p><a href="pay.html" target="_blank">> 其他支付方式</a></p> -->
-        
+
       </div>
     </div>
   </div>
 </template>
 <script>
-import ordersApi from '@/api/orders'
+import ordersApi from '@/api/order'
 export default {
      asyncData({ params, error }) {
          return ordersApi.createNatvie(params.pid)

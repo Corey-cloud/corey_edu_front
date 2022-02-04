@@ -86,10 +86,10 @@
       }
     },
     methods: {
-     
+
        //注册提交的方法
        submitRegister() {
-         registerApi.registerMember(this.params)
+         registerApi.submitRegister(this.params)
           .then(response => {
             //提示注册成功
               this.$message({
@@ -98,7 +98,7 @@
               })
             //跳转登录页面
             this.$router.push({path:'/login'})
-              
+
           })
        },
        timeDown() {
@@ -108,7 +108,6 @@
           if (this.second < 1) {
             clearInterval(result);
             this.sending = true;
-            //this.disabled = false;
             this.second = 60;
             this.codeTest = "获取验证码"
           }

@@ -12,14 +12,14 @@
       <el-step title="发布课程" />
     </el-steps>
     <div class="ccInfo">
-      <img :src="coursePublish.cover">
+      <img :src="coursePublishInfo.cover">
       <div class="main">
-        <h2>{{ coursePublish.title }}</h2>
-        <p class="gray"><span>共{{ coursePublish.lessonNum }}课时</span></p>
-        <p><span>所属分类：{{ coursePublish.subjectLevelOne }} — {{
-        coursePublish.subjectLevelTwo }}</span></p>
-        <p>课程讲师：{{ coursePublish.teacherName }}</p>
-        <h3 class="red">￥{{ coursePublish.price }}</h3>
+        <h2>{{ coursePublishInfo.title }}</h2>
+        <p>共<b>    {{ coursePublishInfo.lessonNum }}</b>课时</p>
+        <p><span>所属分类：{{ coursePublishInfo.subjectLevelOne }} — {{
+        coursePublishInfo.subjectLevelTwo }}</span></p>
+        <p>课程讲师：{{ coursePublishInfo.teacherName }}</p>
+        <h3 class="red">￥{{ coursePublishInfo.price }}</h3>
       </div>
     </div>
     <el-form label-width="120px">

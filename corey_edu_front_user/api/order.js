@@ -1,23 +1,23 @@
 import request from '@/utils/request'
 export default {
   //1、创建订单
-  createOrder(cid,token) {
+  createOrder(cid) {
     return request({
-      url: `/orderservice/order/createOrder/${cid}/${token}`,
+      url: `/order/createOrder/${cid}`,
       method: 'post'
     })
   },
   //2、根据id获取订单
   getById(cid) {
     return request({
-      url: '/orderservice/order/getOrder/' + cid,
+      url: '/order/getOrder/' + cid,
       method: 'get'
     })
   },
   //3、生成微信支付二维码
   createNative(cid) {
     return request({
-      url: '/orderservice/pay-log/createNative/' + cid,
+      url: '/order/pay-log/createNative/' + cid,
       method: 'get'
     })
   },

@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 export default {
+  // 获取热门课程和讲师列表
   getList() {
     return request({
-      url: `/eduservice/index`,
+      url: `/edu/index`,
       method: 'get'
     })
   }

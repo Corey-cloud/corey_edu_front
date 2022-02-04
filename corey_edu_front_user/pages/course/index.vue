@@ -15,13 +15,13 @@
             </dt>
             <dd class="c-s-dl-li">
               <ul class="clearfix">
-                <li>
-                  <a title="全部" href="#">全部</a>
+                <li :class="{active:all==-1}">
+                  <a @click="getAll" title="全部" href="#">全部</a>
                 </li>
                 <li v-for="(item,index) in subjectNestedList" :key="index" :class="{active:oneIndex==index}">
                   <a :title="item.title" href="#" @click="searchOne(item.id,index)">{{item.title}}</a>
                 </li>
-               
+
               </ul>
             </dd>
           </dl>
@@ -34,7 +34,7 @@
                 <li v-for="(item,index) in subSubjectList" :key="index" :class="{active:twoIndex==index}">
                   <a :title="item.title" href="#" @click="searchTwo(item.id,index)">{{item.title}}</a>
                 </li>
-               
+
               </ul>
             </dd>
           </dl>
@@ -81,11 +81,11 @@
                   <section class="course-img">
                     <img :src="item.cover" class="img-responsive" :alt="item.title">
                     <div class="cc-mask">
-                      <a :href="'/course/'+item.id" title="开始学习" class="comm-btn c-btn-1">开始学习</a>
+                      <a :href="'/course/'+item.id" title="开始学习" target="_blank" class="comm-btn c-btn-1">开始学习</a>
                     </div>
                   </section>
                   <h3 class="hLh30 txtOf mt10">
-                    <a :href="'/course/'+item.id" :title="item.title" class="course-title fsize18 c-333">{{item.title}}</a>
+                    <a :href="'/course/'+item.id" :title="item.title" target="_blank" class="course-title fsize18 c-333">{{item.title}}</a>
                   </h3>
                   <section class="mt10 hLh20 of">
                     <span v-if="Number(item.price) === 0" class="fr jgTag bg-green">
@@ -99,7 +99,7 @@
                   </section>
                 </div>
               </li>
-              
+
             </ul>
             <div class="clear"></div>
           </article>
@@ -155,7 +155,7 @@ export default {
       subSubjectList: [], // 二级分类列表
 
       searchObj: {}, // 查询表单对象
-
+      all: -1,
       oneIndex:-1,
       twoIndex:-1,
       buyCountSort:"",
@@ -170,9 +170,21 @@ export default {
     this.initSubject()
   },
   methods:{
+
+    getAll() {
+      this.all=-1
+      this.oneIndex=-1
+      this.twoIndex=-1
+      this.subSubjectList = []
+      //课程第一次查询
+      this.initCourseFirst()
+      //一级分类显示
+      this.initSubject()
+    },
+
     //1 查询第一页数据
     initCourseFirst() {
-      courseApi.getCourseList(1,8,this.searchObj).then(response => {
+      courseApi.getPageList(1,8,this.searchObj).then(response => {
         this.data = response.data.data
       })
     },
@@ -181,13 +193,13 @@ export default {
     initSubject() {
       courseApi.getAllSubject()
         .then(response => {
-          this.subjectNestedList = response.data.data.list
+          this.subjectNestedList = response.data.data.items
         })
     },
 
     //3 分页切换的方法
     gotoPage(page) {
-      courseApi.getCourseList(page,8,this.searchObj).then(response => {
+      courseApi.getPageList(page,8,this.searchObj).then(response => {
         this.data = response.data.data
       })
     },
@@ -198,6 +210,7 @@ export default {
       this.oneIndex = index
 
       this.twoIndex = -1
+      this.all = 1
       this.searchObj.subjectId = ""
       this.subSubjectList = []
 

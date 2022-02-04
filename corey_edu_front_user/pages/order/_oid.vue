@@ -48,7 +48,7 @@
       </table>
       <div class="Finish">
         <div class="fr" id="AgreeDiv">
-          
+
           <label for="Agree"><p class="on"><input type="checkbox" checked="checked">我已阅读并同意<a href="javascript:" target="_blank">《谷粒学院购买协议》</a></p></label>
         </div>
         <div class="clear"></div>
@@ -69,10 +69,10 @@
   </div>
 </template>
 <script>
-import ordersApi from '@/api/orders'
+import ordersApi from '@/api/order'
 export default {
     asyncData({ params, error }) {
-        return ordersApi.getOrdersInfo(params.oid)
+        return ordersApi.getById(params.oid)
             .then(response => {
                 return {
                     order: response.data.data.item

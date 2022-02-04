@@ -2,14 +2,14 @@ import request from '@/utils/request'
 export default {
   getPageList(page, limit, courseId) {
     return request({
-      url: `/eduservice/comment/${page}/${limit}`,
+      url: `/edu/comments/${page}/${limit}`,
       method: 'get',
       params: { courseId }
     })
   },
-  addComment(comment,token) {
+  addComment(comment) {
     return request({
-      url: `/eduservice/comment/auth/save/${token}`,
+      url: `/edu/comments/auth/save`,
       method: 'post',
       data: comment
     })
