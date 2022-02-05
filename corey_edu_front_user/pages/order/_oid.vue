@@ -49,7 +49,7 @@
       <div class="Finish">
         <div class="fr" id="AgreeDiv">
 
-          <label for="Agree"><p class="on"><input type="checkbox" checked="checked">我已阅读并同意<a href="javascript:" target="_blank">《谷粒学院购买协议》</a></p></label>
+          <label for="Agree"><p class="on"><el-checkbox v-model="checked"/>我已阅读并同意<a href="javascript:" target="_blank">《Corey在线教育购买协议》</a></p></label>
         </div>
         <div class="clear"></div>
         <div class="Main fl">
@@ -62,7 +62,7 @@
           </div>
         </div>
         <input name="score" value="0" type="hidden" id="usedScore">
-        <button class="fr redb" type="button" id="submitPay" @click="toPay()">去支付</button>
+        <el-button :disabled="!checked" class="fr redb" type="button" id="submitPay" @click="toPay()">去支付</el-button>
         <div class="clear"></div>
       </div>
     </form>
@@ -70,20 +70,25 @@
 </template>
 <script>
 import ordersApi from '@/api/order'
+
 export default {
+    data() {
+      return {
+        checked: false
+      }
+    },
     asyncData({ params, error }) {
-        return ordersApi.getById(params.oid)
-            .then(response => {
-                return {
-                    order: response.data.data.item
-                }
-            })
+      return ordersApi.getById(params.oid).then(response => {
+        return {
+            order: response.data.data.item
+        }
+      })
     },
     methods:{
-        //去支付
-        toPay() {
-            this.$router.push({path:'/pay/'+this.order.orderNo})
-        }
+      //去支付
+      toPay() {
+          this.$router.push({path:'/pay/'+this.order.orderNo})
+      }
     }
 }
 </script>

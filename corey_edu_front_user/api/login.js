@@ -13,7 +13,7 @@ export default {
     return request({
       url: `/ucenter/member/auth/getLoginInfo`,
       method: 'get',
-      headers: {'token': cookie.get('guli_token')}
+      // headers: {'token': cookie.get('guli_token')}
     })
     //headers: {'token': cookie.get('guli_token')}
   }

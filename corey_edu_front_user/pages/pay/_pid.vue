@@ -35,12 +35,12 @@
 import ordersApi from '@/api/order'
 export default {
      asyncData({ params, error }) {
-         return ordersApi.createNatvie(params.pid)
-            .then(response => {
-                return {
-                      payObj: response.data.data
-                    }
-            })
+        return ordersApi.createNative(params.pid)
+          .then(response => {
+            return {
+              payObj: response.data.data
+            }
+          })
      },
      data() {
          return {

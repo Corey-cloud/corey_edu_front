@@ -34,13 +34,16 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    vendor: ['element-ui']
   },
   plugins: [
-    { src: '~/plugins/nuxt-swiper-plugin.js', ssr: false }
+    { src: '~/plugins/nuxt-swiper-plugin.js', ssr: false },
+    '~plugins/element-ui.js'
   ],
   css: [
-    'swiper/dist/css/swiper.css'
+    'swiper/dist/css/swiper.css',
+    'element-ui/lib/theme-chalk/index.css'
   ]
 }
 

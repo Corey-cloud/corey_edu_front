@@ -24,7 +24,7 @@ export default {
   //4、根据id获取订单支付状态
   queryPayStatus(cid) {
     return request({
-      url: '/orderservice/pay-log/queryPayStatus/' + cid,
+      url: '/order/pay-log/queryPayStatus/' + cid,
       method: 'get'
     })
   }

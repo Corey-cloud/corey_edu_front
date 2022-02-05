@@ -364,7 +364,7 @@ export default {
     initCourseInfo() {
       courseApi.getById(this.courseId).then((response) => {
         (this.courseWebVo = response.data.data.course),
-          (this.chapterVideoList = response.data.data.chapterVideoList),
+          (this.chapterVideoList = response.data.data.chapterVoList),
           (this.isbuy = response.data.data.isBuyCourse);
       });
     },
