@@ -155,7 +155,7 @@ import '~/assets/css/swiper-3.3.1.min.css'
 import "~/assets/css/pages-weixinpay.css"
 
 import cookie from 'js-cookie'
-
+import login from '@/api/login'
 export default {
   data() {
     return {
@@ -172,10 +172,12 @@ export default {
   },
 
   created() {
-    this.showInfo()
-    if (cookie.get("guli_token") == null) {
-      cookie.set("guli_token", "123")
+    this.token = this.$route.query.token
+      if (this.token) {
+      this.wxLogin()
     }
+    this.showInfo()
+    
   },
 
   methods: {
@@ -186,6 +188,17 @@ export default {
       if (jsonStr) {
         this.loginInfo =JSON.parse(jsonStr)
       }
+    },
+
+    wxLogin() {
+      if (this.token == '') return
+      cookie.set('guli_token', this.token, {domain: 'localhost'})
+      cookie.set('guli_ucenter', '', {domain: 'localhost'})
+      login.getLoginUserInfo().then(response => {
+        this.loginInfo = response.data.data.userInfo
+        //获取返回用户信息，放到cookie里面
+        cookie.set('guli_ucenter',this.loginInfo,{domain: 'localhost'})
+      })
     },
 
     logout() {
