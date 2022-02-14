@@ -1,0 +1,81 @@
+.common-content-row {
+  display: flex;
+  justify-content: center;
+}
+.common-content {
+  width: 1280px;
+}
+.el-header {
+  padding: 0;
+  height: auto;
+}
+.el-main{
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.common-pagination {
+  margin-top: 20px;
+}
+.common-a{
+  cursor: pointer;
+}
+.common-a:hover{
+  color: #00b5e5;
+}
+.common-a-bg{
+  cursor: pointer;
+  padding:3px;
+  border-radius: 2px;
+}
+.common-a-bg:hover{
+  background: #e5e9ef;
+  color: #00a1d6;
+}
+.el-avatar{
+  cursor: pointer;
+}
+.common-right-content{
+  height: 100%;
+}
+.main {
+  font-family: Arial, "Microsoft YaHei", "Microsoft Sans Serif",
+    "Microsoft SanSerf", 微软雅黑;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  min-width: 1200px;
+}
+h2 {
+  display: block;
+  font-size: 1.5em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+}
+p {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+/* .el-pagination >>> ul>li{
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  font-size: 18px;
+}
+.el-pagination >>> button{
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  font-size: 18px;
+}
+.el-pagination >>> span{
+  height: 40px;
+  line-height: 40px;
+  font-size: 18px;
+} */

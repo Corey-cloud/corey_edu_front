@@ -1,166 +1,259 @@
-<template>
-
-  <div>
-    <!-- 幻灯片 开始 -->
-  <div v-swiper:mySwiper="swiperOption">
-      <div class="swiper-wrapper">
-
-          <div v-for="banner in bannerList" :key="banner.id" class="swiper-slide" style="background: #040B1B;">
-              <a target="_blank" :href="banner.linkUrl">
-                  <img :src="banner.imageUrl" :alt="banner.title">
-              </a>
-          </div>
-      </div>
-      <div class="swiper-pagination swiper-pagination-white"></div>
-      <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
-      <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
-  </div>
-  <!-- 幻灯片 结束 -->
-
-     <div id="aCoursesList">
-      <!-- 网校课程 开始 -->
-      <div>
-        <section class="container">
-          <header class="comm-title">
-            <h2 class="tac">
-              <span class="c-333">热门课程</span>
-            </h2>
-          </header>
-          <div>
-            <article class="comm-course-list">
-              <ul class="of" id="bna">
-                <li v-for="course in courseList" :key="course.id">
-                  <div class="cc-l-wrap">
-                    <section class="course-img">
-                      <img
-                        width="320"
-                        height="180"
-                        :src="course.cover"
-                        class="img-responsive"
-                        :alt="course.title">
-                      <div class="cc-mask">
-                        <a :href="'/course/'+course.id" title="开始学习" class="comm-btn c-btn-1">开始学习</a>
-                      </div>
-                    </section>
-                    <h3 class="hLh30 txtOf mt10">
-                      <a :href="'/course/'+course.id" :title="course.title" class="course-title fsize18 c-333">{{course.title}}</a>
-                    </h3>
-                    <section class="mt10 hLh20 of">
-                      <span class="fr jgTag bg-green" v-if="Number(course.price) === 0">
-                        <i class="c-fff fsize12 f-fA">免费</i>
-                      </span>
-                      <span class="fl jgAttr c-ccc f-fA">
-                        <i class="c-999 f-fA">{{course.viewCount}}万播放</i>
-                        |
-                        <i class="c-999 f-fA">9634评论</i>
-                      </span>
-                    </section>
-                  </div>
-                </li>
-
-              </ul>
-              <div class="clear"></div>
-            </article>
-            <section class="tac pt20">
-              <a href="/course" title="全部课程" class="comm-btn c-btn-2">全部课程</a>
-            </section>
-          </div>
-        </section>
-      </div>
-      <!-- /网校课程 结束 -->
-      <!-- 网校名师 开始 -->
-      <div>
-        <section class="container">
-          <header class="comm-title">
-            <h2 class="tac">
-              <span class="c-333">名师大咖</span>
-            </h2>
-          </header>
-          <div>
-            <article class="i-teacher-list">
-              <ul class="of">
-                <li v-for="teacher in teacherList" :key="teacher.id">
-                  <section class="i-teach-wrap">
-                    <div class="i-teach-pic">
-                      <a :href="'/teacher/' + teacher.id" :title="teacher.name">
-                        <img :alt="teacher.name" :src="teacher.avatar">
-                      </a>
-                    </div>
-                    <div class="mt10 hLh30 txtOf tac">
-                      <a :href="'/teacher/' + teacher.id" :title="teacher.name" class="fsize18 c-666">{{teacher.name}}</a>
-                    </div>
-                    <div class="hLh30 txtOf tac">
-                      <span class="fsize14 c-999">{{teacher.career}}</span>
-                    </div>
-                    <div class="mt15 i-q-txt">
-                      <p
-                        class="c-999 f-fA"
-                      >{{teacher.intro}}</p>
-                    </div>
-                  </section>
-                </li>
-
-              </ul>
-              <div class="clear"></div>
-            </article>
-            <section class="tac pt20">
-              <a href="/teacher" title="全部讲师" class="comm-btn c-btn-2">全部讲师</a>
-            </section>
-          </div>
-        </section>
-      </div>
-      <!-- /网校名师 结束 -->
-    </div>
-  </div>
-</template>
-
 <script>
+// @ is an alias to /src
+import HelloWorld from './components/HelloWorld.vue'
+import NavHead from './components/NavHead.vue'
+import Carousel from './components/Carousel.vue'
+import NavBar from './components/NavBar.vue'
+import UpdateTable from './components/UpdateTable.vue'
+import FooterBar from './components/FooterBar.vue'
+import Recommond from './components/Recommond.vue'
 import banner from '@/api/banner'
 import index from '@/api/index'
-
 export default {
-  data () {
-    return {
-
-      swiperOption: {
-        //配置分页
-        pagination: {
-          el: '.swiper-pagination'//分页的dom节点
-        },
-        //配置导航
-        navigation: {
-          nextEl: '.swiper-button-next',//下一页dom节点
-          prevEl: '.swiper-button-prev'//前一页dom节点
-        }
-      },
-      //banner数组
-      bannerList:[],
-      courseList:[],
-      teacherList:[]
-    }
+  name: 'index',
+  components: {
+    HelloWorld,
+    Carousel,
+    NavBar,
+    UpdateTable,
+    Recommond
   },
   created() {
-    //调用查询banner的方法
     this.getBannerList()
     //调用查询热门课程和名师的方法
     this.getHotCourseTeacher()
   },
-  methods:{
+
+  methods: {
+    //查询banner数据
+    getBannerList() {
+      banner.getList().then(response => {
+        this.carousels = response.data.data.bannerList
+      })
+    },
     //查询热门课程和名师
     getHotCourseTeacher() {
       index.getList()
         .then(response => {
-          this.courseList = response.data.data.courseList
+          this.recommondItems = response.data.data.courseList
           this.teacherList = response.data.data.teacherList
+          console.log( this.recommondItems, this.teacherList)
         })
     },
-    //查询banner数据
-    getBannerList() {
-      banner.getList()
-        .then(response => {
-          this.bannerList = response.data.data.bannerList
-        })
+  },
+
+  data() {
+    return {
+      visible: false,
+      user: null,
+      teacherList: [],
+      courseList: [],
+      // 由后台传入cards不需要require，后期修改
+      carousels: [
+        // require('./assets/img/carousel1.png'),
+        // require('./assets/img/carousel2.png'),
+        // require('./assets/img/carousel3.png'),
+        // require('./assets/img/carousel4.png')
+      ],
+      recommondItems: [
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '2恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '1恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '3恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '4恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '5恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '6恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '7恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '8恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '9恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '10恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '11恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '12恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '13恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '14恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '15恋爱，搞笑，校园，日常' },
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '16恋爱，搞笑，校园，日常' }
+
+      ],
+      rankinglist: [
+        { id: 1, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: false },
+        { id: 2, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: true },
+        { id: 3, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: true },
+        { id: 4, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: true },
+        { id: 5, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: true },
+        { id: 6, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: true },
+        { id: 7, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: true },
+        { id: 8, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: true },
+        { id: 9, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: true },
+        { id: 10, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: true }
+      ],
+      updateItems: [
+        { updateDate: '今天',
+          isShow: true,
+          updateCards: [
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' }
+          ]
+        },
+        { updateDate: '昨天',
+          isShow: false,
+          updateCards: [
+            { name: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', img: require('./assets/img/card.png'), type: '恋爱，搞笑，校园，日常' }
+          ]
+        },
+        { updateDate: '周三',
+          isShow: false,
+          updateCards: [
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' }
+          ]
+        },
+        { updateDate: '周二',
+          isShow: false,
+          updateCards: [
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' }
+          ]
+        },
+        { updateDate: '周一',
+          isShow: false,
+          updateCards: [
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' }
+          ]
+        },
+        { updateDate: '周日',
+          isShow: false,
+          updateCards: [
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' }
+          ]
+        },
+        { updateDate: '周六',
+          isShow: false,
+          updateCards: [
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
+            { name: '抱歉，我要毁灭一下这个地球', img: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' }
+          ]
+        }
+
+      ]
     }
   }
 }
 </script>
+
+<template>
+  <el-container>
+    <!-- header -->
+    <el-header style="height:auto">
+      <!-- <nav-head :user="user"></nav-head> -->
+      <carousel :carousels="carousels"></carousel>
+      <!-- <nav-bar></nav-bar> -->
+    </el-header>
+    <!-- main -->
+    <el-main>
+      <el-row class="common-content-row">
+        <el-col>
+          <div>
+            <p></p>
+          </div>
+        </el-col>
+        <el-col>
+          <div class="common-content">
+            <!-- 漫画推荐 -->
+            <recommond :recommondItems="recommondItems"
+                       :rankinglist="rankinglist"></recommond>
+            <!-- 更新表 -->
+            <update-table :updateItems="updateItems"></update-table>
+          </div>
+        </el-col>
+        <el-col>
+          <div>
+            <p></p>
+          </div>
+        </el-col>
+      </el-row>
+    </el-main>
+    <!-- footer -->
+    <!-- <el-footer style="height:auto">
+      <footer-bar></footer-bar>
+    </el-footer> -->
+  </el-container>
+
+</template>
+
+<style scoped>
+@import "./assets/css/common.css";
+</style>

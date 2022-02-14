@@ -2,7 +2,7 @@
   <div class="in-wrap">
     <no-ssr>
     <!-- 公共头引入 -->
-    <header id="header">
+    <header class="top" id="header">
       <section class="container">
         <h1 id="logo">
           <a href="/" title="Corey在线教育">
@@ -190,7 +190,7 @@ export default {
 
     logout() {
      cookie.set("guli_ucenter", "")
-     cookie.set("guli_token", "123")
+     cookie.set("guli_token", "")
 
      //跳转页面
      window.location.href = "/"
@@ -248,5 +248,9 @@ html {
   color: #fff;
   background-color: #35495e;
 }
+/* .top {
+  background-image: url(../pages/assets/img/banner_bg.png);
+  color: #fff;
+} */
 </style>
 
