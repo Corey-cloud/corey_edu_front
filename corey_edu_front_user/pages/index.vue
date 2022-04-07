@@ -37,7 +37,6 @@ export default {
         .then(response => {
           this.recommondItems = response.data.data.courseList
           this.teacherList = response.data.data.teacherList
-          console.log( this.recommondItems, this.teacherList)
         })
     },
   },
@@ -64,15 +63,7 @@ export default {
         // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '6恋爱，搞笑，校园，日常' },
         // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '7恋爱，搞笑，校园，日常' },
         // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '8恋爱，搞笑，校园，日常' },
-        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '9恋爱，搞笑，校园，日常' },
-        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '10恋爱，搞笑，校园，日常' },
-        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '11恋爱，搞笑，校园，日常' },
-        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '12恋爱，搞笑，校园，日常' },
-        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '13恋爱，搞笑，校园，日常' },
-        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '14恋爱，搞笑，校园，日常' },
-        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '15恋爱，搞笑，校园，日常' },
-        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '16恋爱，搞笑，校园，日常' }
-
+        // { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '9恋爱，搞笑，校园，日常' }
       ],
       rankinglist: [
         { id: 1, name: 'html page cover', createTime: '2019-11-08', author: '秋天书店', type: '冒险，奇幻', img: require('./assets/img/html_cover.png'), showWord: false },

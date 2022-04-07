@@ -18,12 +18,11 @@ export default {
         <div class="title">
           <h2 style="text-align:left;font-weight:700;">作品推荐</h2>
         </div>
-        <el-row v-for="i in 4" :key="i">
+        <el-row>
           <el-col :span="7"
-                  v-for="j in 3"
-                  :key="j"
+                  v-for="(item,index) in recommondItems" :key="index"
                   style="margin-right: 26px;margin-bottom: 30px;">
-            <card :card="recommondItems[(i-1)*3+j-1]"></card>
+            <card :card="item"></card>
           </el-col>
         </el-row>
         <!-- <el-row>

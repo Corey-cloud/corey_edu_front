@@ -4,7 +4,37 @@
     <div style="padding-left: 8px; padding-right: 5px">
       <p class="card-name line-limit-length">{{ card.title }}</p>
       <div class="bottom clearfix">
-        <p class="card-type line-limit-length">{{ card.type }}</p>
+        <section class="hLh20 of">
+          <span class="fr jgTag bg-green" v-if="Number(card.price) === 0">
+            <i class="c-fff fsize12 f-fA">免费</i>
+          </span>
+          <span class="fl jgAttr c-ccc">
+            <i class="c-999">
+              <span v-if="Number(card.viewCount) >= 100000000">
+                {{(card.viewCount/100000000).toFixed(1)}}亿播放
+              </span>
+              <span v-else-if="Number(card.viewCount) >= 10000">
+                {{(card.viewCount/10000).toFixed(1)}}万播放
+              </span>
+              <span v-else>
+                {{card.viewCount}}播放
+              </span>
+            </i>
+            |
+            <i class="c-999">
+              <span v-if="Number(card.commentCount) >= 100000000">
+                {{(card.commentCount/100000000).toFixed(1)}}亿评论
+              </span>
+              <span v-else-if="Number(card.commentCount) >= 10000">
+                {{(card.commentCount/10000).toFixed(1)}}万评论
+              </span>
+              <span v-else>
+                {{card.commentCount}}评论
+              </span>
+            </i>
+          </span>
+        </section>
+        <!-- <p class="card-type line-limit-length">{{ card.type }}</p> -->
       </div>
     </div>
   </el-card>
@@ -13,18 +43,12 @@
 <script>
 export default {
   name: "Card",
-  props: ["card"],
-  mounted(){
-    console.log("------>",this.card)
-  }
+  props: ["card"]
 };
 </script>
 
-
-
 <style scoped>
 .el-card {
-  height: 195px;
   width: 280px;
   cursor: pointer;
 }
