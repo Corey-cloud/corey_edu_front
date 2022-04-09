@@ -177,7 +177,7 @@ export default {
       this.wxLogin()
     }
     this.showInfo()
-    
+
   },
 
   methods: {

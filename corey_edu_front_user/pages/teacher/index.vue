@@ -55,7 +55,7 @@
             :class="{undisable: !data.hasPrevious}"
             href="#"
             title="首页"
-            @click.prevent="gotoPage(1)">首页</a>
+            @click.prevent="gotoPage(1)">首</a>
 
           <a
             :class="{undisable: !data.hasPrevious}"
@@ -81,7 +81,7 @@
             :class="{undisable: !data.hasNext}"
             href="#"
             title="末页"
-            @click.prevent="gotoPage(data.pages)">末页</a>
+            @click.prevent="gotoPage(data.pages)">末</a>
 
           <div class="clear"/>
         </div>
@@ -109,7 +109,7 @@ export default {
     //分页切换的方法
     //参数是页码数
     gotoPage(page) {
-      teacherApi.getTeacherList(page,8)
+      teacherApi.getPageList(page,8)
         .then(response => {
           this.data = response.data.data
         })

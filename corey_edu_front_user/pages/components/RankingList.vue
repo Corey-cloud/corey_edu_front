@@ -23,8 +23,8 @@ export default {
       <el-col :span="20">
         <h2 style="text-align:left;font-weight:700;">排行榜</h2>
       </el-col>
-      <el-col :span="4">
-        <p class="more-span">更多></p>
+      <el-col :span="4" style="margin-top:20px">
+        <a target="_blank" href="/course" class="more-span">更多></a>
       </el-col>
     </el-row>
     <!-- 排行 -->
@@ -37,10 +37,10 @@ export default {
           <p :class="id<3?'id-p-gold':'id-p'">{{id+1}}</p>
         </el-col>
         <el-col :span="12">
-          <p class="name-p">{{rank.name}}</p>
+          <p class="name-p">{{rank.title}}</p>
         </el-col>
         <el-col :span="8">
-          <p class="update-p">{{rank.createTime}}</p>
+          <p class="update-p">{{(rank.gmtCreate).substring(0, 10)}}</p>
         </el-col>
       </el-row>
       <!-- image -->
@@ -48,30 +48,25 @@ export default {
                     style="height:160px"
                     v-show="!rank.showWord">
         <el-aside width="240px"
-                  style="overflow-y: hidden;">
-          <img :src="rank.img"
-               height="100%"
-               width="240px" />
+          style="overflow-y: hidden;">
+          <a target="_blank" :href="'/course/'+rank.id">
+            <img :src="rank.cover" height="100%" width="240px" />
+          </a>
         </el-aside>
         <el-container>
           <el-main style="padding-left: 20px" class="img-name">
-            <p :title="rank.name"
-               class="line-limit-length">{{rank.name}}</p>
-            <p class="img-word line-limit-length"
-               :title="rank.author">{{rank.author}}</p>
-            <p class="img-word line-limit-length"
-               :title="rank.type">{{rank.type}}</p>
+            <p :title="rank.title"
+               class="line-limit-length">{{rank.title}}</p>
+            <p class="img-word line-limit-length">课时:{{rank.lessonNum}}</p>
+            <p v-if="rank.viewCount*1.2 > 100000000" class="img-word line-limit-length">热度:{{parseFloat((rank.viewCount*1.2/100000000).toFixed(1))}}亿</p>
+            <p v-else-if="rank.viewCount*1.2 > 10000" class="img-word line-limit-length">热度:{{parseFloat((rank.viewCount*1.2/10000).toFixed(1))}}万</p>
+            <p v-else class="img-word line-limit-length">热度:{{parseFloat((rank.viewCount*1.2).toFixed(1))}}</p>
           </el-main>
           <el-footer style="padding-right:0px">
             <el-row>
-              <!-- <el-col :span="12">
-                <p class="img-word">{{rank.author}}</p>
-                <p class="img-word">{{rank.type}}</p>
-                <p class="img-word">更新至{{rank.update}}话</p>
-              </el-col> -->
               <el-col :span="12"
                       :class="id<3?'img-id-gold':'img-id'">
-                {{rank.id}}
+                {{id+1}}
               </el-col>
             </el-row>
           </el-footer>
@@ -150,6 +145,7 @@ export default {
   text-align: right;
   margin: 0px;
   line-height: 50px;
+  white-space: nowrap;
 }
 .line-limit-length {
   overflow: hidden;

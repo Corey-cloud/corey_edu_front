@@ -3,11 +3,11 @@
     <!-- /课程详情 开始 -->
     <section class="container">
       <section class="path-wrap txtOf hLh30">
-        <a href="#" title class="c-999 fsize14">首页</a>
+        <a href="/" title class="c-999 fsize14">首页</a>
         \
-        <a href="#" title class="c-999 fsize14">{{
+        <span title class="c-999 fsize14">{{
           courseWebVo.subjectLevelOne
-        }}</a>
+        }}</span>
         \
         <span class="c-333 fsize14">{{ courseWebVo.subjectLevelTwo }}</span>
       </section>
@@ -18,6 +18,7 @@
               height="357px"
               :src="courseWebVo.cover"
               :alt="courseWebVo.title"
+              style="width:100%"
               class="dis c-v-pic"
             />
           </section>
@@ -29,13 +30,16 @@
             </h2>
             <section class="c-attr-jg">
               <span class="c-fff">价格：</span>
-              <b class="c-yellow" style="font-size: 24px"
+              <b v-if="Number(courseWebVo.price) == 0" class="c-yellow" style="font-size: 24px"
+                >免费</b
+              >
+              <b v-else class="c-yellow" style="font-size: 24px"
                 >￥{{ courseWebVo.price }}</b
               >
             </section>
             <section class="c-attr-mt c-attr-undis">
               <span class="c-fff fsize14"
-                >主讲： {{ courseWebVo.teacherName }}&nbsp;&nbsp;&nbsp;</span
+                >主讲讲师： {{ courseWebVo.teacherName }}&nbsp;&nbsp;&nbsp;</span
               >
             </section>
             <section class="c-attr-mt of">
@@ -45,15 +49,15 @@
               </span>
             </section>
             <section
-              v-if="isbuy || Number(courseWebVo.price) === 0"
+              v-if="Number(courseWebVo.price) === 0 || isbuy"
               class="c-attr-mt"
             >
-              <a :href="'/player/'+courseWebVo.id" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
+              <a target="_blank" :href="'/player/'+courseWebVo.id" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
             </section>
             <section v-else class="c-attr-mt">
               <a
                 @click="createOrder()"
-                href="#"
+                href="javascript:void(0)"
                 title="立即购买"
                 class="comm-btn c-btn-3"
                 >立即购买</a
@@ -84,7 +88,16 @@
               <aside>
                 <span class="c-fff f-fM">浏览数</span>
                 <br />
-                <h6 class="c-fff f-fM mt10">{{ courseWebVo.viewCount }}</h6>
+
+                  <h6 class="c-fff f-fM mt10" v-if="courseWebVo.viewCount >= 100000000">
+                    {{parseFloat((courseWebVo.viewCount/100000000).toFixed(1))}}亿
+                  </h6>
+                  <h6 class="c-fff f-fM mt10" v-else-if="courseWebVo.viewCount >= 10000">
+                    {{(parseFloat(courseWebVo.viewCount/10000).toFixed(1))}}万
+                  </h6>
+                  <h6 class="c-fff f-fM mt10" v-else>
+                    {{parseFloat(courseWebVo.viewCount)}}
+                  </h6>
               </aside>
             </li>
           </ol>
@@ -148,7 +161,7 @@
                                   :href="'/player/' + video.videoSourceId"
                                   target="_blank"
                                 >
-                                  <span class="fr">
+                                  <span v-if="video.isFree" class="fr">
                                     <i class="free-icon vam mr10">免费试听</i>
                                   </span>
                                   <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em
@@ -173,30 +186,31 @@
               <section class="c-infor-tabTitle c-tab-title">
                 <a title href="javascript:void(0)">主讲讲师</a>
               </section>
-              <section class="stud-act-list">
-                <ul style="height: auto">
-                  <li>
-                    <div class="u-face">
-                      <a :href="'/teacher/'+ courseWebVo.teacherId">
-                        <img
-                          :src="courseWebVo.avatar"
-                          width="50"
-                          height="50"
-                          alt
-                        />
-                      </a>
-                    </div>
-                    <section class="hLh30 txtOf">
-                      <a class="c-333 fsize16 fl" :href="'/teacher'+ courseWebVo.teacherId">{{
-                        courseWebVo.teacherName
-                      }}</a>
-                    </section>
-                    <section class="hLh20 txtOf">
-                      <span class="c-999">{{ courseWebVo.intro }}</span>
-                    </section>
-                  </li>
-                </ul>
-              </section>
+              <a target="_blank" :href="'/teacher/'+ courseWebVo.teacherId">
+                <section class="stud-act-list">
+                  <ul style="height: auto">
+                    <li>
+                      <div class="u-face">
+                        <a target="_blank" :href="'/teacher/'+ courseWebVo.teacherId">
+                          <img
+                            :src="courseWebVo.avatar"
+                            width="50"
+                            height="50"
+                            alt
+                          />
+                        </a>
+                      </div>
+                      <section class="hLh30 txtOf">
+                        <a target="_blank" class="c-333 fsize16 fl" :href="'/teacher'+ courseWebVo.teacherId">{{
+                          courseWebVo.teacherName}}</a>
+                      </section>
+                      <section class="hLh20 txtOf">
+                        <span class="c-999">{{ courseWebVo.intro }}</span>
+                      </section>
+                    </li>
+                  </ul>
+                </section>
+              </a>
             </div>
           </div>
         </aside>
@@ -378,7 +392,17 @@ export default {
     addComment() {
       this.comment.courseId = this.courseId;
       this.comment.teacherId = this.courseWebVo.teacherId;
-      comment.addComment(this.comment).then((response) => {
+      comment.addComment(this.comment).then(response => {
+        // 未登录评论（code:28000）处理
+        if (response.data.code == 28000) {
+          this.$confirm('您尚未登录，无法进行评论，是否跳转至登录页面？','用户未登录提示',{
+            confirmButtonText: '去登录',
+            cancelButtonText: '算了',
+            type: 'warning'
+          }).then(() => {
+            this.$router.push({path: '/login'})
+          })
+        }
         if (response.data.success) {
           this.comment.content = "";
           this.initComment();
@@ -395,9 +419,21 @@ export default {
     //生成订单
     createOrder() {
       ordersApi.createOrder(this.courseId).then((response) => {
-        //获取返回订单号
-        //生成订单之后，跳转订单显示页面
-        this.$router.push({ path: "/order/" + response.data.data.orderId });
+        // 未登录购买（code:28004）处理
+        if (response.data.code == 28004) {
+          this.$confirm('您尚未登录，无法进行购买，是否跳转至登录页面？','用户未登录提示',{
+            confirmButtonText: '去登录',
+            cancelButtonText: '算了',
+            type: 'warning'
+          }).then(() => {
+            this.$router.push({path: '/login'})
+          })
+        } else {
+          //获取返回订单号
+          //生成订单之后，跳转订单显示页面
+          let routerJump = this.$router.resolve({ path: "/order/" + response.data.data.orderId });
+          window.open(routerJump.href, '_blank')
+          }
       });
     },
   },

@@ -1,12 +1,14 @@
 <template>
   <el-card :body-style="{ padding: '0px' }" :title="card.title">
+    <a target="_blank" :href="'/course/'+card.id">
     <img :src="card.cover" class="card-img" />
+    </a>
     <div style="padding-left: 8px; padding-right: 5px">
       <p class="card-name line-limit-length">{{ card.title }}</p>
       <div class="bottom clearfix">
-        <section class="hLh20 of">
+        <section class="hLh2 f of">
           <span class="fr jgTag bg-green" v-if="Number(card.price) === 0">
-            <i class="c-fff fsize12 f-fA">免费</i>
+            <i class="c-fff">免费</i>
           </span>
           <span class="fl jgAttr c-ccc">
             <i class="c-999">
@@ -57,7 +59,7 @@ export default {
   width: 100%;
 }
 .card-name {
-  font-size: 14px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.87);
   text-align: left;
 }
@@ -71,5 +73,8 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   margin: 0px;
+}
+.f {
+  font-size: 13px;
 }
 </style>

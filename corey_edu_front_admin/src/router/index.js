@@ -138,6 +138,35 @@ export const asyncRoutes = [
   },
 
   {
+    path: '/banner',
+    component: Layout,
+    redirect: '/banner/list',
+    name: '轮播图管理',
+    meta: { title: '轮播图管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: '轮播图列表',
+        component: () => import('@/views/edu/banner/list'),
+        meta: { title: '轮播图列表', icon: 'table' }
+      },
+      {
+        path: 'info',
+        name: '添加轮播图',
+        component: () => import('@/views/edu/banner/info'),
+        meta: { title: '添加轮播图', icon: 'tree' }
+      },
+      {
+        path: 'info/:id',
+        name: '编辑轮播图',
+        component: () => import('@/views/edu/banner/info'),
+        meta: { title: '编辑轮播图', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+
+  {
     path: '/sta',
     component: Layout,
     redirect: '/sta/create',

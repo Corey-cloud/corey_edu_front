@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" style="min-width:auto">
     <div class="title">
       <a href="/login">登录</a>
       <span>·</span>
@@ -91,13 +91,17 @@
        submitRegister() {
          registerApi.submitRegister(this.params)
           .then(response => {
-            //提示注册成功
+            if (response.data.success == true) {
+              //提示注册成功
               this.$message({
                 type: 'success',
                 message: "注册成功"
               })
-            //跳转登录页面
-            this.$router.push({path:'/login'})
+              //跳转登录页面
+              this.$router.push({path:'/login'})
+            } else {
+              return
+            }
 
           })
        },
@@ -116,16 +120,27 @@
       },
        //通过输入手机号发送验证码
        getCodeFun() {
+         if (this.params.mobile == '') {
+           this.$message({
+             showClose: true,
+             type: 'warning',
+             message:'请输入手机号'
+           })
+           return
+         }
          registerApi.sendCode(this.params.mobile)
           .then(response => {
               this.sending = false
               //调用倒计时的方法
               this.timeDown()
+              this.$message({
+                type: "success",
+                message: "验证码已发送"
+              })
           })
        },
 
       checkPhone (rule, value, callback) {
-        //debugger
         if (!(/^1[34578]\d{9}$/.test(value))) {
           return callback(new Error('手机号码格式不正确'))
         }

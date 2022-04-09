@@ -176,6 +176,10 @@ export default {
       this.oneIndex=-1
       this.twoIndex=-1
       this.subSubjectList = []
+      this.buyCountSort = ''
+      this.gmtCreateSort = ''
+      this.priceSort = ''
+      this.searchObj = {}
       //课程第一次查询
       this.initCourseFirst()
       //一级分类显示
@@ -208,6 +212,10 @@ export default {
     searchOne(subjectParentId,index) {
       //把传递index值赋值给oneIndex,为了active样式生效
       this.oneIndex = index
+
+      this.buyCountSort = ''
+      this.gmtCreateSort = ''
+      this.priceSort = ''
 
       this.twoIndex = -1
       this.all = 1

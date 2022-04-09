@@ -1,11 +1,10 @@
 <template>
-  <div class="main">
+  <div class="main" style="min-width: auto">
     <div class="title">
       <a class="active" href="/login">登录</a>
       <span>·</span>
       <a href="/register">注册</a>
     </div>
-
     <div class="sign-up-container">
       <el-form ref="userForm" :model="user">
 
@@ -78,14 +77,18 @@
                   this.loginInfo = response.data.data.userInfo
                   //获取返回用户信息，放到cookie里面
                   cookie.set('guli_ucenter',this.loginInfo,{domain: 'localhost'})
-
+                  this.$message({
+                    type:'success',
+                    message:'登录成功'
+                  })
+                  
                   //跳转页面
-                  window.location.href = "/";
+                    this.$router.go(-1);
+                  // window.location.href = "/";
                 })
            })
       },
       checkPhone (rule, value, callback) {
-        //debugger
         if (!(/^1[34578]\d{9}$/.test(value))) {
           return callback(new Error('手机号码格式不正确'))
         }

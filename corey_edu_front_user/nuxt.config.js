@@ -4,9 +4,6 @@ module.exports = {
   */
   head: {
     title: 'Corey在线教育 - Java视频|HTML5视频|前端视频|Python视频|大数据视频-自学拿1万+月薪的IT在线视频课程，粉丝力挺，老学员为你推荐',
-    script: [
-      {src: 'https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js'}
-    ],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -15,7 +12,12 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css' }    ]
+      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css' }
+    ],
+    script: [
+      {src: 'https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js'},
+    ],
+
   },
   /*
   ** Customize the progress bar color

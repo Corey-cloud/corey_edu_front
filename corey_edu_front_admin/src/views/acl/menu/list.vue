@@ -161,11 +161,6 @@ export default {
           this.menuList = response.data.permissionsList
           console.log(this.menuList)
         }
-      }).catch(() => {
-        this.$message({
-          type: 'error',
-          message: '获取菜单列表失败'
-        })
       })
     },
 
