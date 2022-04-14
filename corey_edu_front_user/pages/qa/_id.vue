@@ -133,12 +133,15 @@ export default {
     initInfo(id) {
       if (this.$route.params && this.$route.params.id) {
         const id = this.$route.params.id;
-        qaApi.getQtAnswerList(id).then((res) => {
-          let question = res.data.data.questionTree;
-          question.qaAnswerList.forEach((i) => (i.isShowAnswer = false));
-          this.question = question;
-          this.oneAnswer = question.qaAnswerList;
+        qaApi.getQuestionById(id).then((res) => {
+          this.question = res.data.data.question
         });
+        // qaApi.getQtAnswerList(id).then((res) => {
+        //   let question = res.data.data.questionTree;
+        //   question.qaAnswerList.forEach((i) => (i.isShowAnswer = false));
+        //   this.question = question;
+        //   this.oneAnswer = question.qaAnswerList;
+        // });
       }
     },
     //一级回复

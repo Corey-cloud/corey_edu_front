@@ -401,6 +401,8 @@ export default {
             type: 'warning'
           }).then(() => {
             this.$router.push({path: '/login'})
+          }).catch(_ => {
+            return
           })
         }
         if (response.data.success) {

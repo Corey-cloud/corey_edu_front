@@ -9,12 +9,12 @@
             :class="{ listyle: idx === currentIdx }"
             @click="handleLiClick(item, idx)"
           >
-            <span class="dataNav">{{ item.name }}</span
-            ><br />
+            <span class="dataNav">{{ item.name }}</span>
+            <br />
           </li>
         </ul>
       </div>
-      <div class="list1" v-for="(data, idx) in dataList.records" :key="idx">
+      <div class="list1" v-for="(data, idx) in dataList.items" :key="idx">
         <div class="people">
           <div class="touxiang">
             <img :src="data.memberAvatar" alt="" />
@@ -33,12 +33,12 @@
           <div class="shijian">{{ data.gmtCreate }}</div>
         </div>
         <div class="wenda">
-          <div class="wenda-num">{{ data.qaComments }}</div>
           <div class="wenda-word">回答数</div>
+          <div class="wenda-num">{{ data.qaComments }}</div>
         </div>
         <div class="view">
-          <div class="huida-num">{{ data.qaView }}</div>
           <div class="huida-word">浏览数</div>
+          <div class="huida-num">{{ data.qaView }}</div>
         </div>
       </div>
     </div>
@@ -47,7 +47,6 @@
       <div class="tiwen" @click="isShow = !isShow">我要提问</div>
       <div class="lizi">
         <ul>
-          <li>全部</li>
           <li v-for="(data, idx) in states" :key="idx">{{ data.typeName }}</li>
         </ul>
       </div>
@@ -65,9 +64,9 @@
               >{{ data.questionTitle }}</a
             >
             <div class="hot-huida">
-              <span>{{ data.qaComments }}</span
-              ><br />
               <span>回答数</span>
+              <br />
+              <span>{{ data.qaComments }}</span>
             </div>
           </li>
         </ul>
@@ -182,7 +181,7 @@ import cookie from "js-cookie";
 export default {
   data() {
     return {
-      btnDataList: [{ name: "最新" }, { name: "热门" }, { name: "等待回答" }],
+      btnDataList: [{ name: "综合" }, { name: "最新" }, { name: "热门" }, { name: "等待回答" }],
       currentIdx: 0,
       title: "",
       options: [],
@@ -203,9 +202,9 @@ export default {
       },
       userInfo: {},
       pageNo: 1,
-      pageSize: 3,
+      pageSize: 6,
       queryObj: {},
-      dataList: [],
+      dataList: {},
       hotList: [],
     };
   },
@@ -237,15 +236,9 @@ export default {
       });
     },
     getQtList(pageNo, idx) {
-      if (!idx) {
-        this.queryObj = {
-          qt: "",
-        };
-      } else {
-        this.queryObj = {
-          qt: `${idx + 1}`,
-        };
-      }
+      this.queryObj = {
+        qt: `${idx}`,
+      };
       qaApi
         .getQuestionList(pageNo, this.pageSize, this.queryObj)
         .then((res) => {

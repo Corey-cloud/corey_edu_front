@@ -13,7 +13,9 @@
           <div class="pinglun">
             <img src="~/assets/img/pinglun.png" alt="" />
             <span> {{ "(" + cmNum + ")" }}</span>
-            <img src="~/assets/img/zanqian.png" alt="" />
+            <a href="javascript:void(0)">
+              <img src="~/assets/img/zanqian.png" @click="hitZan(content.id)" alt="文章不错，赞一个~" />
+            </a>
             <span>{{ "(" + content.contentHit + ")" }}</span>
           </div>
         </div>
@@ -26,7 +28,7 @@
     <div class="mt50 commentHtml i-box pl">
       <div>
         <h6 class="c-c-content c-infor-title pl-title" id="i-art-comment">
-          <span class="commentTitle">课程评论</span>
+          <span class="commentTitle">文章评论</span>
         </h6>
 
         <section class="lh-bj-list pr mt20 replyhtml">
@@ -37,7 +39,7 @@
                   width="50"
                   height="50"
                   class="picImg"
-                  :src="myComment.cmsAvatar"
+                  :src="myComment.avatar"
                 />
               </aside>
 
@@ -46,7 +48,7 @@
                   <fieldset>
                     <textarea
                       name=""
-                      v-model="myComment.comment"
+                      v-model="myComment.content"
                       placeholder="输入您要评论的文字"
                       id="commentContent"
                     ></textarea>
@@ -77,7 +79,7 @@
           <section class="question-list lh-bj-list pr">
             <ul class="pr10">
               <li
-                v-for="(comment, index) in pageData.records"
+                v-for="(comment, index) in pageData.items"
                 v-bind:key="index"
               >
                 <aside class="noter-pic">
@@ -85,20 +87,20 @@
                     width="50"
                     height="50"
                     class="picImg"
-                    :src="comment.cmsAvatar"
+                    :src="comment.avatar"
                   />
                 </aside>
                 <div class="of">
                   <span class="fl">
                     <font class="fsize12 c-blue">
-                      {{ comment.cmsNickname }}</font
+                      {{ comment.nickname }}</font
                     >
                     <font class="fsize12 c-999 ml5">评论：</font></span
                   >
                 </div>
 
                 <div class="noter-txt mt5">
-                  <p>{{ comment.comment }}</p>
+                  <p>{{ comment.content }}</p>
                 </div>
 
                 <div class="of mt5">
@@ -175,7 +177,7 @@
 </template>
 
 <script>
-import contentApi from "@/api/article";
+import articleApi from "@/api/article";
 import cookie from "js-cookie";
 export default {
   data() {
@@ -185,11 +187,11 @@ export default {
       //评论提交信息
       myComment: {
         id: null,
-        contentId: "",
-        cmsMemberId: "",
-        cmsNickname: "",
-        cmsAvatar: "https://edu-425.oss-cn-chengdu.aliyuncs.com/tx.jpg",
-        comment: "",
+        articleId: "",
+        memberId: "",
+        mickname: "",
+        avatar: "https://edu-425.oss-cn-chengdu.aliyuncs.com/tx.jpg",
+        content: "",
       },
       pageDisable: false, //是否显示分页条
     };
@@ -211,20 +213,20 @@ export default {
     init() {
       if (this.$route.params && this.$route.params.id) {
         const id = this.$route.params.id;
-        this.getContentInfo(id);
+        this.getArticleInfo(id);
         this.gotoPage(1);
         var userStr = cookie.get("guli_ucenter");
         if (userStr) {
           //把字符串转换json对象
           if (userStr) {
             this.userInfo = JSON.parse(userStr);
-            this.myComment.cmsMemberId = this.userInfo.id;
-            this.myComment.cmsAvatar = this.userInfo.avatar;
-            this.myComment.cmsNickname = this.userInfo.nickname;
-            this.myComment.contentId = id;
+            this.myComment.memberId = this.userInfo.id;
+            this.myComment.avatar = this.userInfo.avatar;
+            this.myComment.nickname = this.userInfo.nickname;
+            this.myComment.articleId = id;
           } else {
             //未登录
-            this.myComment.cmsAvatar =
+            this.myComment.avatar =
               "https://edu-425.oss-cn-chengdu.aliyuncs.com/tx.jpg";
           }
         }
@@ -232,14 +234,26 @@ export default {
         console.log("=== 你从何而来？我没拿到文章id");
       }
     },
-    getContentInfo(id) {
-      contentApi.getContent(id).then((res) => {
-        this.content = res.data.data.content;
+    getArticleInfo(id) {
+      articleApi.getArticle(id).then((res) => {
+        this.content = res.data.data.article;
       });
     },
     //提交评论
     commitComment() {
-      contentApi.commitComment(this.myComment).then((res) => {
+      articleApi.commitComment(this.myComment).then((res) => {
+        // 未登录评论（code:28000）处理
+        if (res.data.code == 28000) {
+          this.$confirm('您尚未登录，无法进行评论，是否跳转至登录页面？','用户未登录提示',{
+            confirmButtonText: '去登录',
+            cancelButtonText: '算了',
+            type: 'warning'
+          }).then(() => {
+            this.$router.push({path: '/login'})
+          }).catch(_ => {
+            return
+          })
+        }
         if (res.data.code === 20000) {
           this.myComment.content = "";
           this.$message({
@@ -247,19 +261,28 @@ export default {
             type: "success",
           });
           this.gotoPage(1);
-          this.myComment.comment = "";
+          this.myComment.content = "";
         }
       });
     },
     //评论分页
     gotoPage(page) {
-      contentApi.getCommentList(page, 4, this.$route.params.id).then((res) => {
-        if (res.data.data.records.length > 0) {
+      articleApi.getCommentList(page, 4, this.$route.params.id).then((res) => {
+        if (res.data.data.items) {
           this.pageDisable = true;
           this.pageData = res.data.data;
         } else {
           this.pageDisable = false;
         }
+      });
+    },
+    hitZan(id) {
+      articleApi.hitZan(id).then((res) => {
+        this.$message({
+          type: "success",
+          message: "点赞成功",
+        })
+        this.getArticleInfo(id)
       });
     },
   },

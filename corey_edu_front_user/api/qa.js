@@ -8,6 +8,7 @@ export default {
       method: 'get',
     })
   },
+  // 发布问题
   publishQ(data) {
     return request({
       url: `/edu/qa-question/publish`,
@@ -21,6 +22,12 @@ export default {
       url: `/edu/qa-question/getQuestionList/${pageNo}/${pageSize}`,
       method: 'post',
       data: data
+    })
+  },
+  getQuestionById(id) {
+    return request({
+      url: `/edu/qa-question/${id}`,
+      method: 'get'
     })
   },
   //获取前端问答信息

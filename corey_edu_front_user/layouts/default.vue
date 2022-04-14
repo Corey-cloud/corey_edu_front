@@ -94,7 +94,7 @@
     <!-- 公共底引入 -->
     <footer id="footer">
       <section class="container">
-        <div class>
+        <div>
           <h4 class="hLh30">
             <span class="fsize18 f-fM c-999">友情链接</span>
           </h4>

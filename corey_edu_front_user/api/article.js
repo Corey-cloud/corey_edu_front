@@ -4,23 +4,23 @@ const api_name = '/edu/articles';
 
 export default {
   //获取文章列表
-  getContentList(pageNo, pageSize) {
+  getArticleList(page, limit, articleQuery) {
     return request({
-      url: `${api_name}/${pageNo}/${pageSize}`,
-      method: 'get',
-
+      url: `${api_name}/${page}/${limit}`,
+      method: 'post',
+      data: articleQuery
     })
   },
   //获取排行
-  getHotContent() {
+  getHotArticle() {
     return request({
-      url: `${api_name}/getHotContent`,
+      url: `${api_name}/getHotArticle`,
       method: 'get',
 
     })
   },
   //获取文章信息
-  getContent(id) {
+  getArticle(id) {
     return request({
       url: `${api_name}/${id}`,
       method: 'get',
@@ -29,17 +29,17 @@ export default {
   //提交评论
   commitComment(data) {
     return request({
-      url: `/educms/cms-comment-front/commitComment`,
+      url: `/edu/article-comment/auth/save`,
       method: 'post',
       data: data
     })
   },
   //分页获取评论信息
-  getCommentList(pageNo, pageSize, contentId) {
+  getCommentList(page, limit, articleId) {
     return request({
-      url: `/educms/cms-comment-front/getFrontComment/${pageNo}/${pageSize}`,
+      url: `/edu/article-comment/${page}/${limit}`,
       method: 'get',
-      params: { contentId }
+      params: { articleId }
     })
   },
   hitZan(id) {
