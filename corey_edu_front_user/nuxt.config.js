@@ -50,6 +50,15 @@ module.exports = {
     'swiper/dist/css/swiper.css',
     'element-ui/lib/theme-chalk/index.css',
     './pages/assets/css/common.css'
-  ]
+  ],
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        path: '/pay/:id',
+        name: 'pay',
+        component: resolve(__dirname, 'pages/pay/_id.vue')
+      })
+    }
+  },
 }
 
