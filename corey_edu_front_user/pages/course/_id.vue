@@ -430,6 +430,9 @@ export default {
           }).then(() => {
             this.$router.push({path: '/login'})
           })
+          // 当前订单已存在待支付
+        } else if (response.data.code == 28001) {
+          this.$alert("当前存在已创建待支付的订单，请稍候再试")
         } else {
           //获取返回订单号
           //生成订单之后，跳转订单显示页面
