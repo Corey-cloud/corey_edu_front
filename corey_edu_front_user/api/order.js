@@ -27,5 +27,13 @@ export default {
       url: '/order/pay-log/queryPayStatus/' + cid,
       method: 'get'
     })
+  },
+  // 5、获取我的订单列表
+  getMyOrderList(page, limit, memberId) {
+    return request({
+      url: `/order/getMyOrderList/${page}/${limit}`,
+      method: 'get',
+      params: {memberId}
+    })
   }
 }

@@ -41,53 +41,21 @@
                   </div>
                 </section>
               </li>
-
             </ul>
             <div class="clear"></div>
           </article>
         </div>
-        <!-- 公共分页 开始 -->
-        <!-- 公共分页 开始 -->
-      <div>
-        <div class="paging">
-          <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
-          <a
-            :class="{undisable: !data.hasPrevious}"
-            href="#"
-            title="首页"
-            @click.prevent="gotoPage(1)">首</a>
-
-          <a
-            :class="{undisable: !data.hasPrevious}"
-            href="#"
-            title="前一页"
-            @click.prevent="gotoPage(data.current-1)">&lt;</a>
-
-          <a
-            v-for="page in data.pages"
-            :key="page"
-            :class="{current: data.current == page, undisable: data.current == page}"
-            :title="'第'+page+'页'"
-            href="#"
-            @click.prevent="gotoPage(page)">{{ page }}</a>
-
-          <a
-            :class="{undisable: !data.hasNext}"
-            href="#"
-            title="后一页"
-            @click.prevent="gotoPage(data.current+1)">&gt;</a>
-
-          <a
-            :class="{undisable: !data.hasNext}"
-            href="#"
-            title="末页"
-            @click.prevent="gotoPage(data.pages)">末</a>
-
-          <div class="clear"/>
-        </div>
-      </div>
-      <!-- 公共分页 结束 -->
-        <!-- 公共分页 结束 -->
+        <!-- 分页组件 -->
+        <el-pagination
+          :current-page="page"
+          :total="total"
+          :page-size="limit"
+          :page-sizes="[8, 16, 32, 48, 64, 80]"
+          style="padding: 30px 0; text-align: center;"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="fetchData"
+          @size-change="changeSize"
+        />
       </section>
     </section>
     <!-- /讲师列表 结束 -->
@@ -97,21 +65,37 @@
 import teacherApi from '@/api/teacher'
 
 export default {
+  data() {
+    return {
+      page: 1,
+      limit: 8
+    }
+  },
   //异步调用，调用一次
   //params: 相当于之前 this.$route.params.id  等价  params.id
   asyncData({ params, error }) {
     return teacherApi.getPageList(1,8).then(response => {
           //this.data = response.data.data
-          return { data: response.data.data }
+          return { data: response.data.data,
+                    total: response.data.data.total
+                 }
        })
   },
   methods:{
     //分页切换的方法
     //参数是页码数
-    gotoPage(page) {
-      teacherApi.getPageList(page,8)
+    // 当页码发生改变的时候
+    changeSize(size) {
+      this.limit = size
+      this.fetchData(1)
+    },
+
+    fetchData(page = 1) {
+      this.page = page
+      teacherApi.getPageList(this.page,this.limit)
         .then(response => {
           this.data = response.data.data
+          this.total = response.data.data.total
         })
     }
   }

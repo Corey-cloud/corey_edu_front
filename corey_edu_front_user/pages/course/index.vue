@@ -104,40 +104,17 @@
             <div class="clear"></div>
           </article>
         </div>
-        <!-- 公共分页 开始 -->
-        <div>
-      <div class="paging">
-        <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
-        <a
-          :class="{undisable: !data.hasPrevious}"
-          href="#"
-          title="首页"
-          @click.prevent="gotoPage(1)">首</a>
-        <a
-          :class="{undisable: !data.hasPrevious}"
-          href="#"
-          title="前一页"
-          @click.prevent="gotoPage(data.current-1)">&lt;</a>
-        <a
-          v-for="page in data.pages"
-          :key="page"
-          :class="{current: data.current == page, undisable: data.current == page}"
-          :title="'第'+page+'页'"
-          href="#"
-          @click.prevent="gotoPage(page)">{{ page }}</a>
-        <a
-          :class="{undisable: !data.hasNext}"
-          href="#"
-          title="后一页"
-          @click.prevent="gotoPage(data.current+1)">&gt;</a>
-        <a
-          :class="{undisable: !data.hasNext}"
-          href="#"
-          title="末页"
-          @click.prevent="gotoPage(data.pages)">末</a>
-        <div class="clear"/>
-      </div>
-    </div>
+        <!-- 分页组件 -->
+        <el-pagination
+          :current-page="page"
+          :total="total"
+          :page-size="limit"
+          :page-sizes="[8, 16, 32, 48, 64, 80]"
+          style="padding: 30px 0; text-align: center;"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="fetchData"
+          @size-change="changeSize"
+        />
       </section>
     </section>
     <!-- /课程列表 结束 -->
@@ -150,6 +127,7 @@ export default {
   data() {
     return {
       page:1, //当前页
+      limit: 8,
       data:{},  //课程列表
       subjectNestedList: [], // 一级分类列表
       subSubjectList: [], // 二级分类列表
@@ -170,6 +148,19 @@ export default {
     this.initSubject()
   },
   methods:{
+    // 当页码发生改变的时候
+    changeSize(size) {
+      this.limit = size
+      this.fetchData(1)
+    },
+
+    fetchData(page = 1) {
+      this.page = page
+      courseApi.getPageList(this.page,this.limit, this.searchObj).then(res => {
+        this.data = res.data.data
+        this.total = res.data.data.total
+      })
+    },
 
     getAll() {
       this.all=-1
@@ -188,9 +179,7 @@ export default {
 
     //1 查询第一页数据
     initCourseFirst() {
-      courseApi.getPageList(1,8,this.searchObj).then(response => {
-        this.data = response.data.data
-      })
+      this.fetchData(1)
     },
 
     //2 查询所有一级分类
@@ -201,14 +190,7 @@ export default {
         })
     },
 
-    //3 分页切换的方法
-    gotoPage(page) {
-      courseApi.getPageList(page,8,this.searchObj).then(response => {
-        this.data = response.data.data
-      })
-    },
-
-    //4 点击某个一级分类，查询对应二级分类
+    // 点击某个一级分类，查询对应二级分类
     searchOne(subjectParentId,index) {
       //把传递index值赋值给oneIndex,为了active样式生效
       this.oneIndex = index
@@ -225,7 +207,7 @@ export default {
       //把一级分类点击id值，赋值给searchObj
       this.searchObj.subjectParentId = subjectParentId
       //点击某个一级分类进行条件查询
-      this.gotoPage(1)
+      this.fetchData(1)
 
       //拿着点击一级分类id 和 所有一级分类id进行比较，
       //如果id相同，从一级分类里面获取对应的二级分类
@@ -247,7 +229,7 @@ export default {
       //把二级分类点击id值，赋值给searchObj
       this.searchObj.subjectId = subjectId
       //点击某个二级分类进行条件查询
-      this.gotoPage(1)
+      this.fetchData(1)
     },
 
     //6 根据销量排序
@@ -263,7 +245,7 @@ export default {
       this.searchObj.priceSort = this.priceSort;
 
       //调用方法查询
-      this.gotoPage(1)
+      this.fetchData(1)
     },
 
     //7 最新排序
@@ -279,7 +261,7 @@ export default {
       this.searchObj.priceSort = this.priceSort;
 
       //调用方法查询
-      this.gotoPage(1)
+      this.fetchData(1)
     },
 
     //8 价格排序
@@ -295,7 +277,7 @@ export default {
       this.searchObj.priceSort = this.priceSort;
 
       //调用方法查询
-      this.gotoPage(1)
+      this.fetchData(1)
     }
 
   }

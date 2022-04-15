@@ -85,16 +85,6 @@ export default {
     }
   },
 
-  // 监听器
-  watch: {
-    $route(to, from) {
-      console.log('路由变化......')
-      console.log(to)
-      console.log(from)
-      this.init()
-    }
-  },
-
   // 生命周期方法（在路由切换，组件不变的情况下不会被调用）
   created() {
     console.log('form created ......')
