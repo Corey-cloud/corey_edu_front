@@ -16,6 +16,8 @@ import axios from 'axios'
 // vue-qriously
 import VueQriously from 'vue-qriously'
 Vue.use(VueQriously)
+import moment from 'moment'//导入文件
+Vue.prototype.$moment = moment;//赋值使用
 
 Vue.use(ElementUI)
 Vue.use(moment)

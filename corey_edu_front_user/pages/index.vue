@@ -38,6 +38,16 @@ export default {
           this.recommondItems = response.data.data.courseList
           this.rankingList = response.data.data.rankingList
           this.teacherList = response.data.data.teacherList
+          this.updateData = response.data.data.updateItems
+          for (let i = 0; i < this.updateData.length; i++) {
+            this.updateItems[i].updateCards = this.updateData[i]
+            
+            if (this.updateData[i] != null && this.updateData[i].length > 0) {
+              this.updateItems[i].updateDate = this.updateData[i][0].gmtCreate.substr(6,4)
+            } else {
+              this.updateItems[i].updateDate = ""
+            }
+          }
         })
     },
   },
@@ -82,20 +92,20 @@ export default {
         { updateDate: '今天',
           isShow: true,
           updateCards: [
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
-            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' }
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
+            { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 }
           ]
         },
         { updateDate: '昨天',
@@ -104,7 +114,7 @@ export default {
             { title: '辉夜大小姐想让我告白 ~天才们的恋爱头脑战~', cover: require('./assets/img/card.png'), type: '恋爱，搞笑，校园，日常' }
           ]
         },
-        { updateDate: '周三',
+        { updateDate: '前天',
           isShow: false,
           updateCards: [
             { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), type: '奇幻，校园，智斗' },
@@ -227,8 +237,50 @@ export default {
             <!-- 课程推荐 -->
             <recommond :recommondItems="recommondItems"
                        :rankinglist="rankingList"></recommond>
+            <!-- 网校名师 开始 -->
+            <div>
+              <section class="container">
+                <header class="comm-title">
+                  <h2 class="tac">
+                    <span class="c-333">名师大咖</span>
+                  </h2>
+                </header>
+                <div>
+                  <article class="i-teacher-list">
+                    <ul class="of">
+                      <li v-for="teacher in teacherList" :key="teacher.id">
+                        <section class="i-teach-wrap">
+                          <div class="i-teach-pic">
+                            <a :href="'/teacher/' + teacher.id" :title="teacher.name">
+                              <img :alt="teacher.name" :src="teacher.avatar">
+                            </a>
+                          </div>
+                          <div class="mt10 hLh30 txtOf tac">
+                            <a :href="'/teacher/' + teacher.id" :title="teacher.name" class="fsize18 c-666">{{teacher.name}}</a>
+                          </div>
+                          <div class="hLh30 txtOf tac">
+                            <span class="fsize14 c-999">{{teacher.career}}</span>
+                          </div>
+                          <div class="mt15 i-q-txt">
+                            <p
+                              class="c-999 f-fA"
+                            >{{teacher.intro}}</p>
+                          </div>
+                        </section>
+                      </li>
+
+                    </ul>
+                    <div class="clear"></div>
+                  </article>
+                  <section class="tac pt20">
+                    <a href="/teacher" title="全部讲师" class="comm-btn c-btn-2">全部讲师</a>
+                  </section>
+                </div>
+              </section>
+            </div>
+            <!-- /网校名师 结束 -->
             <!-- 更新表 -->
-            <update-table :updateItems="updateItems"></update-table>
+            <update-table :updateItems="updateItems" style="margin-top: 80px;"></update-table>
           </div>
         </el-col>
         <el-col>
