@@ -33,8 +33,8 @@ const Encrypt = new JSEncrypt();
 export default {
   data() {
     var validateUsername = (rule, value, callback) => {
-      if (value.length < 5 || value.length > 10) {
-        callback(new Error('用户名不得小于5个或大于10个字符!'))
+      if (value.length < 2 || value.length > 10) {
+        callback(new Error('用户名不得小于2个或大于10个字符!'))
       } else {
         callback()
       }

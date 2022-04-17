@@ -8,10 +8,11 @@
           <a :href="OSS_API + '/2021-07-23/f892ae57823b490183ed4afc4ed4f38701.xlsx'">点击下载模版</a>
         </el-tag>
       </el-form-item>
+
       <el-form-item label="选择Excel">
         <el-upload
           ref="upload"
-          :auto-upload="false"
+          :auto-upload="true"
           :on-success="fileUploadSuccess"
           :on-error="fileUploadError"
           :disabled="importBtnDisabled"
@@ -19,13 +20,14 @@
           :action="BASE_API+'/edu/admin/subjects/addSubject'"
           name="file"
           accept="application/.xlsx">
-          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-          <el-button
+          <el-button size="small" type="primary">选取文件</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传.xlsx文件</div>
+          <!-- <el-button
             :loading="loading"
             style="margin-left: 10px;"
             size="small"
             type="success"
-            @click="submitUpload">{{ fileUploadBtnText }}</el-button>
+            @click="submitUpload">{{ fileUploadBtnText }}</el-button> -->
         </el-upload>
       </el-form-item>
     </el-form>
@@ -39,7 +41,7 @@ export default {
       BASE_API: process.env.BASE_API, // 接口API地址
       OSS_API: process.env.OSS_API, // 阿里云OSS地址
       fileUploadBtnText: '上传到服务器', // 按钮文字
-      importBtnDisabled: true, // 按钮是否禁用,
+      importBtnDisabled: false, // 按钮是否禁用,
       loading: false
     }
   },
@@ -53,6 +55,7 @@ export default {
     fileUploadSuccess(response) {
       if (response.success === true) {
         this.fileUploadBtnText = '导入成功'
+        this.importBtnDisabled = false
         this.loading = false
         this.$message({
           type: 'success',
