@@ -67,12 +67,13 @@
         //第一步 调用接口进行登录，返回token字符串
         loginApi.submitLogin(this.user)
            .then(response => {
-             //第二步 获取token字符串放到cookie里面
-             //第一个参数cookie名称，第二个参数值，第三个参数作用范围
-             cookie.set('guli_token',response.data.data.token,{domain: 'localhost'})
+              if (response.data.code == 20000) {
+                //第二步 获取token字符串放到cookie里面
+                //第一个参数cookie名称，第二个参数值，第三个参数作用范围
+                cookie.set('guli_token',response.data.data.token,{domain: 'localhost'})
 
-              //第四步 调用接口 根据token获取用户信息，为了首页面显示
-              loginApi.getLoginUserInfo()
+                //第四步 调用接口 根据token获取用户信息，为了首页面显示
+                loginApi.getLoginUserInfo()
                 .then(response => {
                   this.loginInfo = response.data.data.userInfo
                   //获取返回用户信息，放到cookie里面
@@ -81,11 +82,18 @@
                     type:'success',
                     message:'登录成功'
                   })
-                  
+
                   //跳转页面
                     this.$router.go(-1);
                   // window.location.href = "/";
                 })
+             } else {
+               this.$message({
+                 type: 'error',
+                 message: response.data.message
+               })
+             }
+
            })
       },
       checkPhone (rule, value, callback) {

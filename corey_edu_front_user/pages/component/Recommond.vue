@@ -1,6 +1,6 @@
 <script>
-import RankingList from '../components/RankingList.vue'
-import Card from '../components/Card.vue'
+import RankingList from './RankingList.vue'
+import Card from './Card.vue'
 export default {
   name: 'Recommond',
   components: {

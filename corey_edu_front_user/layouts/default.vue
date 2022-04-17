@@ -68,7 +68,7 @@
                       </span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="edit"
-                          >编辑信息</el-dropdown-item
+                          >修改个人信息</el-dropdown-item
                         >
                         <el-dropdown-item command="order"
                           >我的订单</el-dropdown-item
@@ -95,13 +95,13 @@
             <aside class="h-r-search">
               <form action="#" method="post">
                 <label class="h-r-s-box">
-                  <input
+                  <el-input
                     type="text"
                     placeholder="搜索..."
-                    name="queryCourse.courseName"
-                    value
+                    v-model="searchStr"
+                    @change="handleEnter"
                   />
-                  <a type="submit" href="/course" class="s-btn">
+                  <a type="submit" :href="'/search/' + searchStr" target="_blank" class="s-btn">
                     <em class="icon18">&nbsp;</em>
                   </a>
                 </label>
@@ -186,11 +186,10 @@ import "~/assets/css/pages-weixinpay.css";
 import cookie from "js-cookie";
 import login from "@/api/login";
 
-// 处理页面高度过矮时底部出现空白问题
-
 export default {
   data() {
     return {
+      searchStr: '',
       token: "",
       loginInfo: {
         id: "",
@@ -211,9 +210,26 @@ export default {
     this.showInfo();
   },
 
+  mounted() {
+    setTimeout(()=>{
+      var jsonStr = cookie.get("guli_ucenter");
+      console.log("-----mounted-----")
+      console.log(cookie.get("guli_ucenter"))
+      if (jsonStr) {
+        this.loginInfo = JSON.parse(jsonStr);
+        console.log(this.loginInfo.nickname)
+      } else {
+        this.loginInfo = {}
+      }
+    }, 4000)
+  },
+
   methods: {
+    handleEnter() {
+      const routerJ = this.$router.resolve({ path: "/search/" + this.searchStr });
+        window.open(routerJ.href, "_blank");
+    },
     showInfo() {
-      //debugger
       var jsonStr = cookie.get("guli_ucenter");
       //console.log("guli_ucenter：", jsonStr)
       if (jsonStr) {
@@ -221,8 +237,16 @@ export default {
       }
     },
     handleCommand(command) {
+      if (cookie.get("guli_ucenter") == "") {
+        this.loginInfo = {}
+        return
+      }
       switch (command) {
         case "edit":
+          let routerJu = this.$router.resolve({
+            path: "/user/" + this.loginInfo.id,
+          });
+          window.open(routerJu.href, "_blank");
           break;
         case "order":
           let routerJump = this.$router.resolve({
@@ -231,6 +255,10 @@ export default {
           window.open(routerJump.href, "_blank");
           break;
         case "updatePasswd":
+          let routerJump2 = this.$router.resolve({
+            path: "/user/updatePasswd/" + this.loginInfo.id,
+          });
+          window.open(routerJump2.href, "_blank");
           break;
         case "exit":
           this.logout();
@@ -245,6 +273,7 @@ export default {
         this.loginInfo = response.data.data.userInfo;
         //获取返回用户信息，放到cookie里面
         cookie.set("guli_ucenter", this.loginInfo, { domain: "localhost" });
+        console.log(cookie.get("guli_ucenter"))
       });
     },
 

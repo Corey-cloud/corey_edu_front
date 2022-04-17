@@ -1,12 +1,12 @@
 <script>
 // @ is an alias to /src
-import HelloWorld from './components/HelloWorld.vue'
-import NavHead from './components/NavHead.vue'
-import Carousel from './components/Carousel.vue'
-import NavBar from './components/NavBar.vue'
-import UpdateTable from './components/UpdateTable.vue'
-import FooterBar from './components/FooterBar.vue'
-import Recommond from './components/Recommond.vue'
+import HelloWorld from './component/HelloWorld.vue'
+import NavHead from './component/NavHead.vue'
+import Carousel from './component/Carousel.vue'
+import NavBar from './component/NavBar.vue'
+import UpdateTable from './component/UpdateTable.vue'
+import FooterBar from './component/FooterBar.vue'
+import Recommond from './component/Recommond.vue'
 import banner from '@/api/banner'
 import index from '@/api/index'
 export default {
@@ -39,11 +39,16 @@ export default {
           this.rankingList = response.data.data.rankingList
           this.teacherList = response.data.data.teacherList
           this.updateData = response.data.data.updateItems
+          var flag = false
           for (let i = 0; i < this.updateData.length; i++) {
             this.updateItems[i].updateCards = this.updateData[i]
-            
+
             if (this.updateData[i] != null && this.updateData[i].length > 0) {
               this.updateItems[i].updateDate = this.updateData[i][0].gmtCreate.substr(6,4)
+              if (flag == false) {
+                this.updateItems[i].isShow = true
+                flag = true
+              }
             } else {
               this.updateItems[i].updateDate = ""
             }
@@ -90,7 +95,7 @@ export default {
       ],
       updateItems: [
         { updateDate: '今天',
-          isShow: true,
+          isShow: false,
           updateCards: [
             { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },
             { title: '抱歉，我要毁灭一下这个地球', cover: require('./assets/img/card2.png'), viewCount: 13123242, commentCount: 54653654 },

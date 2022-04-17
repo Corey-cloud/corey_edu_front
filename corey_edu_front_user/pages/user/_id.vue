@@ -1,199 +1,151 @@
 <template>
   <div class="app-container">
-    <el-form ref="user" :model="user" :rules="validateRules" label-width="100px">
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="user.username" style="width:350px"/>
+    <el-form label-width="120px">
+      <el-form-item label="昵称">
+        <el-input v-model="user.nickname" />
       </el-form-item>
-      <el-form-item label="昵称" prop="nickName">
-        <el-input v-model="user.nickName" style="width:350px"/>
+      <el-form-item label="性别">
+        <el-select v-model="user.sex" clearable placeholder="请选择">
+          <el-option :value="2" label="男" />
+          <el-option :value="1" label="女" />
+        </el-select>
       </el-form-item>
-      <el-form-item v-if="!user.id" label="密码" prop="pass">
-        <el-input type="password" v-model="user.pass" style="width:350px">
-        </el-input>
+      <el-form-item label="年龄">
+        <el-input-number
+          :min="1"
+          :max="100"
+          v-model="user.age"
+          controls-position="right"
+        />
       </el-form-item>
-      <el-form-item v-if="!user.id" label="确认密码" prop="checkPass">
-        <el-input type="password" v-model="user.checkPass" style="width:350px">
-        </el-input>
+      <el-form-item label="个性签名">
+        <el-input v-model="user.sign" />
+      </el-form-item>
+      <el-form-item label="我的头像">
+        <pan-thumb :image="user.avatar" />
+        <!-- 文件上传按钮 -->
+        <el-button
+          type="primary"
+          icon="el-icon-upload"
+          @click="imagecropperShow = true"
+          >更换头像
+        </el-button>
+        <!--
+        v-show：是否显示上传组件
+        :key：类似于id，如果一个页面多个图片上传控件，可以做区分
+        :url：后台上传的url地址
+        @close：关闭上传组件
+        @crop-upload-success：上传成功后的回调 -->
+        <image-cropper
+          v-show="imagecropperShow"
+          :width="300"
+          :height="300"
+          :key="imagecropperKey"
+          :url="'/aliyun/oss/fileoss'"
+          field="file"
+          @close="close"
+          @crop-upload-success="cropSuccess"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button :disabled="saveBtnDisabled"  type="primary" @click="saveOrUpdate">保存</el-button>
-        <!-- <el-button :disabled="saveBtnDisabled" @click="resetForm">清空</el-button> -->
+        <el-button
+          :disabled="saveBtnDisabled"
+          type="primary"
+          @click="updateById"
+          >确认修改</el-button
+        >
+        <el-button @click="back">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-
-import userApi from '@/api/acl/user'
-import { JSEncrypt } from 'jsencrypt'
-
-const Encrypt = new JSEncrypt();
-
+import user from "@/api/user";
+import ImageCropper from "./ImageCropper";
+import PanThumb from "./PanThumb";
+import cookie from "js-cookie";
 export default {
+  components: { ImageCropper, PanThumb },
   data() {
-    var validateUsername = (rule, value, callback) => {
-      if (value.length < 5 || value.length > 10) {
-        callback(new Error('用户名不得小于5个或大于10个字符!'))
-      } else {
-        callback()
-      }
-    }
-
-    var validateNickname = (rule, value, callback) => {
-      if (value.length < 2 || value.length > 10) {
-        callback(new Error('昵称不得小于2个或大于10个字符!'))
-      } else {
-        callback()
-      }
-    }
-
-    var validatePass = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不能小于6位!'))
-      } else {
-        if (this.user.checkPass !== '') {
-          this.$refs.user.validateField('checkPass');
-        }
-        callback()
-      }
-    }
-    var validatePass2 = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不能小于6位!'))
-      }
-      if (value !== this.user.pass) {
-        callback(new Error('两次输入密码不一致!'))
-      }
-      callback()
-    }
     return {
       user: {
-        username: '',
-        nickName: '',
-        pass: '',
-        checkPass: ''
+        id: "",
+        sex: 1,
+        age: "",
+        avatar: "",
+        sign: "",
+        nickname: ""
       },
-      saveBtnDisabled: false, // 保存按钮是否禁用,
-      validateRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        nickName: [{ required: true, trigger: 'blur', validator: validateNickname }],
-        pass: [{ required: true, trigger: 'blur', validator: validatePass }],
-        checkPass: [{ required: true, trigger: 'blur', validator: validatePass2 }],
-      },
-      publicKey: '' // 加密公钥
-    }
+      saveBtnDisabled: false, // 保存按钮是否禁用
+      // BASE_API: '"http://127.0.0.1:8222"', // 接口API地址
+      imagecropperShow: false, // 是否显示上传组件
+      imagecropperKey: 0, // 上传组件id
+    };
   },
 
-  // 生命周期方法（在路由切换，组件不变的情况下不会被调用）
   created() {
-    console.log('form created ......')
-    this.init()
+    console.log("created");
+    this.init();
   },
-
   methods: {
-
-    // 重置表单
-    resetForm() {
-      this.user = {
-        username: '',
-        nickName: '',
-        pass: '',
-        checkPass: ''
-      }
-    },
-
-    // 表单初始化
     init() {
       if (this.$route.params && this.$route.params.id) {
-        const id = this.$route.params.id
-        this.fetchDataById(id)
-      } else {
-        this.user = {
-          username: '',
-          nickName: '',
-          pass: '',
-          checkPass: ''
-        }
+        user.getById(this.$route.params.id).then((res) => {
+          this.user = res.data.data.user;
+        });
       }
     },
 
-    // 根据id查询记录
-    fetchDataById(id) {
-      userApi.getById(id).then(response => {
-        this.user = response.data.userInfo
-      })
+    // 修改
+    updateById() {
+      this.saveBtnDisabled = true;
+      user
+        .updateById(this.user)
+        .then((response) => {
+          if (response.data.code == 20000) {
+            this.$message({
+              type: "success",
+              message: "修改成功",
+            });
+            cookie.set("guli_ucenter", this.user, { domain: "localhost" })
+            console.log(cookie.get("guli_ucenter"))
+            // 修改成功，回到列表页面 路由跳转
+            this.$router.push({ path: "/" });
+          } else {
+            this.$message({
+              type: "error",
+              message: response.data.message,
+            });
+            this.saveBtnDisabled = false;
+          }
+        })
     },
 
-    // 添加或修改
-    saveOrUpdate() {
-      this.$refs.user.validate(valid => {
-        if (valid) {
-          this.saveBtnDisabled = true // 防止表单重复提交
-          // 获取公钥
-          userApi.getPublicKey().then(response => {
-            if (response.success) {
-              this.publicKey = response.data.publicKey
-              // 拿到公钥后对用户名和密码进行加密
-              Encrypt.setPublicKey(this.publicKey)
-              if (!this.user.id) {
-                this.saveData()
-              } else {
-                this.updateData()
-              }
-            } else {
-              this.$message({
-                type: 'error',
-                message: '从服务器获取加密公钥失败！'
-              })
-            }
-          })
-        } else {
-          this.$message({
-            type: 'error',
-            message: '表单校验不通过，请检查！'
-          })
-        }
-      })
+    // 返回
+    back() {
+      this.$router.push({ path: "/" });
     },
 
-    // 新增
-    saveData() {
-      const user = { ...this.user }
-      user.username = Encrypt.encrypt(this.user.username.trim())
-      user.pass = Encrypt.encrypt(this.user.pass.trim())
-      user.checkPass = Encrypt.encrypt(this.user.checkPass.trim())
-
-      userApi.save(user).then(response => {
-        if (response.success) {
-          this.$message({
-            type: 'success',
-            message: response.message
-          })
-          this.$router.push({ path: '/acl/user/list' })
-        }
-      }).catch(() => {
-        this.saveBtnDisabled = false
-      })
+    // 上传成功后的回调函数
+    cropSuccess(data) {
+      this.imagecropperShow = false;
+      this.user.avatar = data.url;
+      console.log(this.user.avatar);
+      this.$message({
+        type: "success",
+        message: "头像修改成功",
+      });
+      // 上传成功后，重新打开上传组件时初始化组件，否则显示上一次的上传结果
+      this.imagecropperKey = this.imagecropperKey + 1;
     },
 
-    // 根据id更新记录
-    updateData() {
-      const user = { ...this.user }
-      user.username = Encrypt.encrypt(this.user.username.trim())
-      console.log('username:', user.username)
-      userApi.updateById(user).then(response => {
-        if (response.success) {
-          this.$message({
-            type: 'success',
-            message: response.message
-          })
-          this.$router.push({ path: '/acl/user/list' })
-        }
-      }).catch(() => {
-        this.saveBtnDisabled = false
-      })
-    }
-  }
-}
+    // 关闭上传组件
+    close() {
+      this.imagecropperShow = false;
+      // 上传失败后，重新打开上传组件时初始化组件，否则显示上一次的上传结果
+      this.imagecropperKey = this.imagecropperKey + 1;
+    },
+  },
+};
 </script>

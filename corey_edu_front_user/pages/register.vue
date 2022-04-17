@@ -100,6 +100,10 @@
               //跳转登录页面
               this.$router.push({path:'/login'})
             } else {
+              this.$message({
+                type: 'error',
+                message: response.data.message
+              })
               return
             }
 

@@ -108,7 +108,7 @@
           href="#"
           title="末页"
           @click.prevent="gotoPage(articleList.pages)"
-          >末页</a
+          >末</a
         >
 
         <div class="clear" />

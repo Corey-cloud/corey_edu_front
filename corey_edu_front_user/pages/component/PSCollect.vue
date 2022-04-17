@@ -1,5 +1,5 @@
 <script>
-import CollectCard from '../components/CollectCard.vue'
+import CollectCard from './CollectCard.vue'
 export default {
   name: 'PSCollect',
   components: {

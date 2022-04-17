@@ -1,5 +1,5 @@
 <script>
-import HeadPicture from '../components/HeadPicture.vue'
+import HeadPicture from './HeadPicture.vue'
 export default {
   name: 'UserList',
   components: {

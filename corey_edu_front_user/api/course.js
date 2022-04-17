@@ -23,5 +23,13 @@ export default {
       url: `${api_name}/${courseId}`,
       method: 'get'
     })
+  },
+
+  searchCourse(searchStr) {
+    return request({
+      url: `${api_name}/searchCourse`,
+      method: 'get',
+      params: {searchStr}
+    })
   }
 }

@@ -1,6 +1,6 @@
 <script>
-import HeadPicture from '../components/HeadPicture.vue'
-import Comment from '../components/Comment.vue'
+import HeadPicture from './HeadPicture.vue'
+import Comment from './Comment.vue'
 export default {
   name: 'EventCard',
   props: ['user', 'event'],

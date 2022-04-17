@@ -35,5 +35,12 @@ export default {
       method: 'get',
       params: {memberId}
     })
+  },
+  // 6、取消订单
+  cancelOrder(orderNo) {
+    return request({
+      url: `/order/cancelOrder/${orderNo}`,
+      method: 'put'
+    })
   }
 }

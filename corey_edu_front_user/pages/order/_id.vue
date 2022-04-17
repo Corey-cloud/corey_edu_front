@@ -31,16 +31,16 @@
             </div>
           </td>
           <td class="price">
-            <p>￥<strong>{{order.totalFee}}</strong></p>
-            <!-- <span class="discName red">限时8折</span> -->
+            <p>￥<strong>{{(order.totalFee / 0.8).toFixed(2) }}</strong></p>
+            <span class="discName red">限时8折</span>
           </td>
-          <td class="red priceNew Last">￥<strong>{{order.totalFee}}</strong></td>
+          <td class="red priceNew Last">￥<strong>{{order.totalFee.toFixed(2)}}</strong></td>
         </tr>
         <tr>
           <td class="Billing tr" colspan="3">
             <div class="tr">
               <p>共 <strong class="red">1</strong> 件商品，合计<span
-                class="red f20">￥<strong>{{order.totalFee}}</strong></span></p>
+                class="red f20">￥<strong>{{order.totalFee.toFixed(2)}}</strong></span></p>
             </div>
           </td>
         </tr>
@@ -58,7 +58,7 @@
           </div>
           <div class="fr">
             <p>共 <strong class="red">1</strong> 件商品，合计<span class="red f20">￥<strong
-              id="AllPrice">{{order.totalFee}}</strong></span></p>
+              id="AllPrice">{{order.totalFee.toFixed(2)}}</strong></span></p>
           </div>
         </div>
         <input name="score" value="0" type="hidden" id="usedScore">

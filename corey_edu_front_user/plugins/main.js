@@ -15,9 +15,9 @@ import vRegion from 'v-region'
 import axios from 'axios'
 // vue-qriously
 import VueQriously from 'vue-qriously'
-Vue.use(VueQriously)
 import moment from 'moment'//导入文件
 Vue.prototype.$moment = moment;//赋值使用
+
 
 Vue.use(ElementUI)
 Vue.use(moment)
@@ -26,7 +26,7 @@ Vue.use(vRegion)
 
 Vue.use(axios)
 Vue.config.productionTip = false
-
+Vue.use(VueQriously)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

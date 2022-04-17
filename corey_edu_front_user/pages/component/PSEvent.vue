@@ -1,5 +1,5 @@
 <script>
-import EventCard from '../components/EventCard.vue'
+import EventCard from './EventCard.vue'
 export default {
   name: 'PSEvent',
   components: {

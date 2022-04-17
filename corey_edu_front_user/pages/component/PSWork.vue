@@ -1,5 +1,5 @@
 <script>
-import WorkCard from '../components/WorkCard.vue'
+import WorkCard from './WorkCard.vue'
 export default {
   name: 'PSWork',
   components: {

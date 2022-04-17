@@ -1,5 +1,5 @@
 <script>
-import UserInfoFloat from '../components/UserInfoFloat.vue'
+import UserInfoFloat from './UserInfoFloat.vue'
 export default {
   name: 'HeadPicture',
   components: {

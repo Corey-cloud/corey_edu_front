@@ -1,6 +1,6 @@
 <script>
-import HeadPicture from '../components/HeadPicture.vue'
-import CommentCard from '../components/CommentCard.vue'
+import HeadPicture from './HeadPicture.vue'
+import CommentCard from './CommentCard.vue'
 export default {
   name: 'Comment',
   components: {
