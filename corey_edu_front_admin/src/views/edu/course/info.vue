@@ -225,16 +225,20 @@ export default {
       console.log(res)// 上传响应
       console.log(URL.createObjectURL(file.raw))// base64编码
       this.courseInfo.cover = res.data.url
+      this.$message({
+        type: 'success',
+        message: "封面上传成功"
+      })
     },
 
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
+        this.$message.error('上传封面只能是 JPG 格式!')
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.error('上传封面大小不能超过 2MB!')
       }
       return isJPG && isLt2M
     }
