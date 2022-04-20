@@ -60,7 +60,7 @@
           {{ scope.row.level===1?'高级讲师':'首席讲师' }}
         </template>
       </el-table-column>
-      <el-table-column prop="intro" label="资历" />
+      <el-table-column prop="career" label="资历" />
       <el-table-column sortable prop="gmtCreate" label="创建时间" width="160"/>
       <el-table-column sortable prop="gmtModified" label="更新时间" width="160"/>
       <el-table-column sortable prop="sort" label="排序" width="80" />
