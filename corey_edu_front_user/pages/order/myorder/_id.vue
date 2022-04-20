@@ -58,8 +58,13 @@
       >
         <template slot-scope="scope">
           <span style="color: red" v-if="scope.row.status === 0">
-            <div>{{ array[scope.$index] }}</div>
-            <b>等待买家付款</b>
+            <div v-if="err[scope.$index] == 1">
+              <p style="color: red">当前订单状态异常，系统超时未关闭，请联系管理员处理</p>
+            </div>
+            <div v-else>
+              <div>{{ array[scope.$index] }}</div>
+              <b>等待买家付款</b>
+            </div>
           </span>
           <span style="color: #00aa00" v-else-if="scope.row.status === 1">
             <b>已支付</b>
@@ -81,26 +86,29 @@
       <!-- <el-table-column label="更新时间" prop="gmtModified" align="center" width="160" /> -->
       <el-table-column label="操作" width="350" align="center">
         <template slot-scope="scope">
-          <a
+          <div v-if="err[scope.$index] != 1">
+            <a
             v-if="scope.row.status == 0"
             style="color: #00aa00"
             :href="'/order/' + scope.row.orderNo"
             >订单详情</a
-          >
-          <a
-            v-else
-            style="color: #00aa00"
-            :href="'/order/myorder/detail/' + scope.row.orderNo"
-            >订单详情</a
-          >
-          <div></div>
-          <a
-            href="javascript:void(0)"
-            v-if="scope.row.status == 0"
-            style="color: grey"
-            @click="cancelOrder(scope.row.orderNo)"
-            >取消订单</a
-          >
+            >
+            <a
+              v-else
+              style="color: #00aa00"
+              :href="'/order/myorder/detail/' + scope.row.orderNo"
+              >订单详情</a
+            >
+            <div></div>
+            <a
+              href="javascript:void(0)"
+              v-if="scope.row.status == 0"
+              style="color: grey"
+              @click="cancelOrder(scope.row.orderNo)"
+              >取消订单</a
+            >
+          </div>
+          <div v-else><p style="color: red">该订单状态异常，无法操作</p></div>
         </template>
       </el-table-column>
     </el-table>
@@ -126,9 +134,9 @@ export default {
       total: 0, // 总记录数
       page: 1, // 页码
       limit: 8, // 每页记录数
-      timedown: "",
-      gmtCreate: "",
       array: null,
+      err: [],
+      length: 0
     };
   },
 
@@ -139,6 +147,7 @@ export default {
           memberId: params.id,
           myOrderData: response.data.data,
           total: response.data.data.total,
+          length: response.data.data.records.length,
         };
       });
     } else {
@@ -147,9 +156,11 @@ export default {
   },
 
   created() {
-    if (this.total > 0) {
-      this.array = new Array(this.total);
-      for (let i = 0; i < this.total; i++) {
+    
+    if (this.length > 0) {
+      this.err = new Array(this.length)
+      this.array = new Array(this.length);
+      for (let i = 0; i < this.length; i++) {
         this.array[i] = this.myOrderData.records[i].gmtCreate;
         if (this.myOrderData.records[i].status == 0) {
           this.countdown(i, this.array[i]);
@@ -160,9 +171,10 @@ export default {
 
   mounted() {
     this.tm = setInterval(() => {
-      if (this.total > 0) {
-        this.array = new Array(this.total);
-        for (let i = 0; i < this.total; i++) {
+      if (this.length > 0) {
+        this.err = new Array(this.length)
+        this.array = new Array(this.length);
+        for (let i = 0; i < this.length; i++) {
           this.array[i] = this.myOrderData.records[i].gmtCreate;
           if (this.myOrderData.records[i].status == 0) {
             console.log("--------array[", i, "]--------");
@@ -179,9 +191,11 @@ export default {
       ordersApi
         .getMyOrderList(this.page, this.limit, this.memberId)
         .then((response) => {
-          this.myOrderData = response.data.data;
-          this.total = response.data.data.total;
+          this.myOrderData = response.data.data
+          this.total = response.data.data.total
+          this.length = response.data.data.records.length
         });
+      
     },
     changeSize(size) {
       this.limit = size;
@@ -200,7 +214,10 @@ export default {
 
       console.log(msec);
       if (msec < 0) {
-        this.fetchData(1);
+        this.fetchData(this.page);
+        if (this.myOrderData.records[i].status == 0) {
+          this.err[i] = 1
+        }
         return;
       }
 

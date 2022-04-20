@@ -33,11 +33,11 @@
                   <div class="mt10 hLh30 txtOf tac">
                     <a :href="'/teacher/'+teacher.id" :title="teacher.name" target="_blank" class="fsize18 c-666">{{teacher.name}}</a>
                   </div>
-                  <div class="hLh30 txtOf tac">
-                    <span class="fsize14 c-999">{{teacher.intro}}</span>
-                  </div>
                   <div class="mt15 i-q-txt">
                     <p class="c-999 f-fA">{{teacher.career}}</p>
+                  </div>
+                  <div class="hLh30 txtOf tac">
+                    <span v-html="teacher.intro" class="fsize14 c-999">{{teacher.intro}}</span>
                   </div>
                 </section>
               </li>

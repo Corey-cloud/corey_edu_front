@@ -52,7 +52,7 @@
               v-if="Number(courseWebVo.price) === 0 || isbuy"
               class="c-attr-mt"
             >
-              <a target="_blank" :href="'/player/'+courseWebVo.id" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
+              <a target="_blank" :href="'/player/'+this.chapterVideoList[0].children[0].videoSourceId" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
             </section>
             <section v-else class="c-attr-mt">
               <a
@@ -162,7 +162,7 @@
                                   target="_blank"
                                 >
                                   <span v-if="video.isFree" class="fr">
-                                    <i class="free-icon vam mr10">免费试听</i>
+                                    <i class="free-icon vam mr10">免费试看</i>
                                   </span>
                                   <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em
                                   >{{ video.title }}

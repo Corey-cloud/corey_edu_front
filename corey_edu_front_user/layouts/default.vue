@@ -117,7 +117,7 @@
       <!-- /公共头引入 -->
       <nuxt />
       <!-- 公共底引入 -->
-      <footer id="footer">
+      <footer style="position: relative; bottom: 0" id="footer">
         <section class="container">
           <div>
             <h4 class="hLh30">
@@ -125,7 +125,7 @@
             </h4>
             <ul class="of flink-list">
               <li>
-                <a href="http://www.baidu.com/" title="百度" target="_blank"
+                <a href="/" title="Corey在线教育" target="_blank"
                   >Corey在线教育</a
                 >
               </li>

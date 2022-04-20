@@ -267,7 +267,7 @@ export default {
                             <span class="fsize14 c-999">{{teacher.career}}</span>
                           </div>
                           <div class="mt15 i-q-txt">
-                            <p
+                            <p v-html="teacher.intro"
                               class="c-999 f-fA"
                             >{{teacher.intro}}</p>
                           </div>

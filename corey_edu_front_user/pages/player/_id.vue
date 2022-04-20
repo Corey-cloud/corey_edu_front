@@ -9,19 +9,19 @@
     <!-- 定义播放器dom -->
     <div id="J_prismPlayer" class="prism-player" />
     <!-- 公共底引入 -->
-    <footer id="footer" style="border-top-style: none;">
+    <footer id="footer" style="border-top-style: none; position: absolute; bottom: 0">
       <section class="container">
-        <!-- <div class>
+        <div class>
           <h4 class="hLh30">
             <span class="fsize18 f-fM c-999">友情链接</span>
           </h4>
           <ul class="of flink-list">
             <li>
-              <a href="http://www.baidu.com/" title="百度" target="_blank">Corey在线教育</a>
+              <a href="/" title="Corey在线教育" target="_blank">Corey在线教育</a>
             </li>
           </ul>
           <div class="clear"></div>
-        </div> -->
+        </div>
         <div class="b-foot">
           <section class="fl col-7">
             <section class="mr20">

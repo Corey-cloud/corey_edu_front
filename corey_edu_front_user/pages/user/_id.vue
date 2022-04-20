@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
-    <el-form label-width="120px">
+    <el-form style="margin-left: 50em; margin-top: 5em" label-width="120px">
       <el-form-item label="昵称">
-        <el-input v-model="user.nickname" />
+        <el-input minlength="2" maxlength="8" show-word-limit v-model="user.nickname" style="max-width: 218px" />
       </el-form-item>
       <el-form-item label="性别">
         <el-select v-model="user.sex" clearable placeholder="请选择">
@@ -18,8 +18,13 @@
           controls-position="right"
         />
       </el-form-item>
-      <el-form-item label="个性签名">
-        <el-input v-model="user.sign" />
+      <el-form-item style="max-width: 500px" label="个性签名">
+        <el-input 
+        type="textarea" 
+        :autosize="{ minRows: 2, maxRows: 4}"
+        placeholder="请输入内容" 
+        v-model="user.sign" 
+        />
       </el-form-item>
       <el-form-item label="我的头像">
         <pan-thumb :image="user.avatar" />
