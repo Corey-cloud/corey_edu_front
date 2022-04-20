@@ -7,7 +7,7 @@
           <h1 id="logo">
             <a href="/" title="Corey在线教育">
               <img
-                src="~/assets/img/logo.png"
+                src="~/assets/img/logo3.png"
                 width="100%"
                 alt="Corey在线教育"
               />

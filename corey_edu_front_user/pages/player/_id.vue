@@ -9,7 +9,7 @@
     <!-- 定义播放器dom -->
     <div id="J_prismPlayer" class="prism-player" />
     <!-- 公共底引入 -->
-    <footer id="footer" style="border-top-style: none; position: absolute; bottom: 0">
+    <footer id="footer" style="position: absolute; bottom: 0">
       <section class="container">
         <div class>
           <h4 class="hLh30">
