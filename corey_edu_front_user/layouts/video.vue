@@ -1,8 +1,8 @@
 <template>
   <div class="guli-player">
     <div class="head">
-      <a href="/" title="Corey在线教育">
-        <img class="logo" src="~/assets/img/logo.png" lt="Corey在线教育" />
+      <a href="/" title="科里学院">
+        <img class="logo" src="~/assets/img/logo.png" lt="科里学院" />
       </a>
     </div>
     <div class="body">

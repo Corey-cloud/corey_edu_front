@@ -5,11 +5,11 @@
       <header class="top" id="header">
         <section class="container">
           <h1 id="logo">
-            <a href="/" title="Corey在线教育">
+            <a href="/" title="科里学院">
               <img
-                src="~/assets/img/logo3.png"
+                src="~/assets/img/logo.png"
                 width="100%"
-                alt="Corey在线教育"
+                alt="科里学院"
               />
             </a>
           </h1>
@@ -125,8 +125,8 @@
             </h4>
             <ul class="of flink-list">
               <li>
-                <a href="/" title="Corey在线教育" target="_blank"
-                  >Corey在线教育</a
+                <a href="/" title="科里学院" target="_blank"
+                  >科里学院</a
                 >
               </li>
             </ul>
@@ -145,7 +145,7 @@
                 </section>
                 <section class="b-f-link mt10">
                   <span
-                    >©2021课程版权均归Corey在线教育所有 京ICP备17055252号</span
+                    >©2021课程版权均归科里学院所有 京ICP备17055252号</span
                   >
                 </section>
               </section>
