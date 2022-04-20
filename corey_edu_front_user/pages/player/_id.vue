@@ -17,7 +17,7 @@
           </h4>
           <ul class="of flink-list">
             <li>
-              <a href="/" title="Corey在线教育" target="_blank">Corey在线教育</a>
+              <a href="/" title="科里学院" target="_blank">科里学院</a>
             </li>
           </ul>
           <div class="clear"></div>
@@ -34,7 +34,7 @@
                 <span>Email：1577067415@qq.com</span>
               </section>
               <section class="b-f-link mt10">
-                <span>©2021课程版权均归Corey在线教育所有 京ICP备17055252号</span>
+                <span>©2021课程版权均归科里学院所有 京ICP备17055252号</span>
               </section>
             </section>
           </section>
