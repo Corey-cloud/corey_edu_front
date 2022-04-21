@@ -203,7 +203,7 @@ export default {
     },
     cancelOrder(orderNo) {
       ordersApi.cancelOrder(orderNo).then((res) => {
-        this.fetchData(1);
+        this.fetchData(this.page);
       });
     },
     //倒计时

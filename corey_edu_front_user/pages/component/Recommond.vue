@@ -18,7 +18,7 @@ export default {
         <div class="title">
           <h2 style="text-align:left;font-weight:700;">
             课程推荐
-            <a target="_blank" href="/course" class="more-span">更多></a>
+            <a target="_blank" href="/course" class="more-span">全部课程></a>
           </h2>
         </div>
         <el-row>

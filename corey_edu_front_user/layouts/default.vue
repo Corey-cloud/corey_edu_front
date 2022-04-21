@@ -221,7 +221,7 @@ export default {
       } else {
         this.loginInfo = {}
       }
-    }, 4000)
+    }, 1000)
   },
 
   methods: {
