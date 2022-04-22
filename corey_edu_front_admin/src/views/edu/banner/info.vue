@@ -40,7 +40,7 @@ import banner from '@/api/edu/banner'
 
 const defaultBanner = {
     title: '',
-    imageUrl: '',
+    imageUrl: '/static/default.jpg',
     linkUrl: '',
     sort: 0
 }
@@ -48,6 +48,12 @@ const defaultBanner = {
 export default {
   data() {
     return {
+      banner: {
+        title: '',
+        imageUrl: '/static/default.jpg',
+        linkUrl: '',
+        sort: 0
+      },
       saveBtnDisabled: false, // 保存按钮是否禁用,
       BASE_API: process.env.BASE_API, // 接口API地址
     }
@@ -64,7 +70,9 @@ export default {
   },
   methods: {
     init() {
+      console.log("我进来了")
       if (this.$route.params && this.$route.params.id) {
+        console.log("我进来了")
         this.fetchDataById(this.$route.params.id)
       } else {
         this.banner = {...defaultBanner}
@@ -95,7 +103,7 @@ export default {
     // 保存
     saveData() {
       banner.saveBanner(this.banner).then(response => {
-          if (response.code == 20000) {
+          if (response.success) {
               this.$message({
                 type: 'success',
                 message: '添加成功'
@@ -115,13 +123,13 @@ export default {
     updateData() {
       this.saveBtnDisabled = true
       banner.updateBannerById(this.banner).then(response => {
-          if (response.code == 20000) {
+          if (response.success) {
               this.$message({
-             type: 'success',
-            message: '修改成功'
+                type: 'success',
+                message: '修改成功'
             })
             // 修改成功，回到列表页面 路由跳转
-            this.$router.push({ path: '/edu/teacher/list' })
+            this.$router.push({ path: '/edu/banner/list' })
           } else {
               this.$message({
                 type: 'error',

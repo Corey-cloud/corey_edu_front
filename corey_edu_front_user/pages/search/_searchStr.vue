@@ -107,7 +107,6 @@ export default {
     };
   },
   asyncData({ params, error }) {
-    console.log("searchStr:", params.searchStr);
     return courseApi.searchCourse(params.searchStr).then((response) => {
       return {
         searchStr: params.searchStr,
