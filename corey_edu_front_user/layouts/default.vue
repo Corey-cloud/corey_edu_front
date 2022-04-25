@@ -206,39 +206,32 @@ export default {
   },
 
   created() {
-    this.token = this.$route.query.token;
-    if (this.token) {
-      this.wxLogin();
-    }
-    this.showInfo();
+    this.showInfo()
   },
 
   mounted() {
-    setTimeout(()=>{
-      var jsonStr = cookie.get("guli_ucenter");
-      console.log("-----mounted-----")
-      console.log(cookie.get("guli_ucenter"))
-      if (jsonStr) {
-        this.loginInfo = JSON.parse(jsonStr);
-        console.log(this.loginInfo.nickname)
-      } else {
-        this.loginInfo = {}
-      }
-    }, 1000)
+    setTimeout(()=> {
+      this.showInfo()
+    }, 3000)
+    
   },
 
   methods: {
+
     handleEnter() {
       const routerJ = this.$router.resolve({ path: "/search/" + this.searchStr });
         window.open(routerJ.href, "_blank");
     },
+
     showInfo() {
       var jsonStr = cookie.get("guli_ucenter");
-      //console.log("guli_ucenter：", jsonStr)
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr);
+      } else {
+        this.loginInfo = {}
       }
     },
+
     handleCommand(command) {
       if (cookie.get("guli_ucenter") == "") {
         this.loginInfo = {}
@@ -273,17 +266,6 @@ export default {
           this.logout();
           break;
       }
-    },
-    wxLogin() {
-      if (this.token == "") return;
-      cookie.set("guli_token", this.token, { domain: "localhost" });
-      cookie.set("guli_ucenter", "", { domain: "localhost" });
-      login.getLoginUserInfo().then((response) => {
-        this.loginInfo = response.data.data.userInfo;
-        //获取返回用户信息，放到cookie里面
-        cookie.set("guli_ucenter", this.loginInfo, { domain: "localhost" });
-        console.log(cookie.get("guli_ucenter"))
-      });
     },
 
     logout() {

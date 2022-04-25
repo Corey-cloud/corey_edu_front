@@ -113,8 +113,7 @@ export default {
               type: "success",
               message: "修改成功",
             });
-            cookie.set("guli_ucenter", this.user, { domain: "localhost" })
-            console.log(cookie.get("guli_ucenter"))
+            cookie.set("guli_ucenter", this.user, { domain: "localhost" } )
             // 修改成功，回到列表页面 路由跳转
             this.$router.push({ path: "/" });
           } else {
@@ -135,8 +134,8 @@ export default {
     // 上传成功后的回调函数
     cropSuccess(data) {
       this.imagecropperShow = false;
-      this.user.avatar = data.url;
-      console.log(this.user.avatar);
+      this.user.avatar = data.data.url;
+      console.log("avatar:", this.user.avatar);
       this.$message({
         type: "success",
         message: "头像修改成功",
