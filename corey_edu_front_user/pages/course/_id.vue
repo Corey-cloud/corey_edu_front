@@ -48,24 +48,31 @@
             </section>
             <section class="c-attr-mt of">
               <span class="ml10 vam">
-                <em class="icon18 scIcon"></em>
-                <a
-                  v-if="!this.isCollect"
-                  class="c-fff vam"
-                  title="收藏"
-                  href="#"
-                  @click="collect"
-                  >收藏</a
-                >
-                <a
-                  v-else
-                  style="color: red"
-                  class="c-fff vam"
-                  title="收藏"
-                  href="#"
-                  @click="collect"
-                  >收藏</a
-                >
+                <div v-if="!this.isCollect">
+                  <img
+                    class="icon18 scIcon"
+                    src="~/assets/img/shoucangf.png"
+                    alt="收藏"
+                  />
+                  <a class="c-fff vam" title="收藏" href="#" @click="collect"
+                    >收藏</a
+                  >
+                </div>
+                <div v-else>
+                  <img
+                    class="icon18 scIcon"
+                    src="~/assets/img/shoucang.png"
+                    alt="收藏"
+                  />
+                  <a
+                    style="color: red"
+                    class="c-fff vam"
+                    title="收藏"
+                    href="#"
+                    @click="collect"
+                    >收藏</a
+                  >
+                </div>
               </span>
             </section>
             <section
