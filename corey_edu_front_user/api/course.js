@@ -31,5 +31,6 @@ export default {
       method: 'get',
       params: {searchStr}
     })
-  }
+  },
+  
 }

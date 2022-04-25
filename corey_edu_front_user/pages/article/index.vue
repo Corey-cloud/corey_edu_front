@@ -61,60 +61,17 @@
         </div>
       </div>
     </div>
-    <!-- 公共分页 开始 -->
-    <div>
-      <div class="paging">
-        <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
-
-        <a
-          :class="{ undisable: !articleList.hasPrevious }"
-          href="#"
-          title="首页"
-          @click.prevent="gotoPage(1)"
-          >首</a
-        >
-
-        <a
-          :class="{ undisable: !articleList.hasPrevious }"
-          href="#"
-          title="前一页"
-          @click.prevent="gotoPage(articleList.current - 1)"
-          >&lt;</a
-        >
-
-        <a
-          v-for="page in articleList.pages"
-          :key="page"
-          :class="{
-            current: articleList.current == page,
-            undisable: articleList.current == page,
-          }"
-          :title="'第' + page + '页'"
-          href="#"
-          @click.prevent="gotoPage(page)"
-          >{{ page }}</a
-        >
-
-        <a
-          :class="{ undisable: !articleList.hasNext }"
-          href="#"
-          title="后一页"
-          @click.prevent="gotoPage(articleList.current + 1)"
-          >&gt;</a
-        >
-
-        <a
-          :class="{ undisable: !articleList.hasNext }"
-          href="#"
-          title="末页"
-          @click.prevent="gotoPage(articleList.pages)"
-          >末</a
-        >
-
-        <div class="clear" />
-      </div>
-    </div>
-    <!-- 公共分页 结束 -->
+    <!-- 分页组件 -->
+        <el-pagination
+          :current-page="page"
+          :total="total"
+          :page-size="limit"
+          :page-sizes="[8, 16, 32, 48, 64, 80]"
+          style="padding: 30px 0; text-align: center;"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="gotoPage"
+          @size-change="changeSize"
+        />
   </div>
 </template>
 <script>
@@ -122,39 +79,45 @@ import articleApi from "@/api/article";
 export default {
   data() {
     return {
-      pageSize: 10,
-      pageNum: 1,
+      page: 1,
+      limit: 10,
+      total: 0,
       articleQuery: {},
       articleList: {},
       hotArticle: {},
     };
   },
   created() {
-    this.gotoPage(this.pageNum);
+    this.gotoPage(this.page);
     // this.getCommentList();
     this.getHotArticle();
   },
   methods: {
     hitZan(id) {
       articleApi.hitZan(id).then((res) => {
-        this.$message({
-          type: "success",
-          message: "点赞成功",
-        })
+        // this.$message({
+        //   type: "success",
+        //   message: "点赞成功",
+        // })
         this.gotoPage(1)
         this.getHotArticle()
       });
     },
+    changeSize(size) {
+      this.limit = size
+      this.gotoPage(1)
+    },
     //3.分页切换的方法
-    gotoPage(page) {
-      articleApi.getArticleList(page, this.pageSize).then((res) => {
+    gotoPage(page = 1) {
+      this.page = page
+      articleApi.getArticleList(this.page, this.limit).then((res) => {
         this.articleList = res.data.data;
-        console.log("article:", this.articleList)
+        this.total = res.data.data.total
       });
     },
     //获取文章评论列表
     getCommentList() {
-      articleApi.getCommentList(this.pageNum, this.pageSize).then((res) => {
+      articleApi.getCommentList(this.page, this.limit).then((res) => {
         this.commentList = res.data.data;
       });
     },

@@ -70,6 +70,9 @@
                         <el-dropdown-item command="edit"
                           >修改个人信息</el-dropdown-item
                         >
+                        <el-dropdown-item command="collect"
+                          >我的收藏</el-dropdown-item
+                        >
                         <el-dropdown-item command="order"
                           >我的订单</el-dropdown-item
                         >
@@ -247,6 +250,12 @@ export default {
             path: "/user/" + this.loginInfo.id,
           });
           window.open(routerJu.href, "_blank");
+          break;
+        case "collect":
+          let routerJum = this.$router.resolve({
+            path: "/course/mycollection/" + this.loginInfo.id,
+          });
+          window.open(routerJum.href, "_blank");
           break;
         case "order":
           let routerJump = this.$router.resolve({
