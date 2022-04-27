@@ -1,6 +1,5 @@
-<template>
-  <div>
-
+<template class="bg">
+  <div class="bg">
     <!-- 阿里云视频播放器样式 -->
     <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.1/skins/default/aliplayer-min.css" >
     <!-- 阿里云视频播放器脚本 -->
@@ -97,3 +96,10 @@ export default {
 
 }
 </script>
+
+<style>
+  .bg {
+    background: url(https://corey-edu.oss-cn-shenzhen.aliyuncs.com/source/v-play-bg.jpg);
+    z-index: 10;
+  }
+</style>

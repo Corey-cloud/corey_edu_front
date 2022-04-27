@@ -23,18 +23,15 @@
           </div>
           <div class="shijian">{{ question.gmtModified }}</div>
           <div class="dianzan">
+            <img style="margin-left: 10px" src="~/assets/img/view.png" alt="" />
+            <span>{{ question.qaView }}</span>
             <img
+              style="margin-left: 10px"
               @click="dialogVisible = true"
               src="~/assets/img/pinglun.png"
               alt=""
             />
             <span>{{ question.qaComments }}</span>
-            <img
-              style="margin-left: 10px"
-              src="~/assets/img/zanqian.png"
-              alt=""
-            />
-            <span>{{ question.qaView }}</span>
           </div>
         </div>
       </div>
@@ -119,7 +116,6 @@ export default {
   },
   mounted() {
     this.initInfo();
-    this.getLoginUserInfo();
   },
   methods: {
     changeIsShowAnswer(id) {
@@ -130,22 +126,25 @@ export default {
       });
     },
     commit() {},
-    initInfo(id) {
+    initInfo() {
       if (this.$route.params && this.$route.params.id) {
         const id = this.$route.params.id;
         qaApi.getQuestionById(id).then((res) => {
-          this.question = res.data.data.question
+          this.question = res.data.data.question;
         });
-        // qaApi.getQtAnswerList(id).then((res) => {
-        //   let question = res.data.data.questionTree;
-        //   question.qaAnswerList.forEach((i) => (i.isShowAnswer = false));
-        //   this.question = question;
-        //   this.oneAnswer = question.qaAnswerList;
-        // });
+        qaApi.getQtAnswerList(id).then((res) => {
+          let question = res.data.data.questionTree;
+          question.qaAnswerList.forEach((i) => (i.isShowAnswer = false));
+          this.question = question;
+          this.oneAnswer = question.qaAnswerList;
+        });
       }
     },
     //一级回复
     replyAnswer1() {
+      if (!this.getLoginUserInfo()) {
+        return
+      }
       this.dialogVisible = false;
       this.reply1Answer = {
         memberId: this.userInfo.id,
@@ -170,6 +169,9 @@ export default {
       });
     },
     replyAnswer2(answerId) {
+      if (!this.getLoginUserInfo()) {
+        return
+      }
       this.isShowAnswer = false;
       this.reply2Answer = {
         memberId: this.userInfo.id,
@@ -201,14 +203,24 @@ export default {
       //把字符串转换json对象
       if (userStr) {
         this.userInfo = JSON.parse(userStr);
-        console.log(this.userInfo);
+        return true;
       } else {
-        this.$notify({
-          title: "登录提示！",
-          message: "请登录后发表帖子",
-          duration: 0,
-        });
-        return;
+        // 未登录提问（code:28000）处理
+        this.$confirm(
+          "您尚未登录，无法收藏课程，是否跳转至登录页面？",
+          "用户未登录提示",
+          {
+            confirmButtonText: "去登录",
+            cancelButtonText: "算了",
+            type: "warning",
+          }
+        )
+          .then(() => {
+            this.$router.push({ path: "/login" });
+          })
+          .catch((_) => {
+            return false;
+          });
       }
     },
   },

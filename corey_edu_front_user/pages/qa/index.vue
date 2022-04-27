@@ -30,17 +30,77 @@
             <img src="~/assets/img/pinglun.png" alt="" />
             <span>{{ data.questionDetails }}</span>
           </div>
+          <div class="tag-group">
+            <!-- <span class="tag-group__title">Dark</span> -->
+            <el-tag
+              style="margin-left: 5px"
+              size="small"
+              v-for="item in items[idx]"
+              :key="item"
+              type="info"
+            >
+              {{ item }}
+            </el-tag>
+          </div>
           <div class="shijian">{{ data.gmtCreate }}</div>
         </div>
-        <div class="wenda">
+        <div style="text-align: center" class="wenda">
           <div class="wenda-word">回答数</div>
           <div class="wenda-num">{{ data.qaComments }}</div>
         </div>
-        <div class="view">
+        <div style="text-align: center" class="view">
           <div class="huida-word">浏览数</div>
           <div class="huida-num">{{ data.qaView }}</div>
         </div>
       </div>
+      <!-- 公共分页 开始 -->
+      <div>
+        <div class="paging">
+          <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
+          <a
+            :class="{ undisable: !dataList.hasPrevious }"
+            href="#"
+            title="首页"
+            @click.prevent="getQtList(1)"
+            >首</a
+          >
+          <a
+            :class="{ undisable: !dataList.hasPrevious }"
+            href="#"
+            title="前一页"
+            @click.prevent="getQtList(dataList.current - 1)"
+            >&lt;</a
+          >
+          <a
+            v-for="page in dataList.pages"
+            :key="page"
+            :class="{
+              current: dataList.current == page,
+              undisable: dataList.current == page,
+            }"
+            :title="'第' + page + '页'"
+            href="#"
+            @click.prevent="getQtList(page)"
+            >{{ page }}</a
+          >
+          <a
+            :class="{ undisable: !dataList.hasNext }"
+            href="#"
+            title="后一页"
+            @click.prevent="getQtList(dataList.current + 1)"
+            >&gt;</a
+          >
+          <a
+            :class="{ undisable: !dataList.hasNext }"
+            href="#"
+            title="末页"
+            @click.prevent="getQtList(dataList.pages)"
+            >末</a
+          >
+          <div class="clear" />
+        </div>
+      </div>
+      <!-- 公共分页 结束 -->
     </div>
 
     <div class="right">
@@ -53,11 +113,7 @@
       <div class="hot">
         <div class="hot-title">热门问答推荐</div>
         <ul>
-          <li
-            class="hot-list"
-            v-for="(data, idx) in hotList.records"
-            :key="idx"
-          >
+          <li class="hot-list" v-for="(data, idx) in hotList" :key="idx">
             <img src="~/assets/img/wenti.png" alt="" /><a
               class="hot-title-a"
               :href="'/qa/' + data.id"
@@ -118,61 +174,6 @@
         <el-button type="primary" @click="commitQuestion">确 定</el-button>
       </span>
     </el-dialog>
-
-    <!-- 公共分页 开始 -->
-    <div>
-      <div class="paging">
-        <!-- undisable这个class是否存在，取决于数据属性hasPrevious -->
-
-        <a
-          :class="{ undisable: !dataList.hasPrevious }"
-          href="#"
-          title="首页"
-          @click.prevent="getQtList(1)"
-          >首</a
-        >
-
-        <a
-          :class="{ undisable: !dataList.hasPrevious }"
-          href="#"
-          title="前一页"
-          @click.prevent="getQtList(dataList.current - 1)"
-          >&lt;</a
-        >
-
-        <a
-          v-for="page in dataList.pages"
-          :key="page"
-          :class="{
-            current: dataList.current == page,
-            undisable: dataList.current == page,
-          }"
-          :title="'第' + page + '页'"
-          href="#"
-          @click.prevent="getQtList(page)"
-          >{{ page }}</a
-        >
-
-        <a
-          :class="{ undisable: !dataList.hasNext }"
-          href="#"
-          title="后一页"
-          @click.prevent="getQtList(dataList.current + 1)"
-          >&gt;</a
-        >
-
-        <a
-          :class="{ undisable: !dataList.hasNext }"
-          href="#"
-          title="末页"
-          @click.prevent="getQtList(dataList.pages)"
-          >末</a
-        >
-
-        <div class="clear" />
-      </div>
-    </div>
-    <!-- 公共分页 结束 -->
   </div>
 </template>
 <script>
@@ -181,7 +182,13 @@ import cookie from "js-cookie";
 export default {
   data() {
     return {
-      btnDataList: [{ name: "综合" }, { name: "最新" }, { name: "热门" }, { name: "等待回答" }],
+      items: [],
+      btnDataList: [
+        { name: "综合" },
+        { name: "最新" },
+        { name: "热门" },
+        { name: "等待回答" },
+      ],
       currentIdx: 0,
       title: "",
       options: [],
@@ -206,6 +213,7 @@ export default {
       queryObj: {},
       dataList: {},
       hotList: [],
+      tagList: [],
     };
   },
   mounted() {
@@ -216,8 +224,8 @@ export default {
     initType() {
       qaApi.getTypes().then((res) => {
         if ((res.data.code = 20000)) {
-          for (let i = 0; i < res.data.data.length; i++) {
-            this.states.push(res.data.data[i]);
+          for (let i = 0; i < res.data.data.qTypeVoList.length; i++) {
+            this.states.push(res.data.data.qTypeVoList[i]);
           }
           this.list = this.states.map((item) => {
             return { value: `${item.id}`, label: `${item.typeName}` };
@@ -232,7 +240,7 @@ export default {
         qt: `2`,
       };
       qaApi.getQuestionList(1, 4, this.queryObj).then((res) => {
-        this.hotList = res.data.data;
+        this.hotList = res.data.data.items;
       });
     },
     getQtList(pageNo, idx) {
@@ -243,6 +251,23 @@ export default {
         .getQuestionList(pageNo, this.pageSize, this.queryObj)
         .then((res) => {
           this.dataList = res.data.data;
+          this.rawList = res.data.data.items;
+          this.items = new Array(this.rawList.length);
+          for (let i = 0; i < this.rawList.length; i++) {
+            this.items[i] = this.rawList[i].qtIds.split(",");
+          }
+
+          for (let i = 0; i < this.items.length; i++) {
+            for (let j = 0; j < this.items[i].length; j++) {
+              for (let k = 0; k < this.list.length; k++) {
+                if (this.items[i][j] === this.list[k].value) {
+                  this.items[i][j] = this.list[k].label;
+                  console.log(i,this.items[i]);
+                  break;
+                }
+              }
+            }
+          }
         });
     },
     //动态获取类型
@@ -275,7 +300,9 @@ export default {
     //提交问题
     commitQuestion() {
       this.isShow = false;
-      this.getLoginUserInfo();
+      if (!this.getLoginUserInfo()) {
+        return;
+      }
       this.question = {
         memberId: this.userInfo.id,
         memberNickname: this.userInfo.nickname,
@@ -283,17 +310,19 @@ export default {
         questionTitle: this.title,
         qtIds: this.value.join(","),
         questionDetails: this.quseall,
+        status: 1,
+        enable: 1
       };
 
       qaApi.publishQ(this.question).then((res) => {
         if (res.data.code == 20000) {
           this.$message({
-            message: "发布成功，等待审批!",
+            message: "发布成功，等待审批",
             type: "success",
           });
         } else {
           this.$message({
-            message: "发布失败!",
+            message: "发布失败",
             type: "error",
           });
         }
@@ -305,13 +334,24 @@ export default {
       //把字符串转换json对象
       if (userStr) {
         this.userInfo = JSON.parse(userStr);
+        return true;
       } else {
-        this.$notify({
-          title: "登录提示！",
-          message: "请登录后发表帖子",
-          duration: 0,
-        });
-        return;
+        // 未登录提问（code:28000）处理
+        this.$confirm(
+          "您尚未登录，无法收藏课程，是否跳转至登录页面？",
+          "用户未登录提示",
+          {
+            confirmButtonText: "去登录",
+            cancelButtonText: "算了",
+            type: "warning",
+          }
+        )
+          .then(() => {
+            this.$router.push({ path: "/login" });
+          })
+          .catch((_) => {
+            return false;
+          });
       }
     },
   },
@@ -324,11 +364,10 @@ export default {
 }
 .hot-huida {
   text-align: center;
-  width: 50px;
-  font-size: 16px;
+  width: 60px;
+  font-size: 14px;
   float: right;
-  height: 30px;
-  padding: 5px;
+  height: 10px;
   height: 100%;
 }
 .hot-huida span:nth-child(1) {
@@ -421,6 +460,7 @@ export default {
   font-size: 24px;
 }
 .wenda {
+  vertical-align: middle;
   width: 60px;
   height: 60px;
   position: absolute;
@@ -453,7 +493,6 @@ export default {
 .shijian {
   font-size: 16px;
   color: #bfbfbf;
-  margin-top: 10px;
 }
 .huida img {
   width: 20px;
@@ -482,6 +521,7 @@ export default {
   text-overflow: ellipsis;
 }
 .hot-title-a {
+  margin-bottom: -10px;
   font-size: 16px;
   display: inline-block;
   width: 150px;
@@ -497,9 +537,9 @@ export default {
 .list1 {
   position: relative;
   width: 100%;
-  height: 130px;
+  height: 150px;
   border-bottom: 1px solid #bfbfbf;
-  padding: 30px 20px;
+  padding: 20px 20px;
 }
 .people {
   display: inline-block;
@@ -519,4 +559,5 @@ export default {
 .username {
   color: #bfbfbf;
 }
+
 </style>

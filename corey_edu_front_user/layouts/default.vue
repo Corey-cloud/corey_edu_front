@@ -6,11 +6,7 @@
         <section class="container">
           <h1 id="logo">
             <a href="/" title="科里学院">
-              <img
-                src="~/assets/img/logo.png"
-                width="100%"
-                alt="科里学院"
-              />
+              <img src="~/assets/img/logo.png" width="100%" alt="科里学院" />
             </a>
           </h1>
           <div class="h-r-nsl">
@@ -104,7 +100,12 @@
                     v-model="searchStr"
                     @change="handleEnter"
                   />
-                  <a type="submit" :href="'/search/' + searchStr" target="_blank" class="s-btn">
+                  <a
+                    type="submit"
+                    :href="'/search/' + searchStr"
+                    target="_blank"
+                    class="s-btn"
+                  >
                     <em class="icon18">&nbsp;</em>
                   </a>
                 </label>
@@ -128,9 +129,7 @@
             </h4>
             <ul class="of flink-list">
               <li>
-                <a href="/" title="科里学院" target="_blank"
-                  >科里学院</a
-                >
+                <a href="/" title="科里学院" target="_blank">科里学院</a>
               </li>
             </ul>
             <div class="clear"></div>
@@ -147,21 +146,26 @@
                   <span>Email：1577067415@qq.com</span>
                 </section>
                 <section class="b-f-link mt10">
-                  <span
-                    >©2021课程版权均归科里学院所有 京ICP备17055252号</span
-                  >
+                  <span>©2021课程版权均归科里学院所有 京ICP备17055252号</span>
                 </section>
               </section>
             </section>
             <aside class="fl col-3 tac mt15">
               <section class="gf-tx">
                 <span>
-                  <img src="~/assets/img/wx-icon.png" alt />
+                  <el-popover
+                    placement="top"
+                    width="200"
+                    trigger="hover"
+                  >
+                    <img src="~/assets/img/wx.jpg" width="250" height="250" alt="">
+                    <el-button type="text" slot="reference"> <img src="~/assets/img/wx-icon.png" alt /></el-button>
+                  </el-popover>
                 </span>
               </section>
               <section class="gf-tx">
                 <span>
-                  <img src="~/assets/img/wb-icon.png" alt />
+                  <a href="https://weibo.com/u/6686946488"><img src="~/assets/img/wb-icon.png" alt /></a>
                 </span>
               </section>
             </aside>
@@ -192,7 +196,7 @@ import login from "@/api/login";
 export default {
   data() {
     return {
-      searchStr: '',
+      searchStr: "",
       token: "",
       loginInfo: {
         id: "",
@@ -206,21 +210,21 @@ export default {
   },
 
   created() {
-    this.showInfo()
+    this.showInfo();
   },
 
   mounted() {
-    setTimeout(()=> {
-      this.showInfo()
-    }, 3000)
-    
+    setTimeout(() => {
+      this.showInfo();
+    }, 3000);
   },
 
   methods: {
-
     handleEnter() {
-      const routerJ = this.$router.resolve({ path: "/search/" + this.searchStr });
-        window.open(routerJ.href, "_blank");
+      const routerJ = this.$router.resolve({
+        path: "/search/" + this.searchStr,
+      });
+      window.open(routerJ.href, "_blank");
     },
 
     showInfo() {
@@ -228,14 +232,14 @@ export default {
       if (jsonStr) {
         this.loginInfo = JSON.parse(jsonStr);
       } else {
-        this.loginInfo = {}
+        this.loginInfo = {};
       }
     },
 
     handleCommand(command) {
       if (cookie.get("guli_ucenter") == "") {
-        this.loginInfo = {}
-        return
+        this.loginInfo = {};
+        return;
       }
       switch (command) {
         case "edit":

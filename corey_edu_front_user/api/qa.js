@@ -16,7 +16,7 @@ export default {
       data: data
     })
   },
-  //获取前端问答列表
+  //获取问答列表
   getQuestionList(pageNo, pageSize, data) {
     return request({
       url: `/edu/qa-question/getQuestionList/${pageNo}/${pageSize}`,
@@ -30,10 +30,10 @@ export default {
       method: 'get'
     })
   },
-  //获取前端问答信息
+  //获取前端问答回复信息列表
   getQtAnswerList(id) {
     return request({
-      url: `/edu/qa-question/getQtAnswerList/${id}`,
+      url: `/edu/qa-question/getQaAnswerList/${id}`,
       method: 'get'
     })
   },
