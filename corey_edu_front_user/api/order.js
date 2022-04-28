@@ -29,11 +29,11 @@ export default {
     })
   },
   // 5、获取我的订单列表
-  getMyOrderList(page, limit, memberId) {
+  getMyOrderList(page, limit, memberId, queryStatus) {
     return request({
       url: `/order/getMyOrderList/${page}/${limit}`,
       method: 'get',
-      params: {memberId}
+      params: {memberId, queryStatus}
     })
   },
   // 6、取消订单

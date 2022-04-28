@@ -1,5 +1,12 @@
 <template>
   <div class="app-container">
+    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+    <el-tab-pane label="全部" name="all"></el-tab-pane>
+    <el-tab-pane label="待付款" name="first"></el-tab-pane>
+    <el-tab-pane label="已完成" name="second"></el-tab-pane>
+    <el-tab-pane label="已关闭" name="third"></el-tab-pane>
+    <el-tab-pane label="已取消" name="fourth"></el-tab-pane>
+  </el-tabs>
     <!-- 表格 -->
     <el-table :data="myOrderData.records" fit highlight-current-row>
       <el-table-column label="序号" width="70" align="center">
@@ -136,13 +143,15 @@ export default {
       limit: 8, // 每页记录数
       array: null,
       err: [],
-      length: 0
+      length: 0,
+      activeName: 'all',
+      queryStatus: -1
     };
   },
 
   asyncData({ params, error }) {
     if (params.id != null) {
-      return ordersApi.getMyOrderList(1, 8, params.id).then((response) => {
+      return ordersApi.getMyOrderList(1, 8, params.id, -1).then((response) => {
         return {
           memberId: params.id,
           myOrderData: response.data.data,
@@ -189,7 +198,7 @@ export default {
     fetchData(page = 1) {
       this.page = page;
       ordersApi
-        .getMyOrderList(this.page, this.limit, this.memberId)
+        .getMyOrderList(this.page, this.limit, this.memberId, this.queryStatus)
         .then((response) => {
           this.myOrderData = response.data.data
           this.total = response.data.data.total
@@ -233,6 +242,32 @@ export default {
       this.array[i] = hh + ":" + mm + ":" + ss;
       console.log(this.array[i]);
     },
+
+    handleClick() {
+      console.log(this.activeName)
+      switch(this.activeName) {
+        case 'all':
+          this.queryStatus = -1
+          this.fetchData(1)
+          break
+        case 'first':
+          this.queryStatus = 0
+          this.fetchData(1)
+          break
+        case 'second':
+          this.queryStatus = 1
+          this.fetchData(1)
+          break
+        case 'third':
+          this.queryStatus = 2
+          this.fetchData(1)
+          break
+        case 'fourth':
+          this.queryStatus = 3
+          this.fetchData(1)
+          break
+      }
+    }
   },
 };
 </script>

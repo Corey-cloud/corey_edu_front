@@ -114,7 +114,7 @@ export default {
       userInfo: {},
     };
   },
-  mounted() {
+  created() {
     this.initInfo();
   },
   methods: {
@@ -125,7 +125,6 @@ export default {
         }
       });
     },
-    commit() {},
     initInfo() {
       if (this.$route.params && this.$route.params.id) {
         const id = this.$route.params.id;
