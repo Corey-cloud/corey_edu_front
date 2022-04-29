@@ -25,6 +25,7 @@
           <div class="dianzan">
             <img style="margin-left: 10px" src="~/assets/img/view.png" alt="" />
             <span>{{ question.qaView }}</span>
+            &nbsp;
             <img
               style="margin-left: 10px"
               @click="dialogVisible = true"
