@@ -52,6 +52,15 @@
             src="~/assets/img/pinglun.png"
             alt=""
           />
+          <a href="javascript:void(0)" style="margin-left: 30px">
+            <img
+              width="18"
+              src="~/assets/img/zanqian.png"
+              @click="zan1(data.id)"
+              alt=""
+            />
+          </a>
+          <span>{{ data.zanCount }}</span>
           <div class="shijian1">{{ data.gmtModified }}</div>
         </div>
 
@@ -67,6 +76,20 @@
             <span>{{ sonData.memberNickname + " : " }}</span
             ><br />
             <span>{{ sonData.asDetails }}</span>
+          </div>
+          <br/>
+          <br/>
+          <br/>
+          <div>
+            <a href="javascript:void(0)" style="margin-left: 100px">
+              <img
+                width="18"
+                src="~/assets/img/zanqian.png"
+                @click="zan2(sonData.id)"
+                alt=""
+              />
+            </a>
+            <span>{{ sonData.zanCount }}</span>
           </div>
         </div>
         <div class="son-input" v-show="data.isShowAnswer">
@@ -142,7 +165,7 @@ export default {
     //一级回复
     replyAnswer1() {
       if (!this.getLoginUserInfo()) {
-        return
+        return;
       }
       this.dialogVisible = false;
       this.reply1Answer = {
@@ -169,7 +192,7 @@ export default {
     },
     replyAnswer2(answerId) {
       if (!this.getLoginUserInfo()) {
-        return
+        return;
       }
       this.isShowAnswer = false;
       this.reply2Answer = {
@@ -195,6 +218,30 @@ export default {
           });
         }
       });
+    },
+    zan1(id) {
+      qaApi.zan1(id).then(res => {
+        if (res.data.success) {
+          this.initInfo()
+        }  else {
+          this.$message({
+            type: 'error',
+            message: "该评论不存在"
+          })
+        }
+      })
+    },
+    zan2(id) {
+      qaApi.zan2(id).then(res => {
+        if (res.data.success) {
+          this.initInfo()
+        } else {
+          this.$message({
+            type: 'error',
+            message: "该评论不存在"
+          })
+        }
+      })
     },
     //获取登录用户信息
     getLoginUserInfo() {

@@ -53,4 +53,16 @@ export default {
       data: data
     })
   },
+  zan1(id) {
+    return request({
+      url: `/edu/qa-answer/zan/${id}`,
+      method: 'put'
+    })
+  },
+  zan2(id) {
+    return request({
+      url: `/edu/qa-second-answer/zan/${id}`,
+      method: 'put'
+    })
+  },
 }

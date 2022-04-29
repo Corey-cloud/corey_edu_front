@@ -12,11 +12,16 @@
           {{ content.gmtCreate }}
           <div class="pinglun">
             <img src="~/assets/img/pinglun.png" alt="" />
-            <span> {{ "(" + cmNum + ")" }}</span>
+            <span> {{ cmNum }}</span>
+            &nbsp;
             <a href="javascript:void(0)">
-              <img src="~/assets/img/zanqian.png" @click="hitZan(content.id)" alt="文章不错，赞一个~" />
+              <img
+                src="~/assets/img/zanqian.png"
+                @click="hitZan(content.id)"
+                alt=""
+              />
             </a>
-            <span>{{ "(" + content.contentHit + ")" }}</span>
+            <span>{{ content.contentHit }}</span>
           </div>
         </div>
       </div>
@@ -78,10 +83,7 @@
         <section class="mt20">
           <section class="question-list lh-bj-list pr">
             <ul class="pr10">
-              <li
-                v-for="(comment, index) in pageData.items"
-                v-bind:key="index"
-              >
+              <li v-for="(comment, index) in pageData.items" v-bind:key="index">
                 <aside class="noter-pic">
                   <img
                     width="50"
@@ -92,9 +94,7 @@
                 </aside>
                 <div class="of">
                   <span class="fl">
-                    <font class="fsize12 c-blue">
-                      {{ comment.nickname }}</font
-                    >
+                    <font class="fsize12 c-blue"> {{ comment.nickname }}</font>
                     <font class="fsize12 c-999 ml5">评论：</font></span
                   >
                 </div>
@@ -104,11 +104,20 @@
                 </div>
 
                 <div class="of mt5">
-                  <span class="fr"
-                    ><font class="fsize12 c-999 ml5">{{
-                      comment.gmtCreate
-                    }}</font></span
-                  >
+                  <a href="javascript:void(0)" style="margin-left:60px">
+                    <img
+                    width="18"
+                      src="~/assets/img/zanqian.png"
+                      @click="zan(comment.id)"
+                      alt=""
+                    />
+                  </a>
+                  <span>{{ comment.zanCount }}</span>
+                  <span class="fr">
+                    <font class="fsize12 c-999 ml5">
+                      {{comment.gmtCreate}}
+                    </font>
+                  </span>
                 </div>
               </li>
             </ul>
@@ -244,15 +253,21 @@ export default {
       articleApi.commitComment(this.myComment).then((res) => {
         // 未登录评论（code:28000）处理
         if (res.data.code == 28000) {
-          this.$confirm('您尚未登录，无法进行评论，是否跳转至登录页面？','用户未登录提示',{
-            confirmButtonText: '去登录',
-            cancelButtonText: '算了',
-            type: 'warning'
-          }).then(() => {
-            this.$router.push({path: '/login'})
-          }).catch(_ => {
-            return
-          })
+          this.$confirm(
+            "您尚未登录，无法进行评论，是否跳转至登录页面？",
+            "用户未登录提示",
+            {
+              confirmButtonText: "去登录",
+              cancelButtonText: "算了",
+              type: "warning",
+            }
+          )
+            .then(() => {
+              this.$router.push({ path: "/login" });
+            })
+            .catch((_) => {
+              return;
+            });
         }
         if (res.data.code === 20000) {
           this.myComment.content = "";
@@ -267,7 +282,8 @@ export default {
     },
     //评论分页
     gotoPage(page) {
-      articleApi.getCommentList(page, 4, this.$route.params.id).then((res) => {
+      this.page = page
+      articleApi.getCommentList(this.page, 4, this.$route.params.id).then((res) => {
         if (res.data.data.items) {
           this.pageDisable = true;
           this.pageData = res.data.data;
@@ -278,13 +294,22 @@ export default {
     },
     hitZan(id) {
       articleApi.hitZan(id).then((res) => {
-        this.$message({
-          type: "success",
-          message: "点赞成功",
-        })
-        this.getArticleInfo(id)
+        // this.$message({
+        //   type: "success",
+        //   message: "点赞成功",
+        // });
+        this.getArticleInfo(id);
       });
     },
+    zan(id) {
+      articleApi.zan(id).then((res) => {
+        // this.$message({
+        //   type: "success",
+        //   message: "点赞成功",
+        // });
+        this.gotoPage(this.page);
+      });
+    }
   },
 };
 </script>

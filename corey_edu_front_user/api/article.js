@@ -48,4 +48,10 @@ export default {
       method: 'get',
     })
   },
+  zan(id) {
+    return request({
+      url: `/edu/article-comment/zan/${id}`,
+      method: 'put',
+    })
+  },
 }
