@@ -237,6 +237,8 @@ export default {
             } else {
               this.appendLevelTwo() // 二级分类的添加
             }
+            this.menu = {...menuForm}
+            this.permission = {...perForm}
           } else { // 修改
             this.update(this.menu)
           }

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-const api_name = '/staservice/statistics-daily'
+const api_name = '/staservice/admin/statistics-daily'
 export default {
   createStatistics(day) {
     return request({

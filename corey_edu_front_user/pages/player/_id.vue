@@ -8,7 +8,7 @@
     <!-- 定义播放器dom -->
     <div id="J_prismPlayer" class="prism-player" />
     <!-- 公共底引入 -->
-    <footer id="footer" style="position: absolute; bottom: 0">
+    <footer class="footer">
       <section class="container">
         <div class>
           <h4 class="hLh30">
@@ -101,5 +101,13 @@ export default {
   .bg {
     background: url(https://corey-edu.oss-cn-shenzhen.aliyuncs.com/source/v-play-bg.jpg);
     z-index: 10;
+  }
+  .footer {
+    background-color: #323232;
+    border-top-style: none;
+    color: #999;
+    width: 100%;
+    overflow: hidden;
+    padding-top: 30px;
   }
 </style>

@@ -33,7 +33,12 @@
 </template>
 <script>
 import ordersApi from '@/api/order'
+import Vue from 'vue'
+// vue-qriously
+import VueQriously from 'vue-qriously'
+Vue.use(VueQriously)
 export default {
+    name: 'VueQriously',
      asyncData({ params, error }) {
         return ordersApi.createNative(params.id)
           .then(response => {

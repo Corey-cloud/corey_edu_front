@@ -14,13 +14,10 @@ import moment from 'vue-moment'
 import vRegion from 'v-region'
 // Axios
 import axios from 'axios'
-// vue-qriously
-import VueQriously from 'vue-qriously'
+
 import moment from 'moment'//导入文件
 Vue.prototype.$moment = moment;//赋值使用
-
 Vue.use(ElementUI)
-Vue.use(VueQriously)
 Vue.use(moment)
 Vue.prototype.$Moment = moment
 Vue.use(vRegion)
@@ -31,6 +28,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { App, VueQriously },
+  components: { App },
   template: '<App/>'
 })
