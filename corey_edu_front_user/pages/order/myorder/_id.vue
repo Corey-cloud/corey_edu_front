@@ -17,12 +17,14 @@
       <el-table-column label="订单号" prop="orderNo" align="center" />
       <el-table-column label="课程封面" align="center">
         <template slot-scope="scope">
-          <img
+          <a :href="'/course/'+ scope.row.courseId">
+            <img
             :src="scope.row.courseCover"
             alt="scope.row.courseTitle"
             width="150"
             height="80"
-          />
+            />
+          </a>
         </template>
       </el-table-column>
       <el-table-column label="课程名称" prop="courseTitle" align="center" />

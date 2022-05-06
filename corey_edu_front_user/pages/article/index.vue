@@ -14,7 +14,15 @@
               <div class="right-word">
                 <a :href="'/article/' + data.id">
                   {{ data.contentTitle }}
-                  <span class="fuwenben">{{ data.contentDescription }}</span>
+                  
+                  <span class="fuwenben">
+                    作者：<span style="color: orange;">{{ data.contentAuthor }}</span>
+                    &nbsp;
+                    &nbsp;
+                    来源：{{ data.contentSource }}
+                    <br/>
+                    <br/>
+                    {{ data.contentDescription }}</span>
                 </a>
                 <div class="dianzan">
                   <img src="~/assets/img/pinglun.png" alt="" />
