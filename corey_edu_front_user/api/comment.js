@@ -13,5 +13,11 @@ export default {
       method: 'post',
       data: comment
     })
-  }
+  },
+  zan(id) {
+    return request({
+      url: `/edu/comments/zan/${id}`,
+      method: 'put',
+    })
+  },
 }

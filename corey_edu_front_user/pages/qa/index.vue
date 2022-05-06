@@ -42,15 +42,15 @@
               {{ item }}
             </el-tag>
           </div>
-          <div class="shijian">{{ data.gmtCreate }}</div>
+          <div class="shijian" style="color: #8B8B8B; font-size: 14px;">{{ data.gmtCreate }}</div>
         </div>
         <div style="text-align: center" class="wenda">
           <div class="wenda-word">回答数</div>
-          <div class="wenda-num">{{ data.qaComments }}</div>
+          <div class="wenda-num" style="color: #6B6B6B">{{ data.qaComments }}</div>
         </div>
         <div style="text-align: center" class="view">
           <div class="huida-word">浏览数</div>
-          <div class="huida-num">{{ data.qaView }}</div>
+          <div class="huida-num" style="color: #6B6B6B">{{ data.qaView }}</div>
         </div>
       </div>
       <!-- 公共分页 开始 -->
@@ -122,7 +122,7 @@
             <div class="hot-huida">
               <span>回答数</span>
               <br />
-              <span>{{ data.qaComments }}</span>
+              <span style="color: #8B8B8B">{{ data.qaComments }}</span>
             </div>
           </li>
         </ul>
@@ -371,7 +371,7 @@ export default {
   height: 100%;
 }
 .hot-huida span:nth-child(1) {
-  color: #ff5f16;
+  color: black;
 }
 .hot-list {
   width: 100%;

@@ -24,7 +24,7 @@
           <div class="shijian">{{ question.gmtModified }}</div>
           <div class="dianzan">
             <img style="margin-left: 10px" src="~/assets/img/view.png" alt="" />
-            <span>{{ question.qaView }}</span>
+            <span style="color: #8B8B8B">{{ question.qaView }}</span>
             &nbsp;
             <img
               style="margin-left: 10px"
@@ -32,7 +32,7 @@
               src="~/assets/img/pinglun.png"
               alt=""
             />
-            <span>{{ question.qaComments }}</span>
+            <span style="color: #8B8B8B">{{ question.qaComments }}</span>
           </div>
         </div>
       </div>
@@ -61,8 +61,14 @@
               alt=""
             />
           </a>
-          <span>{{ data.zanCount }}</span>
-          <div class="shijian1">{{ data.gmtModified }}</div>
+          <span style="color: #8B8B8B">{{ data.zanCount }}</span>
+          <div class="shijian1" style="color: #999; font-size: 12px; font-family: Helvetica NeueHelvetica,Hiragino Sans GB,Arial,sans-serif;">
+            <span style="color: #999; font-size: 12px; font-family: Helvetica NeueHelvetica,Hiragino Sans GB,Arial,sans-serif;" v-if="data.comeFrom">
+              来自{{ data.comeFrom.substring(0,2) }}
+              &nbsp;
+            </span>
+            {{ data.gmtModified }}
+          </div>
         </div>
 
         <div
@@ -90,7 +96,14 @@
                 alt=""
               />
             </a>
-            <span>{{ sonData.zanCount }}</span>
+            <span style="color: #8B8B8B">{{ sonData.zanCount }}</span>
+            <div class="shijian1" style="color: #999; font-size: 12px; font-family: Helvetica NeueHelvetica,Hiragino Sans GB,Arial,sans-serif;">
+              <span style="color: #999; font-size: 12px; font-family: Helvetica NeueHelvetica,Hiragino Sans GB,Arial,sans-serif;" v-if="sonData.comeFrom">
+                来自{{ sonData.comeFrom.substring(0,2) }}
+                &nbsp;
+              </span>
+              {{ sonData.gmtModified }}
+            </div>
           </div>
         </div>
         <div class="son-input" v-show="data.isShowAnswer">

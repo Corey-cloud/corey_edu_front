@@ -166,28 +166,6 @@ export const asyncRoutes = [
     ]
   },
 
-  {
-    path: '/member',
-    component: Layout,
-    redirect: '/member/list',
-    name: '成员管理',
-    meta: { title: '成员管理', icon: 'example' },
-    children: [
-      {
-        path: 'list',
-        name: '成员列表',
-        component: () => import('@/views/edu/member/list'),
-        meta: { title: '成员列表', icon: 'table' }
-      },
-      {
-        path: 'info/:id',
-        name: '编辑成员',
-        component: () => import('@/views/edu/member/info'),
-        meta: { title: '编辑成员', noCache: true },
-        hidden: true
-      }
-    ]
-  },
 
   {
     path: '/sta',

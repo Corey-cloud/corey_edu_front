@@ -106,15 +106,19 @@
                 <div class="of mt5">
                   <a href="javascript:void(0)" style="margin-left:60px">
                     <img
-                    width="18"
+                      width="18"
                       src="~/assets/img/zanqian.png"
                       @click="zan(comment.id)"
                       alt=""
                     />
                   </a>
-                  <span>{{ comment.zanCount }}</span>
+                  <span style="color: #8B8B8B">{{ comment.zanCount }}</span>
                   <span class="fr">
                     <font class="fsize12 c-999 ml5">
+                      <span v-if="comment.comeFrom">
+                          来自{{ comment.comeFrom.substring(0,2) }}
+                          &nbsp;
+                        </span>
                       {{comment.gmtCreate}}
                     </font>
                   </span>

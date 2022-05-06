@@ -18,14 +18,14 @@
                 </a>
                 <div class="dianzan">
                   <img src="~/assets/img/pinglun.png" alt="" />
-                  <span>{{ data.contentComment }}</span>
+                  <span style="color: #8B8B8B">{{ data.contentComment }}</span>
                   &nbsp;
                   <img
                     @click="hitZan(data.id)"
                     src="~/assets/img/zanqian.png"
                     alt=""
                   />
-                  <span>{{ data.contentHit }}</span>
+                  <span style="color: #999">{{ data.contentHit }}</span>
                   <div class="time">
                     {{ data.gmtCreate }}
                   </div>
@@ -45,11 +45,11 @@
             <a :href="'/article/' + data.id">{{ data.contentTitle }}</a>
           </div>
         </div>
-        <div class="paihang-time">
+        <div class="paihang-time" style="color: #999">
           {{ data.gmtCreate }}
           <div class="paihang-dianzan">
             <img src="~/assets/img/pinglun.png" alt="" />
-            <span>{{ data.contentComment }}</span>
+            <span style="color: #8B8B8B">{{ data.contentComment }}</span>
             &emsp;
             <a href="javascript:void(0)">
               <img
@@ -58,7 +58,7 @@
                 alt="文章不错，赞一个~"
               />
             </a>
-            <span>{{ data.contentHit }}</span>
+            <span style="color: #8B8B8B">{{ data.contentHit }}</span>
           </div>
         </div>
       </div>
