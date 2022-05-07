@@ -191,7 +191,6 @@ import "~/assets/css/swiper-3.3.1.min.css";
 import "~/assets/css/pages-weixinpay.css";
 
 import cookie from "js-cookie";
-import login from "@/api/login";
 
 export default {
   data() {
@@ -277,7 +276,8 @@ export default {
       cookie.set("guli_token", "");
 
       //跳转页面
-      window.location.href = "/";
+      // window.location.href = "/";
+      this.$router.go(0)
     },
   },
 };
