@@ -50,7 +50,9 @@
         </div>
         <div style="text-align: center" class="view">
           <div class="huida-word">浏览数</div>
-          <div class="huida-num" style="color: #6B6B6B">{{ data.qaView }}</div>
+          <div v-if="data.qaView > 100000000" class="huida-num" style="color: #6B6B6B">{{ (data.qaView/100000000).toFixed(1) }}亿+</div>
+          <div v-else-if="data.qaView > 10000" class="huida-num" style="color: #6B6B6B">{{ (data.qaView/10000).toFixed(1) }}万+</div>
+          <div v-else class="huida-num" style="color: #6B6B6B">{{ data.qaView }}</div>
         </div>
       </div>
       <!-- 公共分页 开始 -->

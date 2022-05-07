@@ -31,8 +31,8 @@
               @click="dialogVisible = true"
               src="~/assets/img/pinglun.png"
               alt=""
-            />
-            <span style="color: #8B8B8B">{{ question.qaComments }}</span>
+            />&nbsp;评论
+            <span style="color: #8B8B8B">({{ question.qaComments }})</span>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@
             @click="changeIsShowAnswer(data.id)"
             src="~/assets/img/pinglun.png"
             alt=""
-          />
+          />&nbsp;评论
           <a href="javascript:void(0)" style="margin-left: 30px">
             <img
               width="18"
@@ -70,7 +70,16 @@
             {{ data.gmtModified }}
           </div>
         </div>
-
+        <div class="son-input" v-show="data.isShowAnswer">
+          <el-input type="textarea" 
+            :autosize="{ minRows: 4, maxRows: 8}" v-model="input" placeholder="请输入内容"></el-input>
+          <el-button
+            type="primary"
+            @click="replyAnswer2(data.id)"
+            class="commit"
+            >发送</el-button
+          >
+        </div>
         <div
           class="son-huifu"
           v-for="(sonData, idx) in data.answer2List"
@@ -106,30 +115,21 @@
             </div>
           </div>
         </div>
-        <div class="son-input" v-show="data.isShowAnswer">
-          <el-input v-model="input" placeholder="请输入内容"></el-input>
-          <el-button
-            type="primary"
-            @click="replyAnswer2(data.id)"
-            class="commit"
-            >提交评论</el-button
-          >
-        </div>
       </div>
     </div>
 
     <el-dialog title="评论" :visible.sync="dialogVisible" width="30%">
       <el-input
         type="textarea"
-        :autosize="{ minRows: 2, maxRows: 4 }"
+        :autosize="{ minRows: 4, maxRows: 8 }"
         placeholder="请输入内容"
         v-model="textarea2"
       >
       </el-input>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="replyAnswer1()">确 定</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="replyAnswer1()">发送</el-button>
       </span>
     </el-dialog>
   </div>
@@ -195,6 +195,7 @@ export default {
             message: "评论成功",
             type: "success",
           });
+          this.textarea2 = ""
           this.initInfo();
         } else {
           this.$message({

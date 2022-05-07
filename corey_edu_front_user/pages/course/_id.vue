@@ -280,7 +280,7 @@
                     width="50"
                     height="50"
                     class="picImg"
-                    src="~/assets/img/avatar-boy.gif"
+                    :src="comment.avatar"
                   />
                 </aside>
                 <div class="of">
@@ -303,7 +303,7 @@
                       <input
                         type="button"
                         @click="addComment()"
-                        value="回复"
+                        value="发送"
                         class="lh-reply-btn"
                       />
                     </p>
@@ -432,6 +432,7 @@ export default {
       limit: 4,
       total: 10,
       comment: {
+        avatar: "https://edu-425.oss-cn-chengdu.aliyuncs.com/tx.jpg",
         content: "",
         courseId: "",
       },
@@ -515,6 +516,22 @@ export default {
     },
 
     initComment() {
+      if (this.$route.params && this.$route.params.id) {
+        const id = this.$route.params.id;
+        var userStr = cookie.get("guli_ucenter");
+        if (userStr) {
+            this.userInfo = JSON.parse(userStr);
+            this.comment.memberId = this.userInfo.id;
+            this.comment.avatar = this.userInfo.avatar;
+            this.comment.nickname = this.userInfo.nickname;
+        } else {
+            //未登录
+            this.comment.avatar =
+              "https://edu-425.oss-cn-chengdu.aliyuncs.com/tx.jpg";
+          }
+      } else {
+        console.log("=== 你从何而来？我没拿到课程id");
+      }
       comment
         .getPageList(this.page, this.limit, this.courseId)
         .then((response) => {

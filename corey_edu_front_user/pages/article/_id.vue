@@ -8,11 +8,26 @@
       </div>
       <div class="top-title">
         {{ content.contentTitle }}
+        <div class="tag-group">
+          <!-- <span class="tag-group__title">Dark</span> -->
+          <el-tag
+            style="margin-left: 5px"
+            size="small"
+            v-for="item in items"
+            :key="item"
+            type="info"
+          >
+            {{ item }}
+          </el-tag>
+        </div>
         <div class="top-time">
           {{ content.gmtCreate }}
           <div class="pinglun">
+            <img style="margin-left: 10px" src="~/assets/img/view.png" alt="" />
+            <span style="color: #8b8b8b">{{ content.contentView }}</span>
+            &nbsp;
             <img src="~/assets/img/pinglun.png" alt="" />
-            <span> {{ cmNum }}</span>
+            <span style="color: #8b8b8b"> {{ cmNum }}</span>
             &nbsp;
             <a href="javascript:void(0)">
               <img
@@ -21,7 +36,7 @@
                 alt=""
               />
             </a>
-            <span>{{ content.contentHit }}</span>
+            <span style="color: #8b8b8b">{{ content.contentHit }}</span>
           </div>
         </div>
       </div>
@@ -54,7 +69,7 @@
                     <textarea
                       name=""
                       v-model="myComment.content"
-                      placeholder="输入您要评论的文字"
+                      placeholder="写评论"
                       id="commentContent"
                     ></textarea>
                   </fieldset>
@@ -70,7 +85,7 @@
                     <input
                       type="button"
                       @click="commitComment()"
-                      value="回复"
+                      value="发送"
                       class="lh-reply-btn"
                     />
                   </p>
@@ -104,7 +119,7 @@
                 </div>
 
                 <div class="of mt5">
-                  <a href="javascript:void(0)" style="margin-left:60px">
+                  <a href="javascript:void(0)" style="margin-left: 60px">
                     <img
                       width="18"
                       src="~/assets/img/zanqian.png"
@@ -112,14 +127,14 @@
                       alt=""
                     />
                   </a>
-                  <span style="color: #8B8B8B">{{ comment.zanCount }}</span>
+                  <span style="color: #8b8b8b">{{ comment.zanCount }}</span>
                   <span class="fr">
                     <font class="fsize12 c-999 ml5">
                       <span v-if="comment.comeFrom">
-                          来自{{ comment.comeFrom.substring(0,2) }}
-                          &nbsp;
-                        </span>
-                      {{comment.gmtCreate}}
+                        来自{{ comment.comeFrom.substring(0, 2) }}
+                        &nbsp;
+                      </span>
+                      {{ comment.gmtCreate }}
                     </font>
                   </span>
                 </div>
@@ -195,6 +210,7 @@ import cookie from "js-cookie";
 export default {
   data() {
     return {
+      items: [],
       content: {},
       pageData: {},
       //评论提交信息
@@ -230,18 +246,15 @@ export default {
         this.gotoPage(1);
         var userStr = cookie.get("guli_ucenter");
         if (userStr) {
-          //把字符串转换json对象
-          if (userStr) {
-            this.userInfo = JSON.parse(userStr);
-            this.myComment.memberId = this.userInfo.id;
-            this.myComment.avatar = this.userInfo.avatar;
-            this.myComment.nickname = this.userInfo.nickname;
-            this.myComment.articleId = id;
-          } else {
-            //未登录
-            this.myComment.avatar =
-              "https://edu-425.oss-cn-chengdu.aliyuncs.com/tx.jpg";
-          }
+          this.userInfo = JSON.parse(userStr);
+          this.myComment.memberId = this.userInfo.id;
+          this.myComment.avatar = this.userInfo.avatar;
+          this.myComment.nickname = this.userInfo.nickname;
+          this.myComment.articleId = id;
+        } else {
+          //未登录
+          this.myComment.avatar =
+            "https://edu-425.oss-cn-chengdu.aliyuncs.com/tx.jpg";
         }
       } else {
         console.log("=== 你从何而来？我没拿到文章id");
@@ -250,6 +263,7 @@ export default {
     getArticleInfo(id) {
       articleApi.getArticle(id).then((res) => {
         this.content = res.data.data.article;
+        this.items = res.data.data.article.contentType.split(",")
       });
     },
     //提交评论
@@ -286,15 +300,17 @@ export default {
     },
     //评论分页
     gotoPage(page) {
-      this.page = page
-      articleApi.getCommentList(this.page, 4, this.$route.params.id).then((res) => {
-        if (res.data.data.items) {
-          this.pageDisable = true;
-          this.pageData = res.data.data;
-        } else {
-          this.pageDisable = false;
-        }
-      });
+      this.page = page;
+      articleApi
+        .getCommentList(this.page, 4, this.$route.params.id)
+        .then((res) => {
+          if (res.data.data.items) {
+            this.pageDisable = true;
+            this.pageData = res.data.data;
+          } else {
+            this.pageDisable = false;
+          }
+        });
     },
     hitZan(id) {
       articleApi.hitZan(id).then((res) => {
@@ -313,7 +329,7 @@ export default {
         // });
         this.gotoPage(this.page);
       });
-    }
+    },
   },
 };
 </script>
