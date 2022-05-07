@@ -22,25 +22,28 @@
         </div>
         <div class="top-time">
           {{ content.gmtCreate }}
-          <div class="pinglun">
-            <img style="margin-left: 10px" src="~/assets/img/view.png" alt="" />
+          <div class="view">
+            <img style="left: 10px" src="~/assets/img/view.png" alt="" />
             <span style="color: #8b8b8b">{{ content.contentView }}</span>
-            &nbsp;
-            <img src="~/assets/img/pinglun.png" alt="" />
-            <span style="color: #8b8b8b"> {{ cmNum }}</span>
-            &nbsp;
-            <a href="javascript:void(0)">
-              <img
-                src="~/assets/img/zanqian.png"
-                @click="hitZan(content.id)"
-                alt=""
-              />
-            </a>
-            <span style="color: #8b8b8b">{{ content.contentHit }}</span>
           </div>
         </div>
       </div>
       <div class="wenzhang" v-html="content.contentDetails"></div>
+      <div class="pinglun">
+        <a href="javascript:void(0)">
+          <img
+            src="~/assets/img/zanqian.png"
+            @click="hitZan(content.id)"
+            alt=""
+          />
+        </a>
+        <span style="color: #8b8b8b">{{ content.contentHit }}</span>
+        &nbsp;
+        <a href="#comment">
+          <img src="~/assets/img/pinglun.png" alt="" />
+        </a>
+        <span style="color: #8b8b8b"> {{ cmNum }}</span>
+      </div>
     </div>
 
     <!-- 评论 开始-->
@@ -63,7 +66,7 @@
                 />
               </aside>
 
-              <div class="of">
+              <div id="comment" class="of">
                 <section class="n-reply-wrap">
                   <fieldset>
                     <textarea
@@ -263,7 +266,7 @@ export default {
     getArticleInfo(id) {
       articleApi.getArticle(id).then((res) => {
         this.content = res.data.data.article;
-        this.items = res.data.data.article.contentType.split(",")
+        this.items = res.data.data.article.contentType.split(",");
       });
     },
     //提交评论
@@ -363,9 +366,22 @@ export default {
   font-size: 16px;
   color: #bfbfbf;
 }
-.pinglun {
+.view {
   position: absolute;
-  right: 1%;
+  right: 75%;
+  bottom: 1%;
+  font-size: 16px;
+}
+.view img {
+  width: 20px;
+  height: 20px;
+}
+.view span {
+  color: #bfbfbf;
+}
+.pinglun {
+  position: fixed;
+  right: 50%;
   bottom: 1%;
   font-size: 16px;
 }
