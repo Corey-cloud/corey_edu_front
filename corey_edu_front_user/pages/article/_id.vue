@@ -368,7 +368,7 @@ export default {
 }
 .view {
   position: absolute;
-  right: 75%;
+  right: 5%;
   bottom: 1%;
   font-size: 16px;
 }
@@ -381,8 +381,12 @@ export default {
 }
 .pinglun {
   position: fixed;
-  right: 50%;
-  bottom: 1%;
+  width: 100%;
+  height: 50px;
+  padding-left: 40%;
+  padding-top: 15px;
+  background-color: white;
+  bottom: 0.0000001%;
   font-size: 16px;
 }
 .pinglun img {
@@ -396,5 +400,8 @@ export default {
   width: 100%;
   padding: 20px;
   margin-bottom: 50px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #4d4d4d;
 }
 </style>

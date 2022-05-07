@@ -13,8 +13,9 @@
               </div>
               <div class="right-word">
                 <a :href="'/article/' + data.id">
-                  {{ data.contentTitle }}
-
+                  <span class="title">
+                    {{ data.contentTitle }}
+                  </span>
                   <span class="fuwenben">
                     作者：<span style="color: orange">{{
                       data.contentAuthor
@@ -32,14 +33,30 @@
                         {{ item }}
                       </el-tag>
                     </div>
-                    {{ data.contentDescription }}</span
-                  >
+                    <span class="description">
+                      {{ data.contentDescription }}
+                    </span>
+                  </span>
                 </a>
                 <div class="dianzan">
-                  <img style="margin-left: 10px" src="~/assets/img/view.png" alt="" />
-                  <span v-if="data.contentView >= 100000000" style="color: #8B8B8B">{{ (data.contentView/100000000).toFixed(1) }}亿+</span>
-                  <span v-else-if="data.contentView >= 10000" style="color: #8B8B8B">{{ (data.contentView/10000).toFixed(1) }}万+</span>
-                  <span v-else style="color: #8B8B8B">{{ data.contentView }}</span>
+                  <img
+                    style="margin-left: 10px"
+                    src="~/assets/img/view.png"
+                    alt=""
+                  />
+                  <span
+                    v-if="data.contentView >= 100000000"
+                    style="color: #8b8b8b"
+                    >{{ (data.contentView / 100000000).toFixed(1) }}亿+</span
+                  >
+                  <span
+                    v-else-if="data.contentView >= 10000"
+                    style="color: #8b8b8b"
+                    >{{ (data.contentView / 10000).toFixed(1) }}万+</span
+                  >
+                  <span v-else style="color: #8b8b8b">{{
+                    data.contentView
+                  }}</span>
                   &nbsp;
                   <img
                     @click="hitZan(data.id)"
@@ -50,7 +67,7 @@
                   &nbsp;
                   <img src="~/assets/img/pinglun.png" alt="" />
                   <span style="color: #8b8b8b">{{ data.contentComment }}</span>
-                  
+
                   <div class="time">
                     {{ data.gmtCreate }}
                   </div>
@@ -69,13 +86,25 @@
         :key="data.id"
       >
         <div class="paihang-first">
-          <div class="paihang-box" v-if="idx == 0" style="background-color: gold;">
+          <div
+            class="paihang-box"
+            v-if="idx == 0"
+            style="background-color: gold"
+          >
             {{ idx + 1 }}
           </div>
-          <div class="paihang-box" v-else-if="idx == 1" style="background-color: silver;">
+          <div
+            class="paihang-box"
+            v-else-if="idx == 1"
+            style="background-color: silver"
+          >
             {{ idx + 1 }}
           </div>
-          <div class="paihang-box" v-else-if="idx == 2" style="background-color: #cf9870;">
+          <div
+            class="paihang-box"
+            v-else-if="idx == 2"
+            style="background-color: #cf9870"
+          >
             {{ idx + 1 }}
           </div>
           <div class="paihang-box" v-else>
@@ -230,6 +259,12 @@ export default {
   text-overflow: ellipsis;
   font-size: 16px;
   color: #8c8c8c;
+  position: relative;
+  top: -20px;
+}
+.description {
+  position: relative;
+  top: 5px;
 }
 .paihang-word {
   display: inline-block;
@@ -280,13 +315,20 @@ li {
   height: 150px;
   width: 75%;
 }
+.title {
+  width: 100%;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .right-word a {
   font-size: 26px;
 }
 .dianzan {
   width: 100%;
   position: relative;
-  margin-top: -20px;
+  margin-top: -30px;
 }
 .dianzan span {
   font-size: 16px;
