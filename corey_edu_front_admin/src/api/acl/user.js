@@ -7,7 +7,7 @@ export default {
   // 获取公钥
   getPublicKey() {
     return request({
-      url: '/rsa/getPublicKey',
+      url: `/rsa/acl/getPublicKey`,
       method: 'get'
     })
   },
