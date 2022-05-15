@@ -7,7 +7,7 @@ export default {
   // 获取公钥
   getPublicKey() {
     return request({
-      url: `${api_name}/index/publicKey`,
+      url: '/rsa/getPublicKey',
       method: 'get'
     })
   },
