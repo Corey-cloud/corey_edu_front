@@ -70,14 +70,16 @@
               if (response.data.code == 20000) {
                 //第二步 获取token字符串放到cookie里面
                 //第一个参数cookie名称，第二个参数值，第三个参数作用范围
-                cookie.set('guli_token',response.data.data.token,{domain: 'localhost'})
+                // cookie.set('guli_token',response.data.data.token,{domain: 'localhost'})
+                cookie.set('guli_token',response.data.data.token)
 
                 //第四步 调用接口 根据token获取用户信息，为了首页面显示
                 loginApi.getLoginUserInfo()
                 .then(response => {
                   this.loginInfo = response.data.data.userInfo
                   //获取返回用户信息，放到cookie里面
-                  cookie.set('guli_ucenter',this.loginInfo,{domain: 'localhost'})
+                  // cookie.set('guli_ucenter',this.loginInfo,{domain: 'localhost'})
+                  cookie.set('guli_ucenter',this.loginInfo)
                   this.$message({
                     type:'success',
                     message:'登录成功'

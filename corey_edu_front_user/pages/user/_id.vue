@@ -113,7 +113,7 @@ export default {
               type: "success",
               message: "修改成功",
             });
-            cookie.set("guli_ucenter", this.user, { domain: "localhost" } )
+            cookie.set("guli_ucenter", this.user)
             // 修改成功，回到列表页面 路由跳转
             this.$router.push({ path: "/" });
           } else {
