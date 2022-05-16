@@ -28,7 +28,7 @@ export default {
       this.btnDisabled = true
       daily.createStatistics(this.day).then((response) => {
         this.btnDisabled = false
-        if (response.data.success) {
+        if (response.success) {
           this.$message({
             type: 'success',
             message: '生成成功'
