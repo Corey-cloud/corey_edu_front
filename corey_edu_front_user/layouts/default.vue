@@ -1,6 +1,6 @@
 <template>
   <div class="in-wrap">
-    <no-ssr>
+    <client-only>
       <!-- 公共头引入 -->
       <header class="top" id="header">
         <section class="container">
@@ -174,7 +174,7 @@
         </section>
       </footer>
       <!-- /公共底引入 -->
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 <script>

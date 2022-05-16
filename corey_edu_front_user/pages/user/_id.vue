@@ -83,7 +83,6 @@ export default {
         nickname: ""
       },
       saveBtnDisabled: false, // 保存按钮是否禁用
-      // BASE_API: '"http://127.0.0.1:8222"', // 接口API地址
       imagecropperShow: false, // 是否显示上传组件
       imagecropperKey: 0, // 上传组件id
     };

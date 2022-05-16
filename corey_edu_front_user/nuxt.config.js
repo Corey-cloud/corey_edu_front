@@ -12,10 +12,10 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css' }
+      { rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' }
     ],
     script: [
-      {src: 'https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js'},
+      {src: 'http://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js'},
     ],
 
   },
