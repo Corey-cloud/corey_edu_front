@@ -165,8 +165,7 @@
                   </h6>
                   <div class="course-txt-body-wrap">
                     <section class="course-txt-body">
-                      <p v-html="courseWebVo.description">
-                      </p>
+                      <p v-html="courseWebVo.description"></p>
                     </section>
                   </div>
                 </div>
@@ -200,16 +199,38 @@
                                 v-for="video in chapter.children"
                                 :key="video.id"
                               >
-                                <a
-                                  :href="'/player/' + video.videoSourceId"
-                                  target="_blank"
-                                >
-                                  <span v-if="video.isFree" class="fr">
-                                    <i class="free-icon vam mr10">免费试看</i>
+                                <span v-if="video.isFree">
+                                  <a
+                                    :href="'/player/' + video.videoSourceId"
+                                    target="_blank"
+                                  >
+                                    <span class="fr">
+                                      <i class="free-icon vam mr10">免费试看</i>
+                                    </span>
+                                    <em class="lh-menu-i-2 icon16 mr5"
+                                      >&nbsp;</em
+                                    >{{ video.title }}
+                                  </a>
+                                </span>
+                                <span v-else>
+                                  <span v-if="isbuy">
+                                    <a
+                                      :href="'/player/' + video.videoSourceId"
+                                      target="_blank"
+                                    >
+                                      <em class="lh-menu-i-2 icon16 mr5"
+                                        >&nbsp;</em
+                                      >{{ video.title }}
+                                    </a>
                                   </span>
-                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em
-                                  >{{ video.title }}
-                                </a>
+                                  <span v-else>
+                                    <a href="javascript:void(0)">
+                                      <em class="lh-menu-i-2 icon16 mr5"
+                                        >&nbsp;</em
+                                      >{{ video.title }}
+                                    </a>
+                                  </span>
+                                </span>
                               </li>
                             </ol>
                           </li>
@@ -250,12 +271,12 @@
                         <a
                           target="_blank"
                           class="c-333 fsize16 fl"
-                          :href="'/teacher' + courseWebVo.teacherId"
+                          :href="'/teacher/' + courseWebVo.teacherId"
                           >{{ courseWebVo.teacherName }}</a
                         >
                       </section>
                       <section class="hLh20 txtOf">
-                        <span class="c-999">{{ courseWebVo.intro }}</span>
+                        <span class="c-999" v-html="courseWebVo.intro"></span>
                       </section>
                     </li>
                   </ul>
@@ -335,24 +356,23 @@
                     <p>{{ comment.content }}</p>
                   </div>
                   <div class="of mt5">
-                    <a href="javascript:void(0)" style="margin-left:60px">
+                    <a href="javascript:void(0)" style="margin-left: 60px">
                       <img
-                      width="18"
-                      src="~/assets/img/zanqian.png"
-                      @click="zan(comment.id)"
-                      alt=""
+                        width="18"
+                        src="~/assets/img/zanqian.png"
+                        @click="zan(comment.id)"
+                        alt=""
                       />
                     </a>
-                    <span style="color: #8B8B8B">{{ comment.zanCount }}</span>
+                    <span style="color: #8b8b8b">{{ comment.zanCount }}</span>
                     <span class="fr"
                       ><font class="fsize12 c-999 ml5">
                         <span v-if="comment.comeFrom">
-                          来自{{ comment.comeFrom.substring(0,2) }}
+                          来自{{ comment.comeFrom.substring(0, 2) }}
                           &nbsp;
                         </span>
-                        {{
-                        comment.gmtCreate
-                      }}</font></span
+                        {{ comment.gmtCreate }}</font
+                      ></span
                     >
                   </div>
                 </li>
@@ -519,15 +539,15 @@ export default {
         const id = this.$route.params.id;
         var userStr = cookie.get("guli_ucenter");
         if (userStr) {
-            this.userInfo = JSON.parse(userStr);
-            this.comment.memberId = this.userInfo.id;
-            this.comment.avatar = this.userInfo.avatar;
-            this.comment.nickname = this.userInfo.nickname;
+          this.userInfo = JSON.parse(userStr);
+          this.comment.memberId = this.userInfo.id;
+          this.comment.avatar = this.userInfo.avatar;
+          this.comment.nickname = this.userInfo.nickname;
         } else {
-            //未登录
-            this.comment.avatar =
-              "https://edu-425.oss-cn-chengdu.aliyuncs.com/tx.jpg";
-          }
+          //未登录
+          this.comment.avatar =
+            "https://edu-425.oss-cn-chengdu.aliyuncs.com/tx.jpg";
+        }
       } else {
         console.log("=== 你从何而来？我没拿到课程id");
       }
