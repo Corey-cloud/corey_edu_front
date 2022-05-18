@@ -49,7 +49,7 @@
                   <q class="red-point" style="display: none">&nbsp;</q>
                 </li>
                 <li class="h-r-user" id="is-login-two">
-                  <a href="#" title>
+                  <a href="javascript:void(0)" title>
                     <img
                       :src="loginInfo.avatar"
                       width="30"
@@ -121,7 +121,7 @@
       <!-- /公共头引入 -->
       <nuxt />
       <!-- 公共底引入 -->
-      <footer style="position: relative; bottom: 0" id="footer">
+      <footer style="position: relative;" id="footer">
         <section class="container">
           <div>
             <h4 class="hLh30">

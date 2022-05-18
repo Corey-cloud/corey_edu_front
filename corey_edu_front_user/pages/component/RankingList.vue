@@ -111,6 +111,12 @@ export default {
   font-size: 16px;
   color: rgba(0, 0, 0, 0.87);
   text-align: left;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 .update-p {
   font-size: 12px;

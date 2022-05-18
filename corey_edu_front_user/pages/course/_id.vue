@@ -193,7 +193,7 @@
                               >{{ chapter.title }}
                             </a>
 
-                            <ol class="lh-menu-ol" style="display: block">
+                            <ol class="lh-menu-ol" style="display: block" v-if="chapter.children">
                               <li
                                 class="lh-menu-second ml30"
                                 v-for="video in chapter.children"

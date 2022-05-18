@@ -269,7 +269,7 @@ export default {
                           <div class="mt15 i-q-txt">
                             <p v-html="teacher.intro"
                               class="c-999 f-fA"
-                            >{{teacher.intro}}</p>
+                            ></p>
                           </div>
                         </section>
                       </li>
