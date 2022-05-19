@@ -193,7 +193,11 @@
                               >{{ chapter.title }}
                             </a>
 
-                            <ol class="lh-menu-ol" style="display: block" v-if="chapter.children">
+                            <ol
+                              class="lh-menu-ol"
+                              style="display: block"
+                              v-if="chapter.children"
+                            >
                               <li
                                 class="lh-menu-second ml30"
                                 v-for="video in chapter.children"
@@ -478,9 +482,26 @@ export default {
     },
 
     collect() {
-      // var jsonStr = cookie.get("guli_ucenter");
-      // if (!jsonStr) {
-      // }
+      var jsonStr = cookie.get("guli_ucenter");
+      if (!jsonStr) {
+        // 未登录收藏（code:28000）处理
+        this.$confirm(
+          "您尚未登录，无法收藏课程，是否跳转至登录页面？",
+          "用户未登录提示",
+          {
+            confirmButtonText: "去登录",
+            cancelButtonText: "算了",
+            type: "warning",
+          }
+        )
+          .then(() => {
+            this.$router.push({ path: "/login" });
+          })
+          .catch((_) => {
+            return;
+          });
+        return
+      }
       var jsonStr = cookie.get("guli_ucenter");
       if (this.isCollect) {
         if (jsonStr) {

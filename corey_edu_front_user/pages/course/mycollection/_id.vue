@@ -43,7 +43,7 @@
                       :title="item.title"
                       target="_blank"
                       class="course-title fsize18 c-333"
-                      >{{ item.title }}</a
+                      ><span class="title">{{ item.title }}</span></a
                     >
                   </h3>
                   <section class="mt10 hLh20 of">
@@ -121,5 +121,10 @@ export default {
 }
 .show {
   display: block;
+}
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
