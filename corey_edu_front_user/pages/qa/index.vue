@@ -340,7 +340,7 @@ export default {
       } else {
         // 未登录提问（code:28000）处理
         this.$confirm(
-          "您尚未登录，无法收藏课程，是否跳转至登录页面？",
+          "您尚未登录，无法进行提问，是否跳转至登录页面？",
           "用户未登录提示",
           {
             confirmButtonText: "去登录",
