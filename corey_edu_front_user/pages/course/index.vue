@@ -10,7 +10,7 @@
       <section class="c-sort-box">
         <section class="c-s-dl">
           <dl>
-            <dt>
+            <dt style="padding-right: 0px">
               <span class="c-999 fsize14">课程类别</span>
             </dt>
             <dd class="c-s-dl-li">
